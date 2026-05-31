@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>LUMI·STUDIO - HOME</title>
+  <!-- 브라우저 탭 아이콘 -->
+<link rel="icon" type="image/png" href="logo.png">
+
+<!-- 디스코드, 카카오톡, SNS 공유 미리보기 -->
+<meta property="og:title" content="LUMI·STUDIO">
+<meta property="og:description" content="작업물을 구경하세요">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myakho.github.io/setting/">
+<meta property="og:image" content="https://myakho.github.io/setting/posts/logo.png">
+
+<!-- 트위터(X) 및 디스코드 호환 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LUMI·STUDIO">
+<meta name="twitter:description" content="작업물을 구경하세요">
+<meta name="twitter:image" content="https://myakho.github.io/setting/posts/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 페이드인 애니메이션 */
+    body {
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* 타이틀 애니메이션 */
+    h1 {
+      animation: slideDown 1.2s ease-out forwards;
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+
+    @keyframes slideDown {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* 버튼 애니메이션 */
+    button {
+      opacity: 0;
+      transform: scale(0.9);
+      animation: popUp 0.8s ease-out forwards;
+    }
+
+    button:nth-of-type(1) {
+      animation-delay: 1.2s;
+    }
+
+    button:nth-of-type(2) {
+      animation-delay: 1.5s;
+    }
+
+    @keyframes popUp {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">HOME</a></li>
+      <li><a href="about.html">ABOUT</a></li>
+      <li><a href="works.html">WORKS</a></li>
+      <li><a href="news.html">NEWS</a></li>
+      <li><a href="life.html">LIFE</a></li>
+      <li><a href="contact.html">CONTACT</a></li>
+    </ul>
+  </nav>
+
+  <section>
+    <h1>LUMI·STUDIO</h1>
+    <p>작업물을 구경하세요</p>
+    <button onclick="location.href='works.html'">View Works</button>
+    <button onclick="location.href='about.html'">About Us</button>
+  </section>
+
+  <footer>
+    OFFICIAL LUMI·STUDIO © 2026 LUMI·STUDIO ALL RIGHTS RESERVED
+  </footer>
+</body>
+</html>
