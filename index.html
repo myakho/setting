@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>시그널 · 음성 AI 비서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000;
+    --panel: rgba(255,255,255,0.07);
+    --panel-strong: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.09);
+    --text:#f2f3f5;
+    --text-dim: rgba(242,243,245,0.5);
+    --text-faint: rgba(242,243,245,0.32);
+    --teal:#45d6c4;
+    --amber:#e8a33d;
+    --danger:#ff5b54;
+    --mono:'IBM Plex Mono', monospace;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body{ height:100%; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    overflow:hidden;
+    position:fixed;
+    inset:0;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  /* ---------- stage ---------- */
+  .stage{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px 24px 140px;
+  }
+
+  /* ---------- HUD frame (Jarvis 느낌의 화면 프레임) ---------- */
+  .hud-layer{ position:fixed; inset:0; pointer-events:none; z-index:4; }
+  .hud-corner{
+    position:absolute; width:24px; height:24px;
+    border:1px solid rgba(124,201,255,0.28);
+    transition:border-color 0.6s ease, opacity 0.6s ease;
+    opacity:0.85;
+  }
+  .hud-corner.tl{ top:10px; left:10px; border-right:none; border-bottom:none; }
+  .hud-corner.tr{ top:10px; right:10px; border-left:none; border-bottom:none; }
+  .hud-corner.bl{ bottom:10px; left:10px; border-right:none; border-top:none; }
+  .hud-corner.br{ bottom:10px; right:10px; border-left:none; border-top:none; }
+  body[data-orb="listening"] .hud-corner{ border-color:rgba(69,214,196,0.4); }
+  body[data-orb="thinking"] .hud-corner{ border-color:rgba(232,163,61,0.4); }
+  body[data-orb="speaking"] .hud-corner{ border-color:rgba(124,201,255,0.55); }
+
+  .hud-readout{
+    position:fixed; top:calc(20px + env(safe-area-inset-top, 0px)); right:16px;
+    z-index:21; text-align:right; pointer-events:none;
+    font-family:var(--mono); letter-spacing:0.08em;
+  }
+  .hud-readout .r-name{ font-size:10px; color:var(--text-faint); }
+  .hud-readout .r-state{ font-size:10.5px; color:var(--teal); margin-top:2px; transition:color 0.3s ease; }
+  body[data-orb="idle"] .hud-readout .r-state{ color:var(--text-faint); }
+  body[data-orb="thinking"] .hud-readout .r-state{ color:var(--amber); }
+  body[data-orb="speaking"] .hud-readout .r-state{ color:#7cc9ff; }
+
+  /* ---------- signature orb (particle cloud) ---------- */
+  .orb-wrap{
+    width:240px; height:240px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+
+  .orb-hud-ring{
+    position:absolute; inset:-30px;
+    color:rgba(124,201,255,0.4);
+    animation:hud-rotate 22s linear infinite;
+    pointer-events:none;
+    transition:color 0.5s ease;
+  }
+  .orb-hud-ring.rev{
+    animation-direction:reverse;
+    animation-duration:30s;
+    color:rgba(124,201,255,0.2);
+  }
+  body[data-orb="listening"] .orb-hud-ring{ color:rgba(69,214,196,0.5); }
+  body[data-orb="thinking"] .orb-hud-ring{ color:rgba(232,163,61,0.5); animation-duration:7s; }
+  body[data-orb="speaking"] .orb-hud-ring{ color:rgba(124,201,255,0.65); animation-duration:5s; }
+  @keyframes hud-rotate{ to{ transform:rotate(360deg); } }
+
+  #orb-canvas{
+    position:absolute; inset:-70px;
+    width:calc(100% + 140px); height:calc(100% + 140px);
+    pointer-events:none;
+  }
+
+  /* ---------- caption / transcript toggle ---------- */
+  .caption-row{
+    margin-top:28px;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    cursor:pointer;
+    max-width:340px;
+    text-align:center;
+  }
+  #caption{
+    font-size:15px;
+    color:var(--text-dim);
+    line-height:1.5;
+    min-height:22px;
+    transition:opacity 0.25s ease;
+  }
+  #transcript-toggle{
+    display:flex; align-items:center; gap:4px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    color:var(--text-faint);
+    background:none; border:none; cursor:pointer;
+    padding:4px 8px;
+  }
+  #transcript-toggle svg{ width:11px; height:11px; transition:transform 0.25s ease; }
+  #transcript-toggle.open svg{ transform:rotate(180deg); }
+
+  /* ---------- transcript drawer ---------- */
+  .drawer-overlay{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.5);
+    opacity:0; pointer-events:none;
+    transition:opacity 0.3s ease;
+    z-index:30;
+  }
+  .drawer-overlay.open{ opacity:1; pointer-events:auto; }
+
+  #transcript-drawer{
+    position:fixed; left:0; right:0; bottom:0;
+    max-height:62vh;
+    background:#0b0c0f;
+    border-top:1px solid var(--border);
+    border-radius:22px 22px 0 0;
+    transform:translateY(100%);
+    transition:transform 0.35s cubic-bezier(.32,.72,0,1);
+    z-index:31;
+    display:flex; flex-direction:column;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #transcript-drawer.open{ transform:translateY(0); }
+  .drawer-handle{
+    width:36px; height:4px; border-radius:2px;
+    background:rgba(255,255,255,0.2);
+    margin:10px auto 4px;
+  }
+  .drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:6px 18px 12px;
+    border-bottom:1px solid var(--border);
+  }
+  .drawer-head h2{ font-family:var(--display); font-size:14px; margin:0; }
+  .drawer-head button{
+    background:none; border:none; color:var(--text-dim); cursor:pointer;
+    width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+  }
+  #transcript-list{
+    padding:16px 18px 20px;
+    overflow-y:auto;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .empty-hint{ color:var(--text-faint); font-size:13px; text-align:center; padding:24px 8px; }
+  .msg{ display:flex; flex-direction:column; gap:4px; max-width:88%; }
+  .msg.user{ align-self:flex-end; align-items:flex-end; }
+  .msg.ai{ align-self:flex-start; align-items:flex-start; }
+  .bubble{ padding:9px 13px; border-radius:14px; font-size:14px; line-height:1.45; white-space:pre-wrap; }
+  .msg.user .bubble{ background:#232830; color:var(--text); border-bottom-right-radius:4px; }
+  .msg.ai .bubble{ background:#15171b; color:var(--text); border:1px solid var(--border); border-bottom-left-radius:4px; }
+  .msg.ai-error .bubble{ border-color:var(--danger); color:#ffb3ae; }
+  .tier-tag{
+    font-family:var(--mono); font-size:10px; letter-spacing:0.03em;
+    padding:2px 7px; border-radius:999px; border:1px solid var(--border); color:var(--text-dim);
+  }
+  .tier-tag.groq{ color:var(--teal); border-color:rgba(69,214,196,0.4); }
+  .tier-tag.ondevice{ color:#b58af5; border-color:rgba(181,138,245,0.4); }
+
+  /* ---------- bottom bar ---------- */
+  .bottom-bar-wrap{
+    position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom, 0px));
+    transform:translateX(-50%);
+    width:min(560px, 92vw);
+    display:flex; flex-direction:column; align-items:stretch; gap:8px;
+    z-index:20;
+  }
+  .attach-chip{
+    display:flex; align-items:center; gap:8px;
+    align-self:flex-start;
+    max-width:100%;
+    background:var(--panel-strong);
+    backdrop-filter:blur(24px) saturate(1.4);
+    -webkit-backdrop-filter:blur(24px) saturate(1.4);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:8px 10px 8px 12px;
+    font-size:12.5px;
+    color:var(--text);
+  }
+  .attach-chip svg{ width:15px; height:15px; flex-shrink:0; color:var(--teal); }
+  .attach-chip .a-name{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:280px; }
+  .attach-chip .a-status{ color:var(--text-faint); font-family:var(--mono); font-size:10.5px; flex-shrink:0; }
+  .attach-chip .a-remove{
+    flex-shrink:0; width:20px; height:20px; border-radius:50%;
+    border:none; background:transparent; color:var(--text-faint);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .attach-chip .a-remove:hover{ background:rgba(255,91,84,0.15); color:var(--danger); }
+  .attach-chip .a-remove svg{ width:12px; height:12px; color:inherit; }
+
+  .msg-actions{ display:flex; gap:6px; margin-top:2px; }
+  .msg-action-btn{
+    display:flex; align-items:center; gap:4px;
+    font-family:var(--mono); font-size:10px; letter-spacing:0.02em;
+    padding:4px 9px; border-radius:999px;
+    border:1px solid var(--border); background:transparent;
+    color:var(--text-dim); cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .msg-action-btn svg{ width:11px; height:11px; }
+  .msg-action-btn:hover{ background:var(--panel-strong); color:var(--text); border-color:rgba(255,255,255,0.2); }
+  .msg-action-btn.busy{ opacity:0.55; pointer-events:none; }
+
+  .bottom-bar{
+    display:flex; align-items:center; gap:6px;
+    background:var(--panel);
+    backdrop-filter:blur(24px) saturate(1.4);
+    -webkit-backdrop-filter:blur(24px) saturate(1.4);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 6px 6px 8px;
+  }
+  .icon-btn{
+    width:42px; height:42px; flex-shrink:0;
+    border-radius:50%; border:none; background:transparent;
+    color:var(--text-dim);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .icon-btn:hover{ background:var(--panel-strong); color:var(--text); }
+  .icon-btn svg{ width:20px; height:20px; }
+  #mic-btn.listening{ color:var(--teal); background:rgba(69,214,196,0.14); }
+  #mic-btn.listening svg{ animation:mic-pulse 1s ease-in-out infinite; }
+  @keyframes mic-pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.5; } }
+
+  #text-input{
+    flex:1; min-width:0;
+    background:transparent; border:none; outline:none;
+    color:var(--text); font-family:var(--body); font-size:15px;
+    padding:0 4px;
+  }
+  #text-input::placeholder{ color:var(--text-faint); }
+
+  #stop-btn{
+    width:42px; height:42px; flex-shrink:0;
+    border-radius:50%; border:none; cursor:pointer;
+    background:#fff; color:#0a0a0c;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform 0.15s ease, opacity 0.2s ease;
+  }
+  #stop-btn:hover{ transform:scale(1.05); }
+  #stop-btn svg{ width:16px; height:16px; }
+  #stop-btn.idle-disabled{ opacity:0.35; pointer-events:none; }
+
+  .no-speech-note{
+    position:fixed; left:50%; bottom:100px; transform:translateX(-50%);
+    font-size:12px; color:var(--text-faint); text-align:center; width:min(320px,90vw);
+    display:none;
+  }
+
+  /* ---------- sidebar ---------- */
+  .menu-btn{
+    position:fixed; top:calc(14px + env(safe-area-inset-top, 0px)); left:14px;
+    z-index:22;
+    width:40px; height:40px; border-radius:50%;
+    background:var(--panel); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--border); color:var(--text-dim);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .menu-btn:hover{ color:var(--text); background:var(--panel-strong); }
+  .menu-btn svg{ width:18px; height:18px; }
+
+  .sidebar-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.55);
+    opacity:0; pointer-events:none; transition:opacity 0.3s ease; z-index:40;
+  }
+  .sidebar-overlay.open{ opacity:1; pointer-events:auto; }
+
+  #sidebar{
+    position:fixed; top:0; left:0; bottom:0;
+    width:min(280px, 82vw);
+    background:#0b0c0f; border-right:1px solid var(--border);
+    transform:translateX(-100%);
+    transition:transform 0.32s cubic-bezier(.32,.72,0,1);
+    z-index:41;
+    display:flex; flex-direction:column;
+    padding-top:env(safe-area-inset-top, 0px);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  #sidebar.open{ transform:translateX(0); }
+
+  .sidebar-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 16px 10px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--display); font-weight:700; font-size:17px; letter-spacing:0.01em;
+  }
+  .brand-mark{
+    width:20px; height:20px; border-radius:50%; flex-shrink:0;
+    background:radial-gradient(circle at 32% 28%, #ffffff 0%, #cdeeff 12%, #7cc9ff 36%, #3b82f6 62%, #0e2a63 100%);
+    box-shadow:0 0 10px 2px rgba(59,130,246,0.5);
+  }
+  .sidebar-head button{
+    background:none; border:none; color:var(--text-dim); cursor:pointer;
+    width:30px; height:30px; display:flex; align-items:center; justify-content:center;
+  }
+  .sidebar-head button:hover{ color:var(--text); }
+
+  .new-chat-btn{
+    margin:4px 16px 14px;
+    display:flex; align-items:center; gap:8px;
+    padding:10px 12px; border-radius:11px;
+    border:1px solid var(--border); background:var(--panel);
+    color:var(--text); font-family:var(--body); font-size:13.5px; font-weight:600;
+    cursor:pointer;
+  }
+  .new-chat-btn:hover{ background:var(--panel-strong); }
+  .new-chat-btn svg{ width:16px; height:16px; }
+
+  .sidebar-clock{
+    margin:0 16px 16px; padding:12px 14px;
+    border:1px solid var(--border); border-radius:12px;
+    background:rgba(255,255,255,0.03);
+  }
+  #clock-date{ font-family:var(--mono); font-size:11px; color:var(--text-faint); letter-spacing:0.02em; }
+  #clock-time{ font-family:var(--display); font-size:20px; font-weight:600; margin-top:2px; color:var(--text); }
+
+  .sidebar-section-label{
+    padding:0 16px 6px; font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em;
+    color:var(--text-faint);
+  }
+  .history-list{
+    flex:1; overflow-y:auto; padding:0 10px 16px;
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .history-item{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 10px; border-radius:9px; cursor:pointer;
+    color:var(--text-dim); font-size:13px;
+  }
+  .history-item:hover{ background:var(--panel); color:var(--text); }
+  .history-item.active{ background:var(--panel-strong); color:var(--text); }
+  .history-item .h-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .history-item .h-title{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .history-item .h-time{ font-family:var(--mono); font-size:10px; color:var(--text-faint); }
+  .history-item .h-delete{
+    flex-shrink:0; width:26px; height:26px; border-radius:50%;
+    border:none; background:transparent; color:var(--text-faint);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    opacity:0; transition:opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .history-item .h-delete svg{ width:14px; height:14px; }
+  .history-item:hover .h-delete{ opacity:1; }
+  .history-item .h-delete:hover{ background:rgba(255,91,84,0.15); color:var(--danger); }
+  .history-empty{ color:var(--text-faint); font-size:12.5px; text-align:center; padding:20px 10px; }
+
+  .sidebar-footer{
+    border-top:1px solid var(--border);
+    padding:10px;
+  }
+  .sidebar-settings-btn{
+    width:100%; display:flex; align-items:center; gap:10px;
+    padding:11px 12px; border-radius:11px;
+    border:none; background:transparent;
+    color:var(--text-dim); font-family:var(--body); font-size:13.5px; font-weight:600;
+    cursor:pointer; text-align:left;
+  }
+  .sidebar-settings-btn:hover{ background:var(--panel); color:var(--text); }
+  .sidebar-settings-btn svg{ width:17px; height:17px; flex-shrink:0; color:var(--teal); }
+  .sidebar-settings-btn .s-sub{ display:block; font-family:var(--mono); font-size:10px; font-weight:400; color:var(--text-faint); margin-top:1px; letter-spacing:0.02em; }
+
+  /* ---------- settings modal ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.72);
+    display:none; align-items:center; justify-content:center; padding:20px; z-index:50;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    width:100%; max-width:400px;
+    background:#101114; border:1px solid var(--border); border-radius:20px;
+    padding:22px; max-height:88vh; overflow-y:auto;
+  }
+  .modal h2{ font-family:var(--display); font-size:17px; margin:0 0 4px; }
+  .modal .lead{ font-size:12.5px; color:var(--text-dim); line-height:1.55; margin:0 0 18px; }
+  .default-badge{
+    display:inline-flex; align-items:center; gap:5px;
+    font-family:var(--mono); font-size:10.5px; color:var(--teal);
+    background:rgba(69,214,196,0.1); border:1px solid rgba(69,214,196,0.3);
+    padding:3px 8px; border-radius:999px; margin-bottom:12px;
+  }
+  .field{ margin-bottom:14px; }
+  .field label{ display:flex; justify-content:space-between; align-items:baseline; font-size:12.5px; font-weight:600; margin-bottom:6px; }
+  .field label a{ font-size:11px; font-weight:400; color:var(--teal); text-decoration:none; }
+  .field label a:hover{ text-decoration:underline; }
+  .field input, .field select, .field textarea{
+    width:100%; background:#181a1e; border:1px solid var(--border); border-radius:8px;
+    padding:9px 11px; color:var(--text); font-family:var(--mono); font-size:12.5px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--teal); }
+  .field textarea{ font-family:var(--body); font-size:13px; resize:vertical; min-height:56px; }
+  .field select{ -webkit-appearance:none; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23808690' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center; background-size:14px; padding-right:30px;
+  }
+  .field .hint{ font-size:11px; color:var(--text-faint); margin-top:5px; line-height:1.5; }
+  .settings-section-label{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; color:var(--teal);
+    margin:20px 0 12px; display:flex; align-items:center; gap:8px;
+  }
+  .settings-section-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+  .settings-section-label:first-of-type{ margin-top:2px; }
+  .field-row{ display:flex; gap:10px; }
+  .field-row .field{ flex:1; }
+  .modal-actions{ display:flex; gap:8px; margin-top:6px; }
+  .modal-actions button{
+    flex:1; padding:10px; border-radius:9px; border:1px solid var(--border);
+    font-family:var(--body); font-weight:600; font-size:13px; cursor:pointer;
+  }
+  #save-settings{ background:var(--teal); color:#0b1c19; border:none; }
+  #save-settings:hover{ background:#5fe3d2; }
+  #reset-settings{ background:transparent; color:var(--text-dim); }
+  #reset-settings:hover{ color:var(--amber); border-color:var(--amber); }
+  #close-settings{ background:transparent; color:var(--text-dim); }
+  #close-settings:hover{ color:var(--text); }
+</style>
+</head>
+<body data-orb="idle">
+
+  <div class="hud-layer">
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
+  </div>
+  <div class="hud-readout" id="hud-readout">
+    <div class="r-name" id="hud-name">SODAM AI</div>
+    <div class="r-state" id="hud-state">STANDBY</div>
+  </div>
+
+  <button class="menu-btn" id="menu-btn" aria-label="메뉴">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+  </button>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside id="sidebar">
+    <div class="sidebar-head">
+      <div class="brand"><span class="brand-mark"></span><span id="brand-name">Sodam</span></div>
+      <button id="sidebar-close" aria-label="닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </button>
+    </div>
+    <button class="new-chat-btn" id="new-chat-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
+      새 대화
+    </button>
+    <div class="sidebar-clock">
+      <div id="clock-date">-</div>
+      <div id="clock-time">-</div>
+    </div>
+    <div class="sidebar-section-label">최근</div>
+    <div class="history-list" id="history-list">
+      <div class="history-empty">아직 대화가 없어요.</div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="sidebar-settings-btn" id="sidebar-settings-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>설정<span class="s-sub">개인 맞춤 · API 키</span></span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="stage">
+    <div class="orb-wrap" id="orb-wrap">
+      <svg class="orb-hud-ring" viewBox="0 0 280 280" fill="none">
+        <circle cx="140" cy="140" r="135" stroke="currentColor" stroke-width="1" stroke-dasharray="1 7" stroke-linecap="round"/>
+        <circle cx="140" cy="140" r="118" stroke="currentColor" stroke-width="1" stroke-dasharray="10 3 2 3" opacity="0.6"/>
+      </svg>
+      <svg class="orb-hud-ring rev" viewBox="0 0 280 280" fill="none">
+        <circle cx="140" cy="140" r="126" stroke="currentColor" stroke-width="1" stroke-dasharray="2 14" stroke-linecap="round"/>
+      </svg>
+      <canvas id="orb-canvas"></canvas>
+    </div>
+    <div class="caption-row" id="caption-row">
+      <div id="caption">탭해서 대화를 시작하세요 · 이후엔 자유롭게 말하면 돼요</div>
+      <button id="transcript-toggle">
+        대화 기록
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="no-speech-note" id="no-speech-note">
+    이 브라우저는 음성 인식을 지원하지 않아요. 아래 입력창을 사용해주세요. (Chrome / Edge 권장)
+  </div>
+
+  <div class="bottom-bar-wrap">
+    <div class="attach-chip" id="attach-chip" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+      <span class="a-name" id="attach-chip-name">파일</span>
+      <span class="a-status" id="attach-chip-status"></span>
+      <button class="a-remove" id="attach-chip-remove" aria-label="첨부 제거">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="bottom-bar">
+      <button class="icon-btn" id="plus-btn" aria-label="설정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </button>
+      <button class="icon-btn" id="attach-btn" aria-label="파일 첨부">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+      </button>
+      <input type="file" id="attach-input" accept=".pdf,.docx,.txt,.md,.csv,.json" style="display:none;">
+      <input id="text-input" type="text" placeholder="유형" autocomplete="off">
+      <button class="icon-btn" id="mic-btn" aria-label="마이크">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+        </svg>
+      </button>
+      <button id="stop-btn" class="idle-disabled" aria-label="중단">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <div id="transcript-drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-head">
+      <h2>대화 기록</h2>
+      <button id="drawer-close" aria-label="닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </button>
+    </div>
+    <div id="transcript-list">
+      <div class="empty-hint">아직 대화가 없어요.</div>
+    </div>
+  </div>
+
+  <!-- 설정 모달 -->
+  <div class="overlay" id="settings-overlay">
+    <div class="modal">
+      <h2>설정</h2>
+      <p class="lead">
+        AI가 당신을 부르는 방식과 말투를 맞춤 설정하고, 응답에 쓰이는 연결 정보를 관리해요.
+      </p>
+
+      <div class="settings-section-label">AI 개인 맞춤</div>
+      <div class="field-row">
+        <div class="field">
+          <label>AI 이름</label>
+          <input type="text" id="pref-ai-name" placeholder="예: 홍길동">
+        </div>
+        <div class="field">
+          <label>내 이름 / 호칭</label>
+          <input type="text" id="pref-user-name" placeholder="예: 홍길동">
+        </div>
+      </div>
+      <div class="field">
+        <label>말투</label>
+        <select id="pref-personality">
+          <option value="friendly">친근한 존댓말 (기본)</option>
+          <option value="formal">격식 있는 존댓말</option>
+          <option value="casual">편한 반말</option>
+          <option value="jarvis">시크하고 위트있게 (자비스 스타일)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>기억해뒀으면 하는 정보 <span style="font-weight:400;color:var(--text-faint);">(선택)</span></label>
+        <textarea id="pref-notes" placeholder="예: IT 회사에서 일해요. 답은 핵심만 짧게 해주세요."></textarea>
+        <div class="hint">여기 적은 내용은 매 답변마다 AI에게 함께 전달돼요. 이 기기의 브라우저에만 저장돼요.</div>
+      </div>
+
+      <div class="settings-section-label">AI 연결</div>
+      <p class="lead" style="margin-bottom:12px;">
+        Groq API 키로 <b>웹 검색이 되는 Compound 모델</b>에게 물어봐요. 모르는 인물이나
+        최신 정보는 스스로 검색해서 답해요. 실패하거나 키가 없으면
+        브라우저 안에서 직접 도는 <b>온디바이스 모델</b>이 대신 답해요.
+      </p>
+      <div id="default-badge" class="default-badge" style="display:none;">● 키 없음 · 온디바이스 모드</div>
+      <div class="field">
+        <label>Groq API 키 <a href="https://console.groq.com/keys" target="_blank" rel="noopener">발급받기 ↗</a></label>
+        <input type="password" id="key-groq" placeholder="gsk_... (없으면 온디바이스 모델 사용)">
+        <div class="hint">이 페이지에는 별도로 내장된 키가 없어요. 여기에 입력한 키는 이 기기의 브라우저(localStorage)에만 저장되고, 다른 사람에게 공유되거나 소스에 노출되지 않아요. 비워두면 자동으로 온디바이스 모델이 대신 답해요.</div>
+      </div>
+      <div class="modal-actions">
+        <button id="reset-settings">기본값으로 초기화</button>
+        <button id="close-settings">닫기</button>
+        <button id="save-settings">저장</button>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  /* =========================================================
+     기본값 & 상태
+  ========================================================= */
+  // 기본 제공 키 없음 — 코드에 실제 키를 하드코딩하면 공개 저장소에서 그대로 노출돼요.
+  // 사용자가 설정에서 직접 입력한 키만 사용하고, 없으면 온디바이스 모델로 자동 폴백됩니다.
+  const DEFAULT_GROQ_KEY = '';
+
+  const orbWrap = document.getElementById('orb-wrap');
+  const caption = document.getElementById('caption');
+  const captionRow = document.getElementById('caption-row');
+  const transcriptToggle = document.getElementById('transcript-toggle');
+  const transcriptList = document.getElementById('transcript-list');
+  const transcriptDrawer = document.getElementById('transcript-drawer');
+  const drawerOverlay = document.getElementById('drawer-overlay');
+  const drawerClose = document.getElementById('drawer-close');
+
+  const plusBtn = document.getElementById('plus-btn');
+  const micBtn = document.getElementById('mic-btn');
+  const stopBtn = document.getElementById('stop-btn');
+  const textInput = document.getElementById('text-input');
+
+  const attachBtn = document.getElementById('attach-btn');
+  const attachInput = document.getElementById('attach-input');
+  const attachChip = document.getElementById('attach-chip');
+  const attachChipName = document.getElementById('attach-chip-name');
+  const attachChipStatus = document.getElementById('attach-chip-status');
+  const attachChipRemove = document.getElementById('attach-chip-remove');
+
+  const settingsOverlay = document.getElementById('settings-overlay');
+  const keyInput = document.getElementById('key-groq');
+  const defaultBadge = document.getElementById('default-badge');
+  const prefAiNameInput = document.getElementById('pref-ai-name');
+  const prefUserNameInput = document.getElementById('pref-user-name');
+  const prefPersonalityInput = document.getElementById('pref-personality');
+  const prefNotesInput = document.getElementById('pref-notes');
+
+  const menuBtn = document.getElementById('menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+  const sidebarClose = document.getElementById('sidebar-close');
+  const newChatBtn = document.getElementById('new-chat-btn');
+  const historyList = document.getElementById('history-list');
+  const clockDateEl = document.getElementById('clock-date');
+  const clockTimeEl = document.getElementById('clock-time');
+  const sidebarSettingsBtn = document.getElementById('sidebar-settings-btn');
+  const brandNameEl = document.getElementById('brand-name');
+  const hudNameEl = document.getElementById('hud-name');
+  const hudStateEl = document.getElementById('hud-state');
+
+  /* =========================================================
+     AI 개인 맞춤 (이름 · 호칭 · 말투 · 메모) — 브라우저에만 저장
+  ========================================================= */
+  const DEFAULT_AI_NAME = 'Sodam';
+  const PERSONALITY_LINES = {
+    friendly: '친근하고 다정한 존댓말로 답해.',
+    formal: '예의를 갖춘 격식 있는 존댓말로 또박또박 답해.',
+    casual: '편하고 스스럼없는 반말로 답해.',
+    jarvis: '아이언맨의 자비스처럼 차분하고 위트있게, 능력 있는 집사 같은 톤의 존댓말로 답해. 필요하면 담백한 유머를 살짝 곁들여.'
+  };
+
+  function loadPrefs(){
+    try{ return JSON.parse(localStorage.getItem('sodam_prefs') || '{}'); }
+    catch(e){ return {}; }
+  }
+  function savePrefs(p){ localStorage.setItem('sodam_prefs', JSON.stringify(p)); }
+  function getAiName(){ return (loadPrefs().aiName || '').trim() || DEFAULT_AI_NAME; }
+  function getUserName(){ return (loadPrefs().userName || '').trim(); }
+
+  function buildSystemPrompt(){
+    const prefs = loadPrefs();
+    const aiName = getAiName();
+    const userName = getUserName();
+    const personalityLine = PERSONALITY_LINES[prefs.personality] || PERSONALITY_LINES.friendly;
+    let prompt =
+      `너는 "${aiName}"라는 이름의 한국어 음성 비서야. ${personalityLine} ` +
+      "대답은 음성으로 읽어줄 거니까 이모지나 마크다운 없이, 자연스러운 구어체로 2~3문장 이내로 짧게 답해줘. " +
+      "유튜버, 인플루언서, 최근 사건, 실시간 정보처럼 네가 확실히 모르거나 최신일 수 있는 " +
+      "질문에는 반드시 웹 검색 도구를 먼저 사용한 뒤 답해. 검색해도 못 찾으면 모른다고 솔직히 말해줘.";
+    if (userName) prompt += ` 사용자를 "${userName}"라고 불러줘.`;
+    if ((prefs.notes || '').trim()) prompt += ` 사용자에 대한 참고 정보: ${prefs.notes.trim()}`;
+    return prompt;
+  }
+
+  function applyPersonalizationToUI(){
+    const aiName = getAiName();
+    const userName = getUserName();
+    if (brandNameEl) brandNameEl.textContent = aiName;
+    if (hudNameEl) hudNameEl.textContent = `${aiName.toUpperCase()} AI`;
+    const idleGreeting = userName
+      ? `${userName}님, 탭해서 대화를 시작하세요 · 이후엔 자유롭게 말하면 돼요`
+      : '탭해서 대화를 시작하세요 · 이후엔 자유롭게 말하면 돼요';
+    IDLE_CAPTION = idleGreeting;
+    if (document.body.dataset.orb === 'idle' && !sessionStarted){
+      caption.textContent = idleGreeting;
+    }
+  }
+
+  let IDLE_CAPTION = '탭해서 대화를 시작하세요 · 이후엔 자유롭게 말하면 돼요';
+
+  let history = []; // {role:'user'|'assistant', content:string}
+  let captionTimer = null;
+
+  let conversations = loadConversations(); // 저장된 전체 대화 목록
+  let currentConversationId = null;        // 지금 이어가고 있는 대화의 id
+
+  function loadConversations(){
+    try{ return JSON.parse(localStorage.getItem('sodam_conversations') || '[]'); }
+    catch(e){ return []; }
+  }
+  function saveConversations(){
+    localStorage.setItem('sodam_conversations', JSON.stringify(conversations));
+  }
+
+  class SkipProvider extends Error {}
+
+  function getGroqKey(){
+    return localStorage.getItem('voiceai_groq_key') || DEFAULT_GROQ_KEY;
+  }
+  function isUsingDefaultKey(){
+    return !localStorage.getItem('voiceai_groq_key');
+  }
+
+  const HUD_STATE_LABELS = { idle:'STANDBY', listening:'LISTENING', thinking:'PROCESSING', speaking:'RESPONDING' };
+  function setOrbState(state){
+    document.body.dataset.orb = state;
+    stopBtn.classList.toggle('idle-disabled', state === 'idle' || state === 'listening');
+    if (hudStateEl) hudStateEl.textContent = HUD_STATE_LABELS[state] || state.toUpperCase();
+  }
+  function setCaption(text, sticky){
+    caption.style.opacity = '0';
+    clearTimeout(captionTimer);
+    setTimeout(() => {
+      caption.textContent = text;
+      caption.style.opacity = '1';
+    }, 120);
+    if (!sticky){
+      captionTimer = setTimeout(() => {
+        if (document.body.dataset.orb === 'idle'){
+          caption.style.opacity = '0';
+          setTimeout(() => {
+            caption.textContent = IDLE_CAPTION;
+            caption.style.opacity = '1';
+          }, 200);
+        }
+      }, 4000);
+    }
+  }
+
+  function renderMessageDOM(sender, text, cls, tierInfo){
+    const hint = transcriptList.querySelector('.empty-hint');
+    if (hint) hint.remove();
+    const wrap = document.createElement('div');
+    wrap.className = `msg ${cls}`;
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    if (tierInfo){
+      const tag = document.createElement('span');
+      tag.className = `tier-tag ${tierInfo.tier}`;
+      tag.textContent = tierInfo.label;
+      wrap.appendChild(tag);
+    }
+    if (cls === 'ai'){
+      const actions = document.createElement('div');
+      actions.className = 'msg-actions';
+
+      const pdfBtn = document.createElement('button');
+      pdfBtn.className = 'msg-action-btn';
+      pdfBtn.type = 'button';
+      pdfBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> PDF';
+      pdfBtn.addEventListener('click', () => exportAnswerToPDF(text, pdfBtn));
+
+      const pptBtn = document.createElement('button');
+      pptBtn.className = 'msg-action-btn';
+      pptBtn.type = 'button';
+      pptBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> PPT';
+      pptBtn.addEventListener('click', () => exportAnswerToPPT(text, pptBtn));
+
+      actions.appendChild(pdfBtn);
+      actions.appendChild(pptBtn);
+      wrap.appendChild(actions);
+    }
+    transcriptList.appendChild(wrap);
+    transcriptList.scrollTop = transcriptList.scrollHeight;
+  }
+
+  function ensureConversation(firstUserText){
+    if (currentConversationId) return;
+    const id = 'c_' + Date.now();
+    const title = firstUserText.length > 24 ? firstUserText.slice(0, 24) + '…' : firstUserText;
+    conversations.unshift({ id, title, messages: [], updatedAt: Date.now() });
+    currentConversationId = id;
+    saveConversations();
+    renderHistoryList();
+  }
+
+  function persistMessage(sender, text, cls, tierInfo){
+    const conv = conversations.find(c => c.id === currentConversationId);
+    if (!conv) return;
+    conv.messages.push({ sender, text, cls, tier: tierInfo?.tier || null, label: tierInfo?.label || null });
+    conv.updatedAt = Date.now();
+    saveConversations();
+    renderHistoryList();
+  }
+
+  function appendMessage(sender, text, cls, tierInfo){
+    renderMessageDOM(sender, text, cls, tierInfo);
+    persistMessage(sender, text, cls, tierInfo);
+  }
+
+  function formatConvTime(ts){
+    return new Intl.DateTimeFormat('ko-KR', {
+      timeZone:'Asia/Seoul', month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true
+    }).format(new Date(ts));
+  }
+
+  function renderHistoryList(){
+    historyList.innerHTML = '';
+    if (!conversations.length){
+      historyList.innerHTML = '<div class="history-empty">아직 대화가 없어요.</div>';
+      return;
+    }
+    const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
+    sorted.forEach(conv => {
+      const item = document.createElement('div');
+      item.className = 'history-item' + (conv.id === currentConversationId ? ' active' : '');
+
+      const main = document.createElement('div');
+      main.className = 'h-main';
+      const title = document.createElement('div');
+      title.className = 'h-title';
+      title.textContent = conv.title || '새 대화';
+      const time = document.createElement('div');
+      time.className = 'h-time';
+      time.textContent = formatConvTime(conv.updatedAt);
+      main.appendChild(title);
+      main.appendChild(time);
+      main.addEventListener('click', () => loadConversation(conv.id));
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'h-delete';
+      delBtn.type = 'button';
+      delBtn.setAttribute('aria-label', '대화 삭제');
+      delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteConversation(conv.id);
+      });
+
+      item.appendChild(main);
+      item.appendChild(delBtn);
+      historyList.appendChild(item);
+    });
+  }
+
+  function deleteConversation(id){
+    conversations = conversations.filter(c => c.id !== id);
+    saveConversations();
+    if (currentConversationId === id){
+      currentConversationId = null;
+      history = [];
+      transcriptList.innerHTML = '<div class="empty-hint">아직 대화가 없어요.</div>';
+    }
+    renderHistoryList();
+  }
+
+  function loadConversation(id){
+    const conv = conversations.find(c => c.id === id);
+    if (!conv) return;
+    currentConversationId = id;
+    history = [];
+    transcriptList.innerHTML = '';
+    if (!conv.messages.length){
+      transcriptList.innerHTML = '<div class="empty-hint">아직 대화가 없어요.</div>';
+    }
+    conv.messages.forEach(m => {
+      renderMessageDOM(m.sender, m.text, m.cls, m.tier ? { tier:m.tier, label:m.label } : null);
+      if (m.cls === 'user') history.push({ role:'user', content:m.text });
+      else if (m.cls === 'ai') history.push({ role:'assistant', content:m.text });
+    });
+    renderHistoryList();
+    closeSidebar();
+    openDrawer();
+  }
+
+  function startNewChat(){
+    currentConversationId = null;
+    history = [];
+    transcriptList.innerHTML = '<div class="empty-hint">아직 대화가 없어요.</div>';
+    renderHistoryList();
+    closeSidebar();
+    hideAttachChip();
+    textInput.placeholder = '유형';
+  }
+
+  /* =========================================================
+     공급자 1: Groq (Llama 3.3 70B)
+  ========================================================= */
+  async function callGroq(prompt, hist){
+    const key = getGroqKey();
+    if (!key) throw new SkipProvider();
+    setCaption('Groq에게 물어보는 중…', true);
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify({
+        // groq/compound: 필요하면 모델이 스스로 웹 검색을 수행한 뒤 답하는 에이전틱 모델
+        model: 'groq/compound',
+        messages: [
+          { role:'system', content: buildSystemPrompt() },
+          ...hist,
+          { role:'user', content: prompt }
+        ],
+        max_tokens: 400,
+        temperature: 0.7,
+        citation_options: 'disabled', // 음성으로 읽을 거라 본문 안에 인용 표시가 섞이면 안 됨
+        compound_custom: { tools: { enabled_tools: ['web_search', 'visit_website'] } }
+      })
+    });
+    if (!res.ok) throw new Error(`Groq HTTP ${res.status}`);
+    const data = await res.json();
+    const text = data.choices?.[0]?.message?.content?.trim();
+    if (!text) throw new Error('Groq: 빈 응답');
+    const usedSearch = !!data.choices?.[0]?.message?.executed_tools?.length;
+    return { text, tier:'groq', label: usedSearch ? 'Groq · 웹 검색' : 'Groq · Compound' };
+  }
+
+  /* =========================================================
+     공급자 2 (최종 폴백): 온디바이스 (transformers.js, 키 불필요)
+  ========================================================= */
+  let onDevicePipeline = null;
+  async function callOnDevice(prompt, hist){
+    setCaption('온디바이스 모델 준비 중… (최초 1회만 다운로드)', true);
+    setOrbState('thinking');
+    if (!onDevicePipeline){
+      const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm');
+      onDevicePipeline = await pipeline(
+        'text-generation',
+        'onnx-community/Qwen2.5-0.5B-Instruct',
+        { dtype: 'q4' }
+      );
+    }
+    setCaption('온디바이스 모델 생성 중…', true);
+    const messages = [
+      { role:'system', content: buildSystemPrompt() },
+      ...hist,
+      { role:'user', content: prompt }
+    ];
+    const output = await onDevicePipeline(messages, { max_new_tokens: 180 });
+    const generated = output?.[0]?.generated_text;
+    const text = Array.isArray(generated) ? generated.at(-1)?.content : generated;
+    if (!text) throw new Error('온디바이스: 빈 응답');
+    return { text: text.trim(), tier:'ondevice', label:'온디바이스' };
+  }
+
+  /* =========================================================
+     오케스트레이터
+  ========================================================= */
+  async function getAIResponse(prompt, hist){
+    const providers = [callGroq, callOnDevice];
+    let lastError = null;
+    for (const fn of providers){
+      try{ return await fn(prompt, hist); }
+      catch(err){
+        if (err instanceof SkipProvider) continue;
+        console.warn(err);
+        lastError = err;
+      }
+    }
+    throw lastError || new Error('모든 공급자 실패');
+  }
+
+  /* =========================================================
+     외부 라이브러리 지연 로드 (전부 무료 CDN, API 키 불필요)
+  ========================================================= */
+  function loadScriptOnce(url){
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${url}"]`)){ resolve(); return; }
+      const s = document.createElement('script');
+      s.src = url;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('라이브러리를 불러오지 못했어요: ' + url));
+      document.head.appendChild(s);
+    });
+  }
+  async function ensurePdfJs(){
+    if (window.pdfjsLib) return;
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  async function ensureMammoth(){
+    if (window.mammoth) return;
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+  }
+  async function ensureJsPDF(){
+    if (window.jspdf) return;
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  }
+  async function ensureHtml2Canvas(){
+    if (window.html2canvas) return;
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  }
+  async function ensurePptxGen(){
+    if (window.PptxGenJS) return;
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js');
+  }
+
+  /* =========================================================
+     파일 첨부 → 텍스트 추출 (PDF / DOCX / TXT / MD / CSV / JSON)
+  ========================================================= */
+  const MAX_ATTACH_CHARS = 8000;
+  let pendingAttachment = null; // { name, text }
+
+  async function extractFileText(file){
+    const name = file.name.toLowerCase();
+    if (name.endsWith('.pdf')){
+      await ensurePdfJs();
+      const buf = await file.arrayBuffer();
+      const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+      let text = '';
+      const maxPages = Math.min(doc.numPages, 40);
+      for (let i = 1; i <= maxPages; i++){
+        const page = await doc.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(it => it.str).join(' ') + '\n';
+      }
+      return text.trim();
+    }
+    if (name.endsWith('.docx')){
+      await ensureMammoth();
+      const buf = await file.arrayBuffer();
+      const result = await window.mammoth.extractRawText({ arrayBuffer: buf });
+      return (result.value || '').trim();
+    }
+    if (name.endsWith('.txt') || name.endsWith('.md') || name.endsWith('.csv') || name.endsWith('.json')){
+      return (await file.text()).trim();
+    }
+    throw new Error('UNSUPPORTED');
+  }
+
+  function showAttachChip(name, statusText){
+    attachChipName.textContent = name;
+    attachChipStatus.textContent = statusText || '';
+    attachChip.style.display = 'flex';
+  }
+  function hideAttachChip(){
+    attachChip.style.display = 'none';
+    pendingAttachment = null;
+  }
+
+  attachBtn.addEventListener('click', () => attachInput.click());
+  attachChipRemove.addEventListener('click', hideAttachChip);
+
+  attachInput.addEventListener('change', async () => {
+    const file = attachInput.files?.[0];
+    attachInput.value = '';
+    if (!file) return;
+    showAttachChip(file.name, '읽는 중…');
+    try{
+      const text = await extractFileText(file);
+      if (!text){
+        showAttachChip(file.name, '텍스트를 찾지 못했어요');
+        pendingAttachment = null;
+        return;
+      }
+      pendingAttachment = { name: file.name, text: text.slice(0, MAX_ATTACH_CHARS) };
+      showAttachChip(file.name, `${Math.min(text.length, MAX_ATTACH_CHARS).toLocaleString()}자 준비됨`);
+      textInput.placeholder = '이 파일에 대해 무엇이든 물어보세요';
+      textInput.focus();
+    }catch(err){
+      console.error(err);
+      const msg = err?.message === 'UNSUPPORTED'
+        ? '지원하지 않는 형식이에요 (PDF·DOCX·TXT·MD·CSV·JSON만 가능)'
+        : '파일을 읽지 못했어요';
+      showAttachChip(file.name, msg);
+      pendingAttachment = null;
+    }
+  });
+
+  /* =========================================================
+     AI 답변 → PDF / PPT 내보내기 (전부 브라우저에서 무료로 생성)
+  ========================================================= */
+  function splitTextIntoChunks(text, maxLen){
+    const paras = text.split(/\n+/).filter(Boolean);
+    const chunks = [];
+    let cur = '';
+    for (const p of paras){
+      if (cur && (cur + '\n' + p).length > maxLen){
+        chunks.push(cur);
+        cur = p;
+      } else {
+        cur = cur ? cur + '\n' + p : p;
+      }
+    }
+    if (cur) chunks.push(cur);
+    return chunks.length ? chunks : [text];
+  }
+
+  async function exportAnswerToPDF(text, btnEl){
+    if (btnEl) btnEl.classList.add('busy');
+    try{
+      await ensureJsPDF();
+      await ensureHtml2Canvas();
+      const { jsPDF } = window.jspdf;
+
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'position:fixed; left:-9999px; top:0; width:700px; padding:40px; ' +
+        'background:#ffffff; color:#141414; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; ' +
+        'font-size:16px; line-height:1.75; white-space:pre-wrap; word-break:break-word;';
+      wrap.textContent = text;
+      document.body.appendChild(wrap);
+      if (document.fonts?.ready) await document.fonts.ready;
+
+      const canvas = await window.html2canvas(wrap, { scale: 2, backgroundColor: '#ffffff' });
+      document.body.removeChild(wrap);
+
+      const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW;
+      const imgH = (canvas.height * imgW) / canvas.width;
+      const imgData = canvas.toDataURL('image/png');
+
+      let heightLeft = imgH;
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', 0, position, imgW, imgH);
+      heightLeft -= pageH;
+      while (heightLeft > 0){
+        position = heightLeft - imgH;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgW, imgH);
+        heightLeft -= pageH;
+      }
+      pdf.save(`${getAiName()}_답변_${Date.now()}.pdf`);
+    }catch(err){
+      console.error(err);
+      alert('PDF 생성에 실패했어요. 네트워크 상태를 확인해주세요.');
+    }finally{
+      if (btnEl) btnEl.classList.remove('busy');
+    }
+  }
+
+  async function exportAnswerToPPT(text, btnEl){
+    if (btnEl) btnEl.classList.add('busy');
+    try{
+      await ensurePptxGen();
+      const pptx = new window.PptxGenJS();
+      pptx.defineLayout({ name: 'SODAM', width: 10, height: 5.63 });
+      pptx.layout = 'SODAM';
+
+      const chunks = splitTextIntoChunks(text, 480);
+      chunks.forEach((chunk, i) => {
+        const slide = pptx.addSlide();
+        slide.background = { color: '0B0C0F' };
+        if (i === 0){
+          slide.addText(getAiName(), { x: 0.5, y: 0.3, fontSize: 22, bold: true, color: '45D6C4' });
+        }
+        slide.addText(chunk, {
+          x: 0.5, y: i === 0 ? 1.0 : 0.5, w: 9, h: i === 0 ? 4.3 : 4.8,
+          fontSize: 16, color: 'F2F3F5', valign: 'top',
+          fontFace: 'Malgun Gothic', breakLine: true
+        });
+        slide.addText(`${i + 1} / ${chunks.length}`, {
+          x: 8.7, y: 5.25, w: 1, h: 0.3, fontSize: 9, color: '4a4d55', align: 'right'
+        });
+      });
+      await pptx.writeFile({ fileName: `${getAiName()}_답변_${Date.now()}.pptx` });
+    }catch(err){
+      console.error(err);
+      alert('PPT 생성에 실패했어요. 네트워크 상태를 확인해주세요.');
+    }finally{
+      if (btnEl) btnEl.classList.remove('busy');
+    }
+  }
+
+  /* =========================================================
+     사용자 입력 처리
+  ========================================================= */
+  let currentRequestId = 0;
+
+  async function handleUserInput(rawText){
+    const attachment = pendingAttachment;
+    let userText = (rawText || '').trim();
+    if (!userText && !attachment) return;
+    if (!userText && attachment) userText = '이 파일의 내용을 설명하고 핵심을 요약해줘.';
+    const myId = ++currentRequestId;
+
+    const displayText = attachment ? `📎 ${attachment.name}\n${userText}` : userText;
+    ensureConversation(userText);
+    appendMessage('나', displayText, 'user');
+    setCaption(userText, true);
+    hideAttachChip();
+
+    const promptForAI = attachment
+      ? `[첨부 파일: ${attachment.name}]\n---\n${attachment.text}\n---\n\n사용자 요청: ${userText}`
+      : userText;
+
+    const histSnapshot = history.slice(-6);
+    history.push({ role:'user', content: promptForAI });
+
+    setOrbState('thinking');
+    try{
+      const { text: answer, tier, label } = await getAIResponse(promptForAI, histSnapshot);
+      if (myId !== currentRequestId) return; // 중단됨
+      history.push({ role:'assistant', content: answer });
+      appendMessage('AI', answer, 'ai', { tier, label });
+      setOrbState('speaking');
+      setCaption(answer, true);
+      aiSpeechText = answer; // 바지인(끼어들기) 시 내 목소리 에코와 구분하기 위해 기록
+      speakText(answer, () => {
+        if (myId !== currentRequestId) return;
+        aiSpeechText = '';
+        setOrbState(handsFreeOn ? 'listening' : 'idle');
+        setCaption('', false);
+      });
+    }catch(err){
+      if (myId !== currentRequestId) return;
+      console.error(err);
+      appendMessage('AI', '죄송해요, 지금은 답변을 가져올 수 없어요.', 'ai-error');
+      setCaption('답변을 가져오지 못했어요', false);
+      setOrbState(handsFreeOn ? 'listening' : 'idle');
+    }
+  }
+
+  /* =========================================================
+     실시간 볼륨 미터 (Web Audio API) — 오브가 목소리 크기에 반응
+  ========================================================= */
+  let audioCtx = null, analyser = null, volData = null, volRafId = null;
+  let currentVolume = 0;
+  let micStreamRef = null;
+
+  function setupVolumeMeter(stream){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.55;
+    const src = audioCtx.createMediaStreamSource(stream);
+    src.connect(analyser);
+    volData = new Uint8Array(analyser.frequencyBinCount);
+    startVolumeLoop();
+  }
+
+  function startVolumeLoop(){
+    function loop(){
+      analyser.getByteTimeDomainData(volData);
+      let sumSquares = 0;
+      let peak = 0;
+      for (let i = 0; i < volData.length; i++){
+        const v = (volData[i] - 128) / 128;
+        sumSquares += v * v;
+        const av = Math.abs(v);
+        if (av > peak) peak = av;
+      }
+      const rms = Math.sqrt(sumSquares / volData.length);
+      // RMS와 순간 피크를 함께 반영해 작은 목소리도 잘 잡히게 함
+      let raw = rms * 5.5 + peak * 2.2;
+      // 노이즈 게이트: 배경 잡음(아주 작은 값)은 0으로 눌러 침묵 시 안 흔들리게
+      raw = raw < 0.05 ? 0 : raw;
+      // 감마 보정으로 작게 말해도 시각적으로 확 드러나게
+      const target = Math.min(1, Math.pow(raw, 0.65));
+      // 어택은 빠르게, 릴리즈는 느리게 (말할 때 훅 반응, 멈추면 서서히 가라앉음)
+      const attack = target > currentVolume ? 0.55 : 0.12;
+      currentVolume += (target - currentVolume) * attack;
+      volRafId = requestAnimationFrame(loop);
+    }
+    volRafId = requestAnimationFrame(loop);
+  }
+
+  function stopVolumeLoop(){
+    if (volRafId) cancelAnimationFrame(volRafId);
+    volRafId = null;
+    currentVolume = 0;
+  }
+
+  /* =========================================================
+     파티클 오브 — 캔버스 기반 구체
+     · idle/listening: 은은한 청록빛 입자, 마이크 볼륨에 반응해 퍼짐
+     · thinking: 주황색으로 전환, 리드미컬하게 맥동
+     · speaking: 파란빛, TTS 음절 경계에 맞춰 순간적으로 퍼짐(피치/볼륨 느낌)
+  ========================================================= */
+  const orbCanvas = document.getElementById('orb-canvas');
+  const octx = orbCanvas.getContext('2d');
+  let orbDpr = Math.min(window.devicePixelRatio || 1, 2);
+  let orbCssSize = 0;
+  let orbParticles = [];
+
+  const ORB_COLORS = {
+    idle:      [69, 214, 196],
+    listening: [69, 214, 196],
+    thinking:  [232, 163, 61],
+    speaking:  [124, 201, 255]
+  };
+
+  function resizeOrbCanvas(){
+    const rect = orbCanvas.getBoundingClientRect();
+    orbCssSize = rect.width;
+    orbDpr = Math.min(window.devicePixelRatio || 1, 2);
+    orbCanvas.width = Math.round(rect.width * orbDpr);
+    orbCanvas.height = Math.round(rect.height * orbDpr);
+  }
+
+  function buildOrbParticles(){
+    const particles = [];
+    const CORE_N = 150;
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < CORE_N; i++){
+      const y = 1 - (i / (CORE_N - 1)) * 2;
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      const theta = golden * i;
+      particles.push({
+        x: Math.cos(theta) * r, y, z: Math.sin(theta) * r,
+        radiusMul: 0.82 + Math.random() * 0.34,
+        size: 0.9 + Math.random() * 1.5,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.6 + Math.random() * 1.1,
+        corona: false
+      });
+    }
+    const CORONA_N = 40;
+    for (let i = 0; i < CORONA_N; i++){
+      const u = Math.random() * 2 - 1;
+      const t = Math.random() * Math.PI * 2;
+      const rxy = Math.sqrt(Math.max(0, 1 - u * u));
+      particles.push({
+        x: Math.cos(t) * rxy, y: u, z: Math.sin(t) * rxy,
+        radiusMul: 1.35 + Math.random() * 1.5,
+        size: 0.6 + Math.random() * 1.1,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.4 + Math.random() * 1.4,
+        corona: true
+      });
+    }
+    orbParticles = particles;
+  }
+
+  let orbEnergy = 0.1;       // 실제 렌더에 쓰이는(스무딩된) 확산 정도
+  let orbEnergyTarget = 0.1; // 목표 확산 정도
+  let speakPulse = 0.1;      // 말하기 상태에서 순간적으로 튀는 값(경계 이벤트로 스파이크)
+  let orbRotY = 0;
+
+  function spikeSpeakPulse(v){ speakPulse = Math.max(speakPulse, v); }
+
+  function renderOrb(t){
+    requestAnimationFrame(renderOrb);
+    if (!orbCssSize) resizeOrbCanvas();
+    const state = document.body.dataset.orb;
+    const time = t / 1000;
+
+    // 상태별 목표 에너지 계산
+    if (state === 'thinking'){
+      orbEnergyTarget = 0.26 + Math.sin(time * 3.2) * 0.12 + Math.max(0, Math.sin(time * 7)) * 0.08;
+    } else if (state === 'speaking'){
+      speakPulse *= 0.92; // 스파이크 감쇠
+      orbEnergyTarget = 0.14 + speakPulse;
+    } else if (state === 'listening'){
+      orbEnergyTarget = 0.14 + currentVolume * 0.95;
+    } else {
+      orbEnergyTarget = 0.08 + Math.sin(time * 0.6) * 0.035;
+    }
+    orbEnergy += (orbEnergyTarget - orbEnergy) * 0.12;
+
+    // 회전 속도: 생각 중엔 더 빠르게 돌아 "처리 중" 느낌
+    const rotSpeed = state === 'thinking' ? 0.55 : (state === 'speaking' ? 0.28 : 0.14);
+    orbRotY += rotSpeed * (1 / 60);
+    const tiltX = Math.sin(time * 0.18) * 0.18;
+
+    const color = ORB_COLORS[state] || ORB_COLORS.idle;
+    const [cr, cg, cb] = color;
+
+    const w = orbCanvas.width, h = orbCanvas.height;
+    octx.setTransform(orbDpr, 0, 0, orbDpr, 0, 0);
+    octx.clearRect(0, 0, orbCssSize, orbCssSize);
+
+    const cx = orbCssSize / 2, cy = orbCssSize / 2;
+    const coreR = orbCssSize * 0.185;
+    const spread = 1 + orbEnergy * 1.7;
+
+    // 은은한 배경 글로우
+    const glowR = coreR * (1.9 + orbEnergy * 1.1);
+    const glow = octx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+    glow.addColorStop(0, `rgba(${cr},${cg},${cb},${0.16 + orbEnergy * 0.18})`);
+    glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+    octx.fillStyle = glow;
+    octx.beginPath();
+    octx.arc(cx, cy, glowR, 0, Math.PI * 2);
+    octx.fill();
+
+    // 교차하는 두 개의 얇은 축선 (스캔라인 느낌)
+    octx.save();
+    octx.translate(cx, cy);
+    octx.rotate(orbRotY * 0.5);
+    octx.strokeStyle = `rgba(${cr},${cg},${cb},${0.12 + orbEnergy * 0.1})`;
+    octx.lineWidth = 1;
+    const axisR = coreR * (1.5 + orbEnergy * 0.6);
+    octx.beginPath(); octx.moveTo(-axisR, 0); octx.lineTo(axisR, 0); octx.stroke();
+    octx.rotate(Math.PI / 2.15);
+    octx.beginPath(); octx.moveTo(-axisR, 0); octx.lineTo(axisR, 0); octx.stroke();
+    octx.restore();
+
+    const cosY = Math.cos(orbRotY), sinY = Math.sin(orbRotY);
+    const cosX = Math.cos(tiltX), sinX = Math.sin(tiltX);
+
+    for (let i = 0; i < orbParticles.length; i++){
+      const p = orbParticles[i];
+      // Y축 회전
+      let x = p.x * cosY - p.z * sinY;
+      let z = p.x * sinY + p.z * cosY;
+      let y = p.y;
+      // 살짝 X축 틸트
+      const y2 = y * cosX - z * sinX;
+      const z2 = y * sinX + z * cosX;
+
+      const jitter = 1 + Math.sin(time * p.speed + p.phase) * 0.06 * (1 + orbEnergy);
+      const rMul = p.radiusMul * spread * jitter;
+      const px = cx + x * coreR * rMul;
+      const py = cy + y2 * coreR * rMul;
+      const depth = (z2 + 1) / 2; // 0(뒤) ~ 1(앞)
+
+      const twinkle = 0.55 + 0.45 * Math.sin(time * p.speed * 1.3 + p.phase);
+      let alpha = (0.18 + depth * 0.7) * twinkle;
+      if (p.corona) alpha *= 0.5;
+      alpha = Math.min(1, alpha);
+      const rad = p.size * (0.55 + depth * 0.85) * (orbDpr >= 1.5 ? 1 : 1);
+
+      octx.beginPath();
+      octx.fillStyle = `rgba(${cr},${cg},${cb},${alpha.toFixed(3)})`;
+      octx.arc(px, py, Math.max(0.4, rad), 0, Math.PI * 2);
+      octx.fill();
+    }
+  }
+
+  buildOrbParticles();
+  window.addEventListener('resize', resizeOrbCanvas);
+  requestAnimationFrame((t) => { resizeOrbCanvas(); renderOrb(t); });
+
+
+  /* =========================================================
+     STT — 상시 인식(핸즈프리) + 끼어들기(바지인)
+  ========================================================= */
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+
+  let sessionStarted = false; // 첫 탭으로 마이크 권한을 받았는지
+  let handsFreeOn = false;    // 지금 상시 인식이 켜져 있는지 (일시정지 여부)
+  let manualStop = false;     // 우리가 의도적으로 recognition.stop()을 부른 것인지
+  let aiSpeechText = '';      // 현재 AI가 말하고 있는 문장(에코 구분용)
+
+  // --- 재시작 폭주 방지 -------------------------------------------------
+  // onend가 짧은 시간 안에 반복해서 발생하면(=권한 재요청이 계속 뜨는 등
+  // 비정상 상황) 재시작을 점점 늦추고, 결국 완전히 멈춰서 사용자에게 알림.
+  let restartTimer = null;
+  let restartAttempts = 0;          // 연속 재시작 횟수
+  let lastRestartAt = 0;            // 마지막 재시작 시각(ms)
+  const RESTART_RESET_MS = 15000;   // 이 시간 이상 정상 동작하면 카운트 초기화
+  const RESTART_MAX_ATTEMPTS = 5;   // 이 횟수를 넘기면 자동 재시작 중단
+  const RESTART_BASE_DELAY = 500;   // 기본 재시작 대기(ms)
+  const RESTART_MAX_DELAY = 8000;   // 최대 재시작 대기(ms)
+
+  function scheduleRestart(){
+    if (restartTimer) return; // 이미 예약돼 있으면 중복 예약 방지
+    const now = Date.now();
+    if (now - lastRestartAt > RESTART_RESET_MS) restartAttempts = 0;
+    lastRestartAt = now;
+    restartAttempts++;
+
+    if (restartAttempts > RESTART_MAX_ATTEMPTS){
+      // 짧은 시간에 너무 자주 끊김 → 자동 재시작을 멈추고 사용자에게 알림
+      handsFreeOn = false;
+      micBtn.classList.remove('listening');
+      setOrbState('idle');
+      setCaption('마이크 인식이 불안정해요. 다시 탭해서 시작해주세요', false);
+      restartAttempts = 0;
+      return;
+    }
+
+    // 시도 횟수가 늘수록 대기 시간을 늘려서(지수 백오프) 팝업/재요청이
+    // 짧은 간격으로 반복되는 것을 막는다.
+    const delay = Math.min(RESTART_BASE_DELAY * Math.pow(2, restartAttempts - 1), RESTART_MAX_DELAY);
+    restartTimer = setTimeout(() => {
+      restartTimer = null;
+      if (!handsFreeOn || manualStop) return;
+      try{ recognition.start(); }catch(e){ /* 이미 시작됨 등 */ }
+    }, delay);
+  }
+
+  function clearScheduledRestart(){
+    if (restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
+    restartAttempts = 0;
+  }
+
+  function isLikelyEcho(said){
+    // 스피커로 나온 AI 목소리가 마이크에 다시 잡혀 인식되는 걸 걸러내기 위한 간단한 휴리스틱
+    if (!aiSpeechText) return false;
+    const norm = s => s.replace(/\s+/g, '').toLowerCase();
+    const saidN = norm(said);
+    if (saidN.length < 2) return true;
+    return norm(aiSpeechText).includes(saidN);
+  }
+
+  function interruptAI(){
+    currentRequestId++; // 진행 중이던 응답을 무시
+    window.speechSynthesis?.cancel();
+    aiSpeechText = '';
+    speakPulse = 0.1;
+    setOrbState('listening');
+    setCaption('', false);
+  }
+
+  async function startSession(){
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({
+        // autoGainControl을 켜두면 브라우저가 조용할 때/말할 때 소리 크기를 비슷하게
+        // 맞춰버려서 오브가 목소리 크기에 반응하는 게 잘 안 보임 → 꺼서 원음 그대로 분석
+        audio: { echoCancellation:true, noiseSuppression:false, autoGainControl:false }
+      });
+      micStreamRef = stream;
+      setupVolumeMeter(stream);
+    }catch(e){
+      setCaption('마이크 권한을 허용해주세요', false);
+      return;
+    }
+    sessionStarted = true;
+    handsFreeOn = true;
+    micBtn.classList.add('listening');
+    setOrbState('listening');
+    setCaption('듣고 있어요, 편하게 말씀해보세요…', true);
+    try{ recognition.start(); }catch(e){ /* 이미 시작됨 */ }
+  }
+
+  function pauseListening(){
+    handsFreeOn = false;
+    manualStop = true;
+    clearScheduledRestart();
+    micBtn.classList.remove('listening');
+    try{ recognition.stop(); }catch(e){}
+    stopVolumeLoop();
+    setOrbState('idle');
+    setCaption('일시정지됨 · 다시 탭하면 계속 들어요', false);
+  }
+
+  function resumeListening(){
+    handsFreeOn = true;
+    clearScheduledRestart();
+    micBtn.classList.add('listening');
+    setOrbState('listening');
+    setCaption('듣고 있어요…', true);
+    if (micStreamRef) startVolumeLoop();
+    try{ recognition.start(); }catch(e){}
+  }
+
+  async function toggleSession(){
+    if (!sessionStarted){ await startSession(); }
+    else if (handsFreeOn){ pauseListening(); }
+    else { resumeListening(); }
+  }
+
+  if (recognition){
+    recognition.lang = 'ko-KR';
+    recognition.continuous = true;     // 버튼 없이 계속 듣기
+    recognition.interimResults = true; // 말하는 중간에도 실시간으로 인지
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      if (document.body.dataset.orb === 'idle') setOrbState('listening');
+    };
+
+    recognition.onresult = (event) => {
+      let interim = '';
+      let finalText = '';
+      for (let i = event.resultIndex; i < event.results.length; i++){
+        const t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) finalText += t;
+        else interim += t;
+      }
+      const state = document.body.dataset.orb;
+      const liveText = (finalText || interim).trim();
+
+      // 끼어들기: AI가 생각 중이거나 말하는 중에 사용자가 말을 시작하면 즉시 중단
+      if ((state === 'thinking' || state === 'speaking') && liveText && !isLikelyEcho(liveText)){
+        interruptAI();
+      }
+
+      if (interim.trim() && document.body.dataset.orb !== 'speaking'){
+        setCaption(interim.trim(), true);
+      }
+      if (finalText.trim() && !isLikelyEcho(finalText.trim())){
+        handleUserInput(finalText.trim());
+      }
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        // 권한이 명시적으로 거부된 경우엔 재시도해봐야 팝업만 반복되므로 완전히 중단
+        handsFreeOn = false;
+        sessionStarted = false;
+        clearScheduledRestart();
+        micBtn.classList.remove('listening');
+        setCaption('마이크 권한을 허용해주세요', false);
+      }
+      // 'no-speech', 'aborted', 'network' 등은 onend에서 백오프 재시작으로 처리
+    };
+
+    recognition.onend = () => {
+      if (handsFreeOn && !manualStop){
+        // 브라우저가 침묵 등으로 자체 종료한 경우, 폭주 방지 로직을 거쳐 재시작
+        scheduleRestart();
+      }
+      manualStop = false;
+    };
+
+    micBtn.addEventListener('click', toggleSession);
+    orbWrap.addEventListener('click', toggleSession);
+  } else {
+    micBtn.disabled = true;
+    document.getElementById('no-speech-note').style.display = 'block';
+  }
+
+  /* =========================================================
+     TTS
+  ========================================================= */
+  let koVoice = null;
+  function loadVoices(){
+    const voices = window.speechSynthesis.getVoices();
+    koVoice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang?.startsWith('ko')) || null;
+  }
+  if ('speechSynthesis' in window){
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  function speakText(text, onEnd){
+    if (!('speechSynthesis' in window)){ if (onEnd) onEnd(); return; }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'ko-KR';
+    if (koVoice) utter.voice = koVoice;
+    speakPulse = 0.35; // 말 시작하며 살짝 퍼짐
+    // 단어/음절 경계마다 오브가 순간적으로 퍼지도록(음성 볼륨/피치가 실린 느낌)
+    utter.onboundary = () => { spikeSpeakPulse(0.45 + Math.random() * 0.5); };
+    utter.onend = () => { speakPulse = 0.1; if (onEnd) onEnd(); };
+    utter.onerror = () => { speakPulse = 0.1; if (onEnd) onEnd(); };
+    window.speechSynthesis.speak(utter);
+  }
+
+  /* =========================================================
+     중단(X) 버튼: 진행 중인 응답/음성을 취소
+  ========================================================= */
+  stopBtn.addEventListener('click', () => {
+    currentRequestId++; // 진행 중이던 응답 무시
+    window.speechSynthesis?.cancel();
+    aiSpeechText = '';
+    speakPulse = 0.1;
+    // 상시 인식은 그대로 유지 — 여기서는 응답/음성만 중단
+    setOrbState(handsFreeOn ? 'listening' : 'idle');
+    setCaption('', false);
+  });
+
+  /* =========================================================
+     텍스트 입력
+  ========================================================= */
+  function sendTextInput(){
+    const val = textInput.value;
+    textInput.value = '';
+    handleUserInput(val);
+  }
+  textInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendTextInput(); });
+
+  /* =========================================================
+     대화 기록 드로어
+  ========================================================= */
+  function openDrawer(){
+    transcriptDrawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    transcriptToggle.classList.add('open');
+  }
+  function closeDrawer(){
+    transcriptDrawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+    transcriptToggle.classList.remove('open');
+  }
+  transcriptToggle.addEventListener('click', () => {
+    transcriptDrawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  drawerOverlay.addEventListener('click', closeDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+
+  /* =========================================================
+     설정 모달
+  ========================================================= */
+  function refreshDefaultBadge(){
+    defaultBadge.style.display = isUsingDefaultKey() ? 'inline-flex' : 'none';
+  }
+  function openSettings(){
+    keyInput.value = localStorage.getItem('voiceai_groq_key') || '';
+    keyInput.placeholder = isUsingDefaultKey() ? 'gsk_... (없으면 온디바이스 모델 사용)' : 'gsk_...';
+    refreshDefaultBadge();
+    const prefs = loadPrefs();
+    prefAiNameInput.value = prefs.aiName || '';
+    prefUserNameInput.value = prefs.userName || '';
+    prefPersonalityInput.value = prefs.personality || 'friendly';
+    prefNotesInput.value = prefs.notes || '';
+    settingsOverlay.classList.add('open');
+  }
+  function closeSettings(){ settingsOverlay.classList.remove('open'); }
+
+  plusBtn.addEventListener('click', openSettings);
+  document.getElementById('close-settings').addEventListener('click', closeSettings);
+  settingsOverlay.addEventListener('click', (e) => { if (e.target === settingsOverlay) closeSettings(); });
+
+  document.getElementById('save-settings').addEventListener('click', () => {
+    const v = keyInput.value.trim();
+    if (v) localStorage.setItem('voiceai_groq_key', v);
+    else localStorage.removeItem('voiceai_groq_key');
+    refreshDefaultBadge();
+    savePrefs({
+      aiName: prefAiNameInput.value.trim(),
+      userName: prefUserNameInput.value.trim(),
+      personality: prefPersonalityInput.value,
+      notes: prefNotesInput.value.trim()
+    });
+    applyPersonalizationToUI();
+    closeSettings();
+  });
+  document.getElementById('reset-settings').addEventListener('click', () => {
+    localStorage.removeItem('voiceai_groq_key');
+    keyInput.value = '';
+    keyInput.placeholder = 'gsk_... (없으면 온디바이스 모델 사용)';
+    refreshDefaultBadge();
+  });
+
+  refreshDefaultBadge();
+  applyPersonalizationToUI();
+
+  /* =========================================================
+     사이드바 (로고 · 새 대화 · 시계 · 대화 기록)
+  ========================================================= */
+  function openSidebar(){ sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); }
+  function closeSidebar(){ sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); }
+  menuBtn.addEventListener('click', openSidebar);
+  sidebarOverlay.addEventListener('click', closeSidebar);
+  sidebarClose.addEventListener('click', closeSidebar);
+  newChatBtn.addEventListener('click', startNewChat);
+  sidebarSettingsBtn.addEventListener('click', () => { closeSidebar(); openSettings(); });
+  renderHistoryList();
+
+  function updateClock(){
+    const now = new Date();
+    const dateFmt = new Intl.DateTimeFormat('ko-KR', {
+      timeZone:'Asia/Seoul', year:'numeric', month:'long', day:'numeric', weekday:'short'
+    });
+    const timeFmt = new Intl.DateTimeFormat('ko-KR', {
+      timeZone:'Asia/Seoul', hour:'2-digit', minute:'2-digit', hour12:true
+    });
+    clockDateEl.textContent = dateFmt.format(now);
+    clockTimeEl.textContent = timeFmt.format(now);
+  }
+  updateClock();
+  setInterval(updateClock, 15000);
+</script>
+</body>
+</html>
