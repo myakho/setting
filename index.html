@@ -2,91 +2,60 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>STUDIO - HOME</title>
-  <!-- 브라우저 탭 아이콘 -->
-  <link rel="icon" type="image/png" href="logo.png?v=2">
-
-<meta property="og:title" content="STUDIO">
-<meta property="og:description" content="작업물을 구경하세요">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="STUDIO">
-<meta property="og:image" content="https://myakho.github.io/setting/logo.png">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://myakho.github.io/setting/logo.png">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 음성 인식 웹앱</title>
   <style>
-    /* 페이드인 애니메이션 */
-    body {
-      opacity: 0;
-      animation: fadeIn 1.5s ease-in forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* 타이틀 애니메이션 */
-    h1 {
-      animation: slideDown 1.2s ease-out forwards;
-      transform: translateY(-30px);
-      opacity: 0;
-    }
-
-    @keyframes slideDown {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    /* 버튼 애니메이션 */
-    button {
-      opacity: 0;
-      transform: scale(0.9);
-      animation: popUp 0.8s ease-out forwards;
-    }
-
-    button:nth-of-type(1) {
-      animation-delay: 1.2s;
-    }
-
-    button:nth-of-type(2) {
-      animation-delay: 1.5s;
-    }
-
-    @keyframes popUp {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
+    body { font-family: sans-serif; text-align: center; padding: 50px; }
+    #result { margin-top: 20px; padding: 15px; border: 1px solid #ccc; min-height: 100px; border-radius: 8px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><a href="index.html">HOME</a></li>
-      <li><a href="about.html">ABOUT</a></li>
-      <li><a href="works.html">WORKS</a></li>
-      <li><a href="news.html">NEWS</a></li>
-      <li><a href="life.html">LIFE</a></li>
-      <li><a href="contact.html">CONTACT</a></li>
-    </ul>
-  </nav>
 
-  <section>
-    <h1>STUDIO</h1>
-    <p>작업물을 구경하세요</p>
-    <button onclick="location.href='works.html'">View Works</button>
-    <button onclick="location.href='about.html'">About Us</button>
-  </section>
+  <h1>🎙️ AI 음성 인식 (GitHub Pages)</h1>
+  <button id="start-btn">음성 인식 시작</button>
+  <div id="result">여기에 인식된 텍스트가 표시됩니다...</div>
 
-  <footer>
-    OFFICIAL STUDIO © 2026 STUDIO ALL RIGHTS RESERVED
-  </footer>
+  <script>
+    const startBtn = document.getElementById('start-btn');
+    const resultDiv = document.getElementById('result');
+
+    // Web Speech API 지원 여부 확인
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ko-KR'; // 한국어 설정
+      recognition.continuous = false; // 단발성 인식 (지속 인식을 원하면 true)
+      recognition.interimResults = true; // 중간 결과 반환
+
+      recognition.onstart = () => {
+        startBtn.textContent = '듣고 있는 중...';
+        resultDiv.textContent = '말씀해 주세요...';
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        resultDiv.textContent = transcript;
+      };
+
+      recognition.onerror = (event) => {
+        resultDiv.textContent = '오류 발생: ' + event.error;
+        startBtn.textContent = '음성 인식 시작';
+      };
+
+      recognition.onend = () => {
+        startBtn.textContent = '음성 인식 시작';
+      };
+
+      startBtn.addEventListener('click', () => {
+        recognition.start();
+      });
+    } else {
+      resultDiv.textContent = '이 브라우저는 음성 인식을 지원하지 않습니다. (Chrome 권장)';
+    }
+  </script>
 </body>
 </html>
