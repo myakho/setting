@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STUDY DESK</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Cinzel:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- Sidebar : styled as an expedition badge / trail marker -->
+  <aside class="sidebar">
+    <div class="spine" aria-hidden="true"></div>
+
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" class="compass-svg">
+          <circle cx="32" cy="32" r="29" class="compass-ring-outer"/>
+          <circle cx="32" cy="32" r="24" class="compass-ring-face"/>
+          <g class="compass-ticks">
+            <line x1="32" y1="6"  x2="32" y2="11"/>
+            <line x1="32" y1="53" x2="32" y2="58"/>
+            <line x1="6"  y1="32" x2="11" y2="32"/>
+            <line x1="53" y1="32" x2="58" y2="32"/>
+          </g>
+          <polygon points="32,15 37,32 32,49 27,32" class="compass-needle"/>
+          <circle cx="32" cy="32" r="3" class="compass-pivot"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">STUDY DESK</div>
+        <div class="brand-sub">SKY TREASURE LOG</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <a href="#dashboard" data-route="dashboard"><span class="nav-tab">01</span><span class="nav-label">대시보드</span></a>
+      <a href="#focus" data-route="focus"><span class="nav-tab">02</span><span class="nav-label">집중</span></a>
+      <a href="#todo" data-route="todo"><span class="nav-tab">03</span><span class="nav-label">할 일</span></a>
+      <a href="#subjects" data-route="subjects"><span class="nav-tab">04</span><span class="nav-label">과목</span></a>
+      <a href="#notes" data-route="notes"><span class="nav-tab">05</span><span class="nav-label">노트</span></a>
+      <a href="#schedule" data-route="schedule"><span class="nav-tab">06</span><span class="nav-label">일정</span></a>
+      <a href="#stats" data-route="stats"><span class="nav-tab">07</span><span class="nav-label">통계</span></a>
+      <a href="#settings" data-route="settings"><span class="nav-tab">08</span><span class="nav-label">설정</span></a>
+    </nav>
+
+    <div class="sidebar-foot"><span class="annotation">이 기록은 보물 사냥꾼 본인에게만 유효합니다.</span></div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-tag">BOUNTY LOG</span>
+        <div class="topbar-date" id="topbarDate">2026년 8월 23일</div>
+      </div>
+      <div class="topbar-right">
+        <span class="status-chip"><span class="status-dot"></span>ON THE HUNT</span>
+        <span class="pill" id="focusPill" hidden>집중 중 · <span id="focusPillTime">00:00</span></span>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+      <!-- Ambient sky layer — sits behind the views, always visible -->
+      <div class="content-sky" aria-hidden="true" id="contentSky">
+        <span class="c-cloud c-cloud-1"></span>
+        <span class="c-cloud c-cloud-2"></span>
+        <span class="c-cloud c-cloud-3"></span>
+        <span class="c-flight-path"></span>
+        <span class="c-plane">◆</span>
+        <svg class="c-rose" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="96" fill="none" stroke="var(--stub)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="var(--stub)" stroke-width="1"/>
+          <g stroke="var(--stub)" stroke-width="1">
+            <line x1="100" y1="4" x2="100" y2="196"/>
+            <line x1="4" y1="100" x2="196" y2="100"/>
+            <line x1="30" y1="30" x2="170" y2="170"/>
+            <line x1="170" y1="30" x2="30" y2="170"/>
+          </g>
+          <polygon points="100,20 108,100 100,180 92,100" fill="var(--stub)"/>
+          <polygon points="20,100 100,92 180,100 100,108" fill="var(--stub)"/>
+        </svg>
+      </div>
+
+      <!-- ===================== 01 대시보드 ===================== -->
+      <section class="view" id="view-dashboard">
+        <h1 class="view-title">오늘의 공부</h1>
+        <p class="view-date" id="dashDate">2026년 8월 23일 · 일요일</p>
+
+        <div class="block">
+          <div class="block-label">목표 진행률</div>
+          <div class="progress-row">
+            <div class="progress-track"><div class="progress-fill" id="dashGoalFill"></div></div>
+            <div class="progress-num mono" id="dashGoalPct">0%</div>
+          </div>
+          <div class="hint annotation" id="dashGoalHint">오늘 목표까지 0시간 0분 남았습니다.</div>
+        </div>
+
+        <div class="split">
+          <div class="block">
+            <div class="block-label-row">
+              <div class="block-label">오늘 할 일</div>
+              <a href="#todo" class="text-link">전체보기 →</a>
+            </div>
+            <ul class="check-list" id="dashTodoList"></ul>
+          </div>
+
+          <div class="block">
+            <div class="block-label">오늘 공부 시간</div>
+            <div class="big-mono" id="dashTodayTime">0시간 0분</div>
+            <div class="hint" id="dashSessionHint">아직 집중 세션이 없습니다.</div>
+            <a href="#focus" class="btn btn-quiet">집중 시작하기 →</a>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label-row">
+            <div class="block-label">다가오는 일정</div>
+            <a href="#schedule" class="text-link">전체보기 →</a>
+          </div>
+          <table class="table" id="dashScheduleTable">
+            <thead><tr><th>일정</th><th>과목</th><th>날짜</th><th>D-day</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== 02 집중 ===================== -->
+      <section class="view" id="view-focus">
+        <h1 class="view-title">집중</h1>
+
+        <div class="focus-wrap">
+          <label class="focus-subject-label" for="focusSubjectSelect">과목</label>
+          <select id="focusSubjectSelect" class="select"></select>
+
+          <div class="focus-dial" id="focusDial">
+            <div class="focus-timer mono" id="focusTimer">00:00:00</div>
+          </div>
+          <div class="focus-caption" id="focusCaption">시작 전</div>
+
+          <div class="focus-rule"></div>
+
+          <div class="focus-controls">
+            <button class="btn btn-primary" id="focusStartBtn">시작</button>
+            <button class="btn btn-quiet" id="focusPauseBtn" hidden>일시정지</button>
+            <button class="btn btn-quiet" id="focusResumeBtn" hidden>재개</button>
+            <button class="btn btn-outline" id="focusStopBtn" hidden>집중 종료</button>
+          </div>
+
+          <div class="hint annotation" id="focusElapsedHint"></div>
+        </div>
+      </section>
+
+      <!-- ===================== 03 할 일 ===================== -->
+      <section class="view" id="view-todo">
+        <h1 class="view-title">할 일</h1>
+
+        <form class="add-row" id="todoForm">
+          <input type="text" id="todoInput" class="input" placeholder="할 일을 입력하고 Enter" maxlength="80">
+          <button type="submit" class="btn btn-primary">추가</button>
+        </form>
+
+        <ul class="check-list large" id="todoList"></ul>
+        <div class="hint" id="todoEmptyHint" hidden>완료된 할 일이 없습니다.</div>
+      </section>
+
+      <!-- ===================== 04 과목 ===================== -->
+      <section class="view" id="view-subjects">
+        <h1 class="view-title">과목</h1>
+
+        <form class="add-row" id="subjectForm">
+          <input type="text" id="subjectNameInput" class="input" placeholder="과목명" maxlength="20">
+          <input type="number" id="subjectGoalInput" class="input input-num" placeholder="목표(h)" min="1" max="200" value="10">
+          <button type="submit" class="btn btn-primary">추가</button>
+        </form>
+
+        <table class="table has-actions" id="subjectsTable">
+          <thead><tr><th>과목</th><th>공부시간</th><th>목표</th><th>진행률</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ===================== 05 노트 ===================== -->
+      <section class="view" id="view-notes">
+        <h1 class="view-title">노트</h1>
+
+        <div class="notes-toolbar">
+          <input type="text" id="notesSearch" class="input" placeholder="🔎 검색...">
+          <button class="btn btn-primary" id="newNoteBtn">+ 새 노트</button>
+        </div>
+
+        <table class="table has-actions" id="notesTable">
+          <thead><tr><th>제목</th><th>과목</th><th>수정일</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="hint" id="notesEmptyHint" hidden>작성된 노트가 없습니다.</div>
+      </section>
+
+      <!-- Note editor (sub-view) -->
+      <section class="view" id="view-note-editor">
+        <a href="#notes" class="text-link back-link">← 노트 목록</a>
+        <input type="text" id="noteTitleInput" class="input note-title-input" placeholder="제목 없음" maxlength="60">
+        <select id="noteSubjectSelect" class="select note-subject-select"></select>
+        <textarea id="noteContentInput" class="textarea" placeholder="내용을 입력하세요..."></textarea>
+        <div class="note-editor-foot">
+          <span class="hint annotation" id="noteSavedHint">자동 저장됨</span>
+          <button class="btn btn-outline" id="deleteNoteBtn">삭제</button>
+        </div>
+      </section>
+
+      <!-- ===================== 06 일정 ===================== -->
+      <section class="view" id="view-schedule">
+        <h1 class="view-title">일정</h1>
+
+        <form class="add-row wrap" id="scheduleForm">
+          <input type="text" id="scheduleTitleInput" class="input" placeholder="일정명 (예: 중간고사)" maxlength="40">
+          <select id="scheduleSubjectSelect" class="select"></select>
+          <input type="date" id="scheduleDateInput" class="input input-date">
+          <button type="submit" class="btn btn-primary">추가</button>
+        </form>
+
+        <table class="table has-actions" id="scheduleTable">
+          <thead><tr><th>일정</th><th>과목</th><th>날짜</th><th>D-day</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="hint" id="scheduleEmptyHint" hidden>등록된 일정이 없습니다.</div>
+      </section>
+
+      <!-- ===================== 07 통계 ===================== -->
+      <section class="view" id="view-stats">
+        <h1 class="view-title">통계</h1>
+
+        <div class="block">
+          <div class="block-label">이번 주 공부시간</div>
+          <div class="chart" id="statsChart"></div>
+        </div>
+
+        <table class="table stats-summary" id="statsSummaryTable">
+          <tbody>
+            <tr><th>총 공부시간</th><td id="statsTotal">0시간 0분</td></tr>
+            <tr><th>일 평균 공부시간</th><td id="statsAvg">0시간 0분</td></tr>
+            <tr><th>가장 많이 공부한 과목</th><td id="statsTopSubject">-</td></tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">과목별 누적</div>
+          <table class="table" id="statsSubjectTable">
+            <thead><tr><th>과목</th><th>공부시간</th><th>목표</th><th>진행률</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== 08 설정 ===================== -->
+      <section class="view" id="view-settings">
+        <h1 class="view-title">설정</h1>
+
+        <div class="block">
+          <div class="block-label">닉네임</div>
+          <input type="text" id="settingsName" class="input" maxlength="20" placeholder="이름 또는 닉네임">
+        </div>
+
+        <div class="block">
+          <div class="block-label">하루 목표 공부시간 (시간)</div>
+          <input type="number" id="settingsGoal" class="input input-num" min="1" max="24" value="5">
+        </div>
+
+        <div class="block">
+          <div class="block-label">배경 애니메이션</div>
+          <label class="toggle-row" for="settingsAnim">
+            <input type="checkbox" id="settingsAnim" checked>
+            <span>움직이는 배경(구름·비행기) 켜기</span>
+          </label>
+          <p class="hint">끄면 배경이 정지된 화면으로 바뀝니다. (즉시 적용)</p>
+        </div>
+
+        <div class="block">
+          <button class="btn btn-primary" id="saveSettingsBtn">저장</button>
+          <span class="hint annotation" id="settingsSavedHint"></span>
+        </div>
+
+        <div class="block danger-block">
+          <div class="block-label">데이터 초기화</div>
+          <p class="hint">모든 과목, 할 일, 노트, 일정, 집중 기록이 삭제됩니다. 이 작업은 되돌릴 수 없습니다.</p>
+          <button class="btn btn-outline" id="resetDataBtn">전체 데이터 초기화</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
