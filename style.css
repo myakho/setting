@@ -1,81 +1,114 @@
 /* =========================================================
    STUDY DESK — design tokens
-   subject: a physical study desk / 모눈노트(graph-paper notebook)
-   signature: faint blue graph-grid page + red margin rule +
-              spiral-bound sidebar tabs
+   subject: an airport departures board (split-flap / Solari
+            board) repurposed as a personal study terminal
+   signature: split-flap seam line across every big readout +
+              a flip-down reveal when a board (view) changes +
+              amber board text inside a dark bezelled housing
    ========================================================= */
 
 :root{
-  --paper:      #EFEBDF;
-  --panel:      #FBF9F3;
-  --grid-line:  rgba(46, 74, 56, 0.09);
-  --grid-line-strong: rgba(46, 74, 56, 0.15);
-  --margin-rule: rgba(193, 52, 31, 0.32);
+  --casing:     #05070a;   /* outer housing / sidebar shell */
+  --paper:      #10151c;   /* screen area behind the board   */
+  --panel:      #171e27;   /* flap tile / input surface      */
+  --panel-alt:  #1b232d;   /* zebra row on the flap surface  */
 
-  --ink:        #1C1B16;
-  --ink-soft:   #6B6656;
-  --ink-faint:  #A19C88;
+  --grid-line:  rgba(255,178,0,0.045);
+  --grid-line-strong: rgba(255,178,0,0.11);
+  --margin-rule: rgba(255,178,0,0.22);
 
-  --accent:     #2E4A38;      /* pine green — focus / progress   */
-  --accent-ink: #1B2E22;
-  --accent-soft: rgba(46, 74, 56, 0.10);
+  --ink:        #ffb200;   /* board amber — primary readout   */
+  --ink-soft:   rgba(255,178,0,0.62);
+  --ink-faint:  rgba(255,178,0,0.34);
 
-  --redpen:     #C1341F;      /* red-pen ink — annotations, stamps, alerts */
-  --redpen-soft:rgba(193, 52, 31, 0.12);
+  --accent:     #33e6a0;   /* "on time" board green            */
+  --accent-ink: #16342a;
+  --accent-soft: rgba(51,230,160,0.14);
 
-  --highlighter: 245, 225, 90; /* rgb triplet, used with alpha */
+  --redpen:     #ff5252;   /* "delayed / cancelled" board red  */
+  --redpen-soft:rgba(255,82,82,0.14);
 
-  --line:       #D6CFB9;
-  --line-strong:#B7AE92;
+  --highlighter: 255,178,0; /* rgb triplet, row hover tint    */
 
-  --radius: 3px;
+  --line:       rgba(255,178,0,0.14);
+  --line-strong:rgba(255,178,0,0.30);
+
+  --seam:       rgba(0,0,0,0.55); /* split-flap seam shadow   */
+
+  --radius: 2px;
 
   --font-ui:   'PretendardVariable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-hand: 'Nanum Pen Script', cursive;
 }
 
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 body{
   margin:0;
+  padding:16px;
+  background:#000;
   font-family: var(--font-ui);
   color: var(--ink);
-  background: var(--paper);
   -webkit-font-smoothing: antialiased;
 }
 a{ color:inherit; text-decoration:none; }
 button{ font-family:inherit; }
 .mono{ font-family: var(--font-mono); }
+::selection{ background: var(--ink); color: var(--casing); }
 
 /* ---------------------------------------------------------
-   Layout frame
+   Layout frame — the board's outer housing
 --------------------------------------------------------- */
 .frame{
+  position:relative;
   display:flex;
-  min-height:100vh;
+  min-height: calc(100vh - 32px);
+  background: var(--casing);
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,178,0,0.15),
+    0 30px 80px rgba(0,0,0,0.65),
+    inset 0 0 40px rgba(0,0,0,0.45);
+}
+.frame::before{
+  /* power-on strip along the top edge of the housing */
+  content:"";
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--ink) 20%, var(--ink) 80%, transparent);
+  opacity:.45;
+  z-index:2;
+}
+.frame::after{
+  /* subtle vignette for depth under the glass */
+  content:"";
+  position:absolute; inset:0;
+  pointer-events:none;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.35) 100%);
+  z-index:2;
 }
 
 /* ---------------------------------------------------------
-   Sidebar — spiral notebook edge
+   Sidebar — board housing / gate list
 --------------------------------------------------------- */
 .sidebar{
   position:relative;
   width:236px;
   flex:0 0 236px;
-  background: var(--accent);
+  background: var(--casing);
   color:#EDEEE5;
   padding: 28px 20px 20px 34px;
   display:flex;
   flex-direction:column;
-  min-height:100vh;
+  min-height:100%;
+  border-right: 1px solid var(--line);
 }
 
 .spine{
   position:absolute;
   left:0; top:0; bottom:0;
   width:16px;
-  background: linear-gradient(90deg, rgba(0,0,0,0.18), transparent);
+  background: linear-gradient(90deg, rgba(0,0,0,0.5), transparent);
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -83,95 +116,116 @@ button{ font-family:inherit; }
   padding: 40px 0;
 }
 .spine .ring{
-  width:9px; height:9px;
+  width:5px; height:5px;
   border-radius:50%;
-  background: var(--paper);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.35);
+  background: var(--ink);
+  opacity:.35;
+  box-shadow: 0 0 4px rgba(255,178,0,0.55);
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-bottom:34px;
+  margin-bottom:30px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--line);
 }
 .brand-mark{
   width:42px; height:42px;
   flex:0 0 auto;
-  border:1.5px solid rgba(237,238,229,0.6);
-  border-radius:50%;
-  box-shadow: inset 0 0 0 3px rgba(237,238,229,0.14);
+  position:relative;
+  border:1.5px solid var(--line-strong);
+  border-radius:4px;
+  background: var(--panel);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   font-family:var(--font-mono);
   font-size:7.5px; font-weight:700;
   letter-spacing:0.5px;
-  color: rgba(237,238,229,0.85);
-  transform: rotate(-8deg);
+  color: var(--ink);
   line-height:1.5;
+}
+.brand-mark::after{
+  /* split-flap seam */
+  content:"";
+  position:absolute; left:2px; right:2px; top:50%; height:1px;
+  background: var(--seam);
 }
 .brand-mark span:first-child{ font-size:8.5px; }
 .brand-title{
   font-family: var(--font-mono);
   font-size:13px;
   font-weight:700;
-  letter-spacing:2px;
+  letter-spacing:3px;
+  color: var(--ink);
+  text-shadow: 0 0 8px rgba(255,178,0,0.35);
 }
 .brand-sub{
-  font-size:11px;
-  color: rgba(237,238,229,0.6);
-  margin-top:2px;
+  font-size:10.5px;
+  font-family: var(--font-mono);
+  letter-spacing:0.4px;
+  text-transform:uppercase;
+  color: rgba(237,238,229,0.5);
+  margin-top:3px;
 }
 
 .nav{
   display:flex;
   flex-direction:column;
-  gap:2px;
+  gap:3px;
 }
 .nav a{
   display:flex;
   align-items:center;
   gap:10px;
   padding:10px 10px;
-  font-size:14px;
-  color: rgba(237,238,229,0.78);
+  font-size:13.5px;
+  font-family: var(--font-mono);
+  letter-spacing:0.3px;
+  color: rgba(237,238,229,0.55);
   border-radius: var(--radius);
-  transition: background 0.12s ease, color 0.12s ease;
+  border:1px solid transparent;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
 .nav a:hover{
-  background: rgba(237,238,229,0.08);
+  background: rgba(255,178,0,0.06);
   color:#fff;
+  border-color: var(--line);
 }
 .nav a.active{
-  background: var(--paper);
-  color: var(--accent-ink);
-  font-weight:600;
+  background: var(--ink);
+  color: var(--casing);
+  font-weight:700;
+  box-shadow: 0 0 14px rgba(255,178,0,0.35);
 }
 .nav a.active .nav-tab{
-  color: var(--redpen);
+  color: var(--casing);
+  opacity:.65;
 }
 .nav-tab{
   font-family: var(--font-mono);
   font-size:11px;
-  color: rgba(237,238,229,0.45);
-  width:18px;
+  color: var(--ink-faint);
+  width:20px;
 }
 
 .sidebar-foot{
   margin-top:auto;
-  padding-top:20px;
+  padding-top:18px;
   font-size:11px;
-  color: rgba(237,238,229,0.45);
-  border-top:1px solid rgba(237,238,229,0.15);
+  border-top:1px solid var(--line);
 }
 
 /* ---------------------------------------------------------
-   Main / graph-paper canvas
+   Main / screen area
 --------------------------------------------------------- */
 .main{
   flex:1;
   min-width:0;
   display:flex;
   flex-direction:column;
+  background: var(--paper);
 }
 
 .topbar{
@@ -182,36 +236,64 @@ button{ font-family:inherit; }
   justify-content:space-between;
   padding: 0 40px;
   border-bottom:1px solid var(--line);
-  background: var(--panel);
+  background: var(--casing);
+}
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.topbar-tag{
+  font-family: var(--font-mono);
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color: var(--ink-faint);
+  border:1px solid var(--line);
+  padding:4px 8px;
+  border-radius:2px;
 }
 .topbar-date{
   font-family: var(--font-mono);
-  font-size:13px;
+  font-size:12.5px;
   color: var(--ink-soft);
-  letter-spacing:0.5px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
 }
 .pill{
   font-family: var(--font-mono);
-  font-size:12px;
-  background: var(--redpen-soft);
-  color: var(--redpen);
-  padding:5px 10px;
+  font-size:11.5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding:5px 10px 5px 8px;
   border-radius: 20px;
-  border:1px solid rgba(193,52,31,0.28);
+  border:1px solid rgba(51,230,160,0.35);
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  letter-spacing:.3px;
 }
+.pill::before{
+  content:"";
+  width:6px; height:6px;
+  border-radius:50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
 
 .content{
   flex:1;
   position:relative;
   padding: 40px 48px 80px 56px;
+  background: var(--paper);
   background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 28px 28px;
+    repeating-linear-gradient(0deg, var(--grid-line) 0px, var(--grid-line) 1px, transparent 1px, transparent 3px);
   overflow-y:auto;
 }
 .content::before{
-  /* red margin rule, like ruled notebook paper */
+  /* board panel divider */
   content:"";
   position:absolute;
   top:0; bottom:0;
@@ -223,37 +305,64 @@ button{ font-family:inherit; }
 .view{
   display:none;
   max-width: 780px;
-  animation: fadeIn 0.18s ease;
+  transform-origin: top center;
 }
-.view.active{ display:block; }
-@keyframes fadeIn{ from{ opacity:0; transform:translateY(4px);} to{ opacity:1; transform:none; } }
+.view.active{
+  display:block;
+  animation: flapIn 0.32s cubic-bezier(.22,.8,.22,1);
+}
+@keyframes flapIn{
+  from{ opacity:0; transform: perspective(700px) rotateX(-10deg) translateY(-6px); }
+  to{ opacity:1; transform:none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .view.active{ animation:none; }
+  .pill::before{ animation:none; }
+}
 
 .view-title{
-  font-size:22px;
+  font-family: var(--font-mono);
+  font-size:20px;
   font-weight:700;
-  margin: 0 0 4px 0;
-  letter-spacing:-0.2px;
+  letter-spacing:1px;
+  margin: 0 0 6px 0;
+  color: var(--ink);
+  text-shadow: 0 0 10px rgba(255,178,0,0.25);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.view-title::before{
+  content:"";
+  width:8px; height:8px;
+  border-radius:50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  flex:0 0 auto;
 }
 .view-date{
   font-family: var(--font-mono);
-  font-size:12px;
-  color: var(--ink-soft);
+  font-size:11.5px;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  color: var(--ink-faint);
   margin:0 0 28px 0;
 }
 
 /* ---------------------------------------------------------
-   Blocks (replacing cards — flat, hairline-divided sections)
+   Blocks (flat, hairline-divided board sections)
 --------------------------------------------------------- */
 .block{
   padding: 20px 0 26px 0;
-  border-bottom:1px solid var(--line);
+  border-bottom:1px dashed var(--line);
   margin-bottom:2px;
 }
 .block:last-child{ border-bottom:none; }
 .block-label{
-  font-size:11px;
+  font-family: var(--font-mono);
+  font-size:10.5px;
   font-weight:700;
-  letter-spacing:1.2px;
+  letter-spacing:1.6px;
   text-transform:uppercase;
   color: var(--ink-soft);
   margin-bottom:14px;
@@ -274,9 +383,11 @@ button{ font-family:inherit; }
 .split .block{ padding-top:20px; }
 
 .text-link{
-  font-size:12px;
+  font-family: var(--font-mono);
+  font-size:11.5px;
   color: var(--accent);
   font-weight:600;
+  letter-spacing:.3px;
 }
 .text-link:hover{ text-decoration:underline; }
 
@@ -297,28 +408,42 @@ button{ font-family:inherit; }
 .progress-track{
   flex:1;
   height:10px;
-  background: var(--line);
-  border-radius:2px;
+  background: var(--panel);
+  border:1px solid var(--line);
+  border-radius:1px;
   overflow:hidden;
 }
 .progress-fill{
   height:100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent), #1fd18f);
+  box-shadow: inset 0 0 8px rgba(51,230,160,0.5);
   width:0%;
   transition: width 0.3s ease;
 }
 .progress-num{
+  font-family: var(--font-mono);
   font-size:14px;
-  font-weight:600;
+  font-weight:700;
   min-width:44px;
   text-align:right;
+  color: var(--ink);
 }
 
 .big-mono{
   font-family: var(--font-mono);
   font-size:32px;
   font-weight:700;
-  color: var(--accent-ink);
+  color: var(--ink);
+  letter-spacing:1px;
+  position:relative;
+  display:inline-block;
+  text-shadow: 0 0 12px rgba(255,178,0,0.3);
+}
+.big-mono::after{
+  content:"";
+  position:absolute; left:-4px; right:-4px; top:50%; height:1px;
+  background: var(--seam);
+  opacity:.6;
 }
 
 /* ---------------------------------------------------------
@@ -336,10 +461,11 @@ button{ font-family:inherit; }
   gap:10px;
   padding:9px 0;
   border-bottom:1px dashed var(--line);
-  font-size:14px;
+  font-size:13.5px;
+  color: var(--ink);
+  transition: background 0.1s ease;
 }
-.check-list li:last-child{ border-bottom:none; }
-.check-list.large li{ padding:12px 0; font-size:15px; }
+.check-list.large li{ padding:12px 0; font-size:14.5px; }
 .check-list input[type=checkbox]{
   width:16px; height:16px;
   accent-color: var(--accent);
@@ -353,7 +479,9 @@ button{ font-family:inherit; }
 .check-list .todo-del{
   opacity:0;
   color: var(--redpen);
-  font-size:12px;
+  font-family: var(--font-mono);
+  font-size:11px;
+  letter-spacing:.3px;
   cursor:pointer;
   padding:2px 6px;
 }
@@ -365,20 +493,21 @@ button{ font-family:inherit; }
 }
 
 /* ---------------------------------------------------------
-   Tables (subject list, notes, schedule, dashboard schedule)
+   Tables (manifest boards — subject list, notes, schedule)
 --------------------------------------------------------- */
 .table{
   width:100%;
   border-collapse:collapse;
-  font-size:13.5px;
+  font-size:13px;
 }
 .table th{
   text-align:left;
-  font-size:11px;
-  letter-spacing:0.6px;
+  font-family: var(--font-mono);
+  font-size:10.5px;
+  letter-spacing:1px;
   text-transform:uppercase;
   color: var(--ink-soft);
-  font-weight:600;
+  font-weight:700;
   padding: 0 10px 10px 0;
   border-bottom:1.5px solid var(--line-strong);
 }
@@ -386,12 +515,18 @@ button{ font-family:inherit; }
   padding: 11px 10px 11px 0;
   border-bottom:1px solid var(--line);
   vertical-align:middle;
+  color: var(--ink);
 }
+.table tbody tr{ transition: background 0.1s ease; }
+.table tbody tr:nth-child(even){ background: rgba(255,178,0,0.03); }
+.table tbody tr:hover{ background: rgba(var(--highlighter), 0.10); }
 .table tbody tr:last-child td{ border-bottom:none; }
 .table td.mono, .table th.mono{ font-family:var(--font-mono); }
 .row-del{
   color: var(--redpen);
-  font-size:12px;
+  font-family: var(--font-mono);
+  font-size:11px;
+  letter-spacing:.3px;
   cursor:pointer;
   opacity:0;
 }
@@ -407,8 +542,8 @@ button{ font-family:inherit; }
    Forms / inputs / buttons
 --------------------------------------------------------- */
 .input, .select, .textarea{
-  font-family: inherit;
-  font-size:14px;
+  font-family: var(--font-ui);
+  font-size:13.5px;
   color: var(--ink);
   background: var(--panel);
   border:1px solid var(--line-strong);
@@ -418,6 +553,7 @@ button{ font-family:inherit; }
 }
 .input:focus, .select:focus, .textarea:focus{
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(51,230,160,0.15);
 }
 .add-row{
   display:flex;
@@ -431,8 +567,11 @@ button{ font-family:inherit; }
 .input-date{ width:150px; flex:0 0 auto; }
 
 .btn{
-  font-size:13px;
-  font-weight:600;
+  font-family: var(--font-mono);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.6px;
+  text-transform:uppercase;
   padding:9px 16px;
   border-radius: var(--radius);
   border:1px solid transparent;
@@ -440,27 +579,27 @@ button{ font-family:inherit; }
   white-space:nowrap;
 }
 .btn-primary{
-  background: var(--accent);
-  color:#fff;
+  background: var(--ink);
+  color: var(--casing);
 }
-.btn-primary:hover{ background: var(--accent-ink); }
+.btn-primary:hover{ background: #ffc94d; }
 .btn-quiet{
   background:transparent;
   color: var(--accent);
-  border-color: var(--line-strong);
+  border-color: rgba(51,230,160,0.4);
 }
-.btn-quiet:hover{ background: rgba(51,81,62,0.06); }
+.btn-quiet:hover{ background: var(--accent-soft); }
 .btn-outline{
   background:transparent;
   color: var(--redpen);
-  border-color: rgba(193,52,31,0.4);
+  border-color: rgba(255,82,82,0.4);
 }
 .btn-outline:hover{ background: var(--redpen-soft); }
 
 a.btn{ display:inline-block; }
 
 /* ---------------------------------------------------------
-   Focus timer
+   Focus timer — the board's big flip clock
 --------------------------------------------------------- */
 .focus-wrap{
   text-align:center;
@@ -468,8 +607,9 @@ a.btn{ display:inline-block; }
 }
 .focus-subject-label{
   display:block;
-  font-size:11px;
-  letter-spacing:1px;
+  font-family: var(--font-mono);
+  font-size:10.5px;
+  letter-spacing:1.5px;
   text-transform:uppercase;
   color: var(--ink-soft);
   margin-bottom:8px;
@@ -479,15 +619,28 @@ a.btn{ display:inline-block; }
   margin-bottom:36px;
 }
 .focus-timer{
-  font-size:44px;
+  font-family: var(--font-mono);
+  font-size:46px;
   font-weight:700;
-  color: var(--accent-ink);
-  letter-spacing:0.5px;
+  color: var(--ink);
+  letter-spacing:2px;
   line-height:1;
+  position:relative;
+  display:inline-block;
+  text-shadow: 0 0 16px rgba(255,178,0,0.4);
+}
+.focus-timer::after{
+  content:"";
+  position:absolute; left:-6px; right:-6px; top:50%; height:1px;
+  background: var(--seam);
+  opacity:.55;
 }
 .focus-caption{
   margin-top:10px;
-  font-size:14px;
+  font-family: var(--font-mono);
+  font-size:12.5px;
+  letter-spacing:.6px;
+  text-transform:uppercase;
   color: var(--ink-soft);
 }
 .focus-rule{
@@ -514,13 +667,14 @@ a.btn{ display:inline-block; }
 }
 .notes-toolbar .input{ flex:1; }
 .note-title-input{
-  font-size:20px;
+  font-size:18px;
   font-weight:700;
   border:none;
   background:transparent;
   padding:8px 0;
   width:100%;
   margin-bottom:6px;
+  color: var(--ink);
 }
 .note-subject-select{
   margin-bottom:18px;
@@ -530,7 +684,7 @@ a.btn{ display:inline-block; }
   min-height:360px;
   resize:vertical;
   line-height:1.7;
-  font-size:14.5px;
+  font-size:14px;
 }
 .note-editor-foot{
   display:flex;
@@ -561,68 +715,88 @@ a.btn{ display:inline-block; }
 }
 .chart-val{
   font-family:var(--font-mono);
-  font-size:11px;
+  font-size:10.5px;
   color: var(--ink-soft);
 }
 .chart-bar{
   width:100%;
   max-width:34px;
-  background: var(--accent);
-  border-radius:2px 2px 0 0;
+  background: linear-gradient(180deg, var(--accent), #17997a);
+  box-shadow: 0 0 6px rgba(51,230,160,0.25);
+  border-radius:1px 1px 0 0;
   min-height:2px;
 }
-.chart-bar.today{ background: var(--redpen); }
+.chart-bar.today{
+  background: linear-gradient(180deg, var(--ink), #c98600);
+  box-shadow: 0 0 8px rgba(255,178,0,0.35);
+}
 .chart-day{
-  font-size:11px;
+  font-size:10.5px;
+  text-transform:uppercase;
   color: var(--ink-soft);
   font-family: var(--font-mono);
 }
 .stats-summary th{
   text-transform:none;
-  font-size:13px;
+  font-size:12.5px;
   color: var(--ink);
   font-weight:600;
   width:220px;
+  font-family: var(--font-ui);
 }
-.stats-summary td{ font-family:var(--font-mono); font-size:14px; }
+.stats-summary td{ font-family:var(--font-mono); font-size:13.5px; color: var(--ink); }
 
 .danger-block{ margin-top:20px; }
 
 /* ---------------------------------------------------------
-   Signature: red-pen marginalia
-   Handwritten annotations, as if a teacher noted them in the
-   margin — reserved for encouraging / status micro-copy only.
+   Signature: status chip
+   Repurposes the app's micro-copy hints as small amber/green
+   board status tags — the kind of remark stamped beside a
+   flight row ("ON TIME", "BOARDING").
 --------------------------------------------------------- */
 .annotation{
-  font-family: var(--font-hand);
-  color: var(--redpen);
-  font-size:19px;
-  line-height:1;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size:11.5px;
+  letter-spacing:.3px;
   display:inline-block;
-  transform: rotate(-1.5deg);
+  padding:3px 8px;
+  background: var(--accent-soft);
+  border:1px solid rgba(51,230,160,0.3);
+  border-radius:3px;
 }
 .hint.annotation{ margin-top:10px; }
 .sidebar-foot .annotation{
-  color: rgba(237,238,229,0.75);
-  font-size:20px;
+  color: var(--ink-soft);
+  font-size:10.5px;
+  letter-spacing:.5px;
+  background:transparent;
+  border:none;
+  padding:0;
 }
 
 /* ---------------------------------------------------------
-   Signature: D-day stamp
+   Signature: D-day stamp — board status tile
 --------------------------------------------------------- */
 .dday-stamp{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   font-family: var(--font-mono);
-  font-size:11px;
+  font-size:10.5px;
   font-weight:700;
-  letter-spacing:0.3px;
+  letter-spacing:0.4px;
   color: var(--ink-soft);
-  border:1.5px solid var(--line-strong);
-  border-radius:20px;
-  padding:3px 10px;
-  transform: rotate(-2deg);
+  border:1px solid var(--line-strong);
+  border-radius:3px;
+  padding:3px 9px;
+  position:relative;
+}
+.dday-stamp::after{
+  content:"";
+  position:absolute; left:3px; right:3px; top:50%; height:1px;
+  background: var(--seam);
+  opacity:.4;
 }
 .dday-stamp.urgent{
   color: var(--redpen);
@@ -632,13 +806,14 @@ a.btn{ display:inline-block; }
 
 /* ---------------------------------------------------------
    Focus dial — a quiet ring behind the stopwatch digits,
-   sweeping once per hour like an analogue timer face.
+   sweeping once per hour like a gate-status ring light.
 --------------------------------------------------------- */
 .focus-dial{
   --dial-pct: 0;
   width:280px; height:280px;
   margin:0 auto;
   border-radius:50%;
+  border:1px solid var(--line);
   display:flex; align-items:center; justify-content:center;
   background:
     radial-gradient(closest-side, var(--panel) 78%, transparent 79% 100%),
@@ -649,19 +824,14 @@ a.btn{ display:inline-block; }
   background:
     radial-gradient(closest-side, var(--panel) 78%, transparent 79% 100%),
     conic-gradient(var(--accent) calc(var(--dial-pct) * 1%), var(--grid-line-strong) 0);
+  box-shadow: 0 0 30px rgba(51,230,160,0.15);
 }
 .focus-dial.paused{
   background:
     radial-gradient(closest-side, var(--panel) 78%, transparent 79% 100%),
     conic-gradient(var(--redpen) calc(var(--dial-pct) * 1%), var(--grid-line-strong) 0);
+  box-shadow: 0 0 30px rgba(255,82,82,0.15);
 }
-
-/* ---------------------------------------------------------
-   Table row hover — a soft highlighter pass
---------------------------------------------------------- */
-.table tbody tr{ transition: background 0.1s ease; }
-.table tbody tr:hover{ background: rgba(var(--highlighter), 0.28); }
-.check-list li{ transition: background 0.1s ease; }
 
 /* ---------------------------------------------------------
    Responsive
@@ -675,6 +845,7 @@ a.btn{ display:inline-block; }
   .nav-tab{ width:auto; }
   .content{ padding:28px 20px; }
   .content::before{ display:none; }
+  .topbar-tag{ display:none; }
   .focus-dial{ width:220px; height:220px; }
   .focus-timer{ font-size:36px; }
 }
