@@ -6,28 +6,33 @@
    ========================================================= */
 
 :root{
-  --paper:      #EFEDE4;
-  --panel:      #F8F7F1;
-  --grid-line:  rgba(51, 81, 62, 0.08);
-  --grid-line-strong: rgba(51, 81, 62, 0.14);
-  --margin-rule: rgba(178, 71, 56, 0.35);
+  --paper:      #EFEBDF;
+  --panel:      #FBF9F3;
+  --grid-line:  rgba(46, 74, 56, 0.09);
+  --grid-line-strong: rgba(46, 74, 56, 0.15);
+  --margin-rule: rgba(193, 52, 31, 0.32);
 
-  --ink:        #22271D;
-  --ink-soft:   #6B7062;
-  --ink-faint:  #9A9C8C;
+  --ink:        #1C1B16;
+  --ink-soft:   #6B6656;
+  --ink-faint:  #A19C88;
 
-  --accent:     #33513E;      /* pine green — focus / progress   */
-  --accent-ink: #21332A;
-  --warm:       #B04A2E;      /* burnt sienna — active / warning */
-  --warm-soft:  rgba(176, 74, 46, 0.12);
+  --accent:     #2E4A38;      /* pine green — focus / progress   */
+  --accent-ink: #1B2E22;
+  --accent-soft: rgba(46, 74, 56, 0.10);
 
-  --line:       #D2CCB9;
-  --line-strong:#B7B096;
+  --redpen:     #C1341F;      /* red-pen ink — annotations, stamps, alerts */
+  --redpen-soft:rgba(193, 52, 31, 0.12);
+
+  --highlighter: 245, 225, 90; /* rgb triplet, used with alpha */
+
+  --line:       #D6CFB9;
+  --line-strong:#B7AE92;
 
   --radius: 3px;
 
   --font-ui:   'PretendardVariable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-hand: 'Nanum Pen Script', cursive;
 }
 
 *{ box-sizing:border-box; }
@@ -91,14 +96,20 @@ button{ font-family:inherit; }
   margin-bottom:34px;
 }
 .brand-mark{
-  width:34px; height:34px;
-  border:1.5px solid rgba(237,238,229,0.55);
+  width:42px; height:42px;
+  flex:0 0 auto;
+  border:1.5px solid rgba(237,238,229,0.6);
   border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
+  box-shadow: inset 0 0 0 3px rgba(237,238,229,0.14);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
   font-family:var(--font-mono);
-  font-size:12px; font-weight:700;
+  font-size:7.5px; font-weight:700;
   letter-spacing:0.5px;
+  color: rgba(237,238,229,0.85);
+  transform: rotate(-8deg);
+  line-height:1.5;
 }
+.brand-mark span:first-child{ font-size:8.5px; }
 .brand-title{
   font-family: var(--font-mono);
   font-size:13px;
@@ -136,7 +147,7 @@ button{ font-family:inherit; }
   font-weight:600;
 }
 .nav a.active .nav-tab{
-  color: var(--warm);
+  color: var(--redpen);
 }
 .nav-tab{
   font-family: var(--font-mono);
@@ -182,11 +193,11 @@ button{ font-family:inherit; }
 .pill{
   font-family: var(--font-mono);
   font-size:12px;
-  background: var(--warm-soft);
-  color: var(--warm);
+  background: var(--redpen-soft);
+  color: var(--redpen);
   padding:5px 10px;
   border-radius: 20px;
-  border:1px solid rgba(176,74,46,0.25);
+  border:1px solid rgba(193,52,31,0.28);
 }
 
 .content{
@@ -341,7 +352,7 @@ button{ font-family:inherit; }
 }
 .check-list .todo-del{
   opacity:0;
-  color: var(--warm);
+  color: var(--redpen);
   font-size:12px;
   cursor:pointer;
   padding:2px 6px;
@@ -379,7 +390,7 @@ button{ font-family:inherit; }
 .table tbody tr:last-child td{ border-bottom:none; }
 .table td.mono, .table th.mono{ font-family:var(--font-mono); }
 .row-del{
-  color: var(--warm);
+  color: var(--redpen);
   font-size:12px;
   cursor:pointer;
   opacity:0;
@@ -441,10 +452,10 @@ button{ font-family:inherit; }
 .btn-quiet:hover{ background: rgba(51,81,62,0.06); }
 .btn-outline{
   background:transparent;
-  color: var(--warm);
-  border-color: rgba(176,74,46,0.4);
+  color: var(--redpen);
+  border-color: rgba(193,52,31,0.4);
 }
-.btn-outline:hover{ background: var(--warm-soft); }
+.btn-outline:hover{ background: var(--redpen-soft); }
 
 a.btn{ display:inline-block; }
 
@@ -468,10 +479,10 @@ a.btn{ display:inline-block; }
   margin-bottom:36px;
 }
 .focus-timer{
-  font-size:76px;
+  font-size:44px;
   font-weight:700;
   color: var(--accent-ink);
-  letter-spacing:1px;
+  letter-spacing:0.5px;
   line-height:1;
 }
 .focus-caption{
@@ -560,7 +571,7 @@ a.btn{ display:inline-block; }
   border-radius:2px 2px 0 0;
   min-height:2px;
 }
-.chart-bar.today{ background: var(--warm); }
+.chart-bar.today{ background: var(--redpen); }
 .chart-day{
   font-size:11px;
   color: var(--ink-soft);
@@ -578,6 +589,81 @@ a.btn{ display:inline-block; }
 .danger-block{ margin-top:20px; }
 
 /* ---------------------------------------------------------
+   Signature: red-pen marginalia
+   Handwritten annotations, as if a teacher noted them in the
+   margin — reserved for encouraging / status micro-copy only.
+--------------------------------------------------------- */
+.annotation{
+  font-family: var(--font-hand);
+  color: var(--redpen);
+  font-size:19px;
+  line-height:1;
+  display:inline-block;
+  transform: rotate(-1.5deg);
+}
+.hint.annotation{ margin-top:10px; }
+.sidebar-foot .annotation{
+  color: rgba(237,238,229,0.75);
+  font-size:20px;
+}
+
+/* ---------------------------------------------------------
+   Signature: D-day stamp
+--------------------------------------------------------- */
+.dday-stamp{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-family: var(--font-mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.3px;
+  color: var(--ink-soft);
+  border:1.5px solid var(--line-strong);
+  border-radius:20px;
+  padding:3px 10px;
+  transform: rotate(-2deg);
+}
+.dday-stamp.urgent{
+  color: var(--redpen);
+  border-color: var(--redpen);
+  background: var(--redpen-soft);
+}
+
+/* ---------------------------------------------------------
+   Focus dial — a quiet ring behind the stopwatch digits,
+   sweeping once per hour like an analogue timer face.
+--------------------------------------------------------- */
+.focus-dial{
+  --dial-pct: 0;
+  width:280px; height:280px;
+  margin:0 auto;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(closest-side, var(--panel) 78%, transparent 79% 100%),
+    conic-gradient(var(--line) calc(var(--dial-pct) * 1%), transparent 0);
+  transition: background 0.2s linear;
+}
+.focus-dial.running{
+  background:
+    radial-gradient(closest-side, var(--panel) 78%, transparent 79% 100%),
+    conic-gradient(var(--accent) calc(var(--dial-pct) * 1%), var(--grid-line-strong) 0);
+}
+.focus-dial.paused{
+  background:
+    radial-gradient(closest-side, var(--panel) 78%, transparent 79% 100%),
+    conic-gradient(var(--redpen) calc(var(--dial-pct) * 1%), var(--grid-line-strong) 0);
+}
+
+/* ---------------------------------------------------------
+   Table row hover — a soft highlighter pass
+--------------------------------------------------------- */
+.table tbody tr{ transition: background 0.1s ease; }
+.table tbody tr:hover{ background: rgba(var(--highlighter), 0.28); }
+.check-list li{ transition: background 0.1s ease; }
+
+/* ---------------------------------------------------------
    Responsive
 --------------------------------------------------------- */
 @media (max-width: 860px){
@@ -589,5 +675,6 @@ a.btn{ display:inline-block; }
   .nav-tab{ width:auto; }
   .content{ padding:28px 20px; }
   .content::before{ display:none; }
-  .focus-timer{ font-size:52px; }
+  .focus-dial{ width:220px; height:220px; }
+  .focus-timer{ font-size:36px; }
 }

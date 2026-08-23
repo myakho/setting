@@ -89,6 +89,11 @@
     if(diff>0) return `D-${diff}`;
     return `D+${Math.abs(diff)}`;
   }
+  function dDayStamp(dateStr){
+    const label = dDayLabel(dateStr);
+    const urgent = label==="D-DAY" || (label.startsWith("D-") && Number(label.slice(2))<=3);
+    return `<span class="dday-stamp${urgent?' urgent':''}">${label}</span>`;
+  }
 
   /* ---------------------------------------------------------
      Subject helpers
@@ -212,7 +217,7 @@
           <td>${escapeHtml(s.title)}</td>
           <td>${escapeHtml(subjectName(s.subjectId))}</td>
           <td class="mono">${s.date}</td>
-          <td class="mono">${dDayLabel(s.date)}</td>
+          <td>${dDayStamp(s.date)}</td>
         </tr>`).join("");
     }
   }
@@ -278,13 +283,24 @@
     const timerEl = document.getElementById("focusTimer");
     const pill = document.getElementById("focusPill");
     const pillTime = document.getElementById("focusPillTime");
+    const dial = document.getElementById("focusDial");
     if(af){
       const sec = currentRunningSecForToday_activeOnly();
       timerEl.textContent = fmtHHMMSS(sec);
       pill.hidden = false;
       pillTime.textContent = fmtHHMMSS(sec);
+      if(dial){
+        const pct = (sec % 3600) / 3600 * 100;
+        dial.style.setProperty("--dial-pct", pct.toFixed(2));
+        dial.classList.toggle("running", af.status==="running");
+        dial.classList.toggle("paused", af.status==="paused");
+      }
     }else{
       pill.hidden = true;
+      if(dial){
+        dial.style.setProperty("--dial-pct", 0);
+        dial.classList.remove("running","paused");
+      }
     }
   }
   function currentRunningSecForToday_activeOnly(){
@@ -515,7 +531,7 @@
         <td>${escapeHtml(s.title)}</td>
         <td>${escapeHtml(subjectName(s.subjectId))}</td>
         <td class="mono">${s.date}</td>
-        <td class="mono">${dDayLabel(s.date)}</td>
+        <td>${dDayStamp(s.date)}</td>
         <td><span class="row-del" data-id="${s.id}">삭제</span></td>
       </tr>`).join("");
     tbody.querySelectorAll(".row-del").forEach(el=>el.addEventListener("click", e=>deleteSchedule(e.target.getAttribute("data-id"))));
