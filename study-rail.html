@@ -597,9 +597,9 @@ const TRAIN_TYPES = [
        톤(피치)은 그대로 얇고 날카롭게 유지하되 모터·바람 소리의 음량 자체는 KTX에 준하게 키워서
        "움직이고 있다"는 느낌이 뚜렷하게 들리도록 했다 */
     sound:{
-      clack:{gapMs:480, jitterMs:50, pairGapMs:45, peak:0.11, filterFreq:1100},
+      clack:{gapMs:480, jitterMs:50, pairGapMs:45, peak:0.11, filterFreq:900},
       wind:{freq:900, gainBase:0.09, q:0.7},
-      motor:{type:'whine', baseFreq:140, sweepRange:4, gain:0.04, filterCutoff:850, overtoneRatio:1.5, overtoneGain:0.16},
+      motor:{type:'whine', baseFreq:100, sweepRange:4, gain:0.04, filterCutoff:700, overtoneRatio:1.5, overtoneGain:0.16},
       brake:{filterStart:2900, filterEnd:680, peak:0.13},
       hiss:{peak:0.11, freqStart:3500, freqEnd:950},
     }},
