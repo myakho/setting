@@ -368,7 +368,7 @@ input,select{font-family:var(--f-body);}
       <div class="stations-strip" id="stations-strip"></div>
 
       <div class="panel-actions">
-        <button id="btn-focus-toggle">🎯 집중 모드</button>
+        <button id="btn-focus-toggle">집중 모드</button>
         <button id="btn-pause">⏸ 일시정지</button>
         <button class="end" id="btn-end">■ 종료</button>
       </div>
@@ -2041,7 +2041,7 @@ function hideDwellUI(){
 /* 집중 모드(NEXT STATION) 오버레이 — 항상 켜진 상태로 시작하며, 사용자가 직접 꺼야 한다 */
 function syncFocusOverlay(){
   document.getElementById('focus-overlay').classList.toggle('show', focusMode);
-  document.getElementById('btn-focus-toggle').textContent = focusMode? '🗺️ 오버레이 숨기기' : '🎯 집중 모드';
+  document.getElementById('btn-focus-toggle').textContent = focusMode? '오버레이 숨기기' : '집중 모드';
 }
 
 function startStudy(){
