@@ -2041,7 +2041,7 @@ function hideDwellUI(){
 /* 집중 모드(NEXT STATION) 오버레이 — 항상 켜진 상태로 시작하며, 사용자가 직접 꺼야 한다 */
 function syncFocusOverlay(){
   document.getElementById('focus-overlay').classList.toggle('show', focusMode);
-  document.getElementById('btn-focus-toggle').textContent = focusMode? '역 표시 끄기' : '집중 모드';
+  document.getElementById('btn-focus-toggle').textContent = focusMode? '오버레이(끔)' : '집중 모드';
 }
 
 function startStudy(){
