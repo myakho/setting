@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2. 발달의 유전 및 경험적 기저</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12203A; --mute:#6A7A93; --faint:#9AA8BC; --line:#DFE6EF;
+  --paper:#FFFFFF; --tint:#F2F6FA;
+  --plum:#7A2E8E; --plum-l:#F5EAF8;
+  --teal:#0D8E9E; --teal-l:#E3F4F6;
+  --coral:#E2503F; --coral-l:#FCEDEB;
+  --blue:#2C6FBF; --blue-l:#E9F1FB;
+  --amber:#C9820A; --amber-l:#FDF4E3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#E7ECF2;color:var(--ink);
+  font-family:Pretendard,'Noto Sans KR',system-ui,-apple-system,sans-serif;
+  overflow:hidden;-webkit-font-smoothing:antialiased}
+.deck{position:relative;width:100vw;height:100vh;background:var(--paper)}
+.slide{position:absolute;inset:0;display:none;
+  padding:clamp(24px,3.6vh,46px) clamp(30px,5vw,88px) 76px;overflow:hidden}
+.slide.live{display:block;animation:sIn .4s cubic-bezier(.2,.75,.3,1)}
+@keyframes sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fit{display:flex;flex-direction:column;width:100%;height:100%;
+  transform-origin:top center;will-change:transform}
+.slide.mid .fit{justify-content:center}
+
+.hd{display:flex;align-items:center;gap:11px;margin-bottom:14px;flex:none}
+.hd .chip{font-size:12.5px;font-weight:700;color:#fff;background:var(--plum);
+  padding:5px 13px;border-radius:100px}
+.hd .sub{font-size:13.5px;color:var(--faint);font-weight:500}
+.slide[data-c="teal"] .hd .chip{background:var(--teal)}
+.slide[data-c="blue"] .hd .chip{background:var(--blue)}
+.slide[data-c="coral"] .hd .chip{background:var(--coral)}
+.slide[data-c="amber"] .hd .chip{background:var(--amber)}
+
+h1{font-size:clamp(40px,6.6vw,86px);font-weight:800;line-height:1.12;letter-spacing:-.035em}
+h2{font-size:clamp(26px,3.4vw,46px);font-weight:800;line-height:1.24;letter-spacing:-.03em;flex:none}
+h2 .hl{color:var(--plum)}
+.slide[data-c="teal"] h2 .hl{color:var(--teal)}
+.slide[data-c="blue"] h2 .hl{color:var(--blue)}
+.slide[data-c="coral"] h2 .hl{color:var(--coral)}
+.slide[data-c="amber"] h2 .hl{color:var(--amber)}
+h3{font-size:clamp(16px,1.5vw,21px);font-weight:700}
+.sup2{font-size:clamp(15px,1.5vw,21px);color:var(--mute);font-weight:500;
+  margin-top:12px;line-height:1.65;flex:none;max-width:78ch}
+p{font-size:clamp(14.5px,1.28vw,19px);line-height:1.78;color:var(--mute);max-width:70ch}
+p+p{margin-top:13px}
+strong{color:var(--ink);font-weight:700}
+em{font-style:normal;color:var(--plum);font-weight:700}
+.slide[data-c="teal"] em{color:var(--teal)}
+.slide[data-c="coral"] em{color:var(--coral)}
+.slide[data-c="amber"] em{color:var(--amber)}
+.cite{font-size:12.5px;color:var(--faint);margin-top:12px}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(24px,3.4vw,56px);align-items:center}
+.two.even{grid-template-columns:1fr 1fr}
+.two.rev{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+@media(max-width:920px){.two,.two.even,.two.rev{grid-template-columns:1fr;gap:18px}}
+.stack>*+*{margin-top:15px}
+
+.quote{font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(21px,2.6vw,36px);line-height:1.6;color:var(--ink);
+  padding:20px 0 20px 26px;border-left:5px solid var(--plum)}
+.quote cite{display:block;font-family:Pretendard,sans-serif;font-style:normal;
+  font-size:13px;color:var(--faint);margin-top:15px;font-weight:500}
+
+.grid{display:grid;gap:13px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--tint);border-radius:14px;padding:19px 21px}
+.card.plum{background:var(--plum-l)} .card.teal{background:var(--teal-l)}
+.card.coral{background:var(--coral-l)} .card.blue{background:var(--blue-l)}
+.card.amber{background:var(--amber-l)}
+.card h4{font-size:14px;font-weight:800;margin-bottom:8px;color:var(--plum)}
+.card.teal h4{color:var(--teal)} .card.coral h4{color:var(--coral)}
+.card.blue h4{color:var(--blue)} .card.amber h4{color:var(--amber)}
+.card p{font-size:clamp(13.5px,1.08vw,16px);line-height:1.66}
+
+table{border-collapse:collapse;width:100%;font-size:clamp(13.5px,1.12vw,16.5px)}
+th{padding:9px 13px;text-align:left;font-size:12.5px;color:var(--faint);font-weight:700;border-bottom:2px solid var(--line)}
+td{padding:10px 13px;border-bottom:1px solid var(--line);color:var(--mute)}
+td strong{color:var(--ink)}
+td.n{font-variant-numeric:tabular-nums;font-weight:700;color:var(--plum);text-align:right}
+tr.mark td{background:var(--plum-l)}
+.slide[data-c="amber"] td.n{color:var(--amber)}
+.slide[data-c="amber"] tr.mark td{background:var(--amber-l)}
+.slide[data-c="coral"] tr.mark td{background:var(--coral-l)}
+
+.stage{position:relative;width:100%;height:clamp(290px,44vh,450px);
+  background:linear-gradient(170deg,#FBFCFE,#EDF3F9);border-radius:18px;overflow:hidden}
+.stage.tall{height:clamp(330px,52vh,520px)}
+.stage .lbl{position:absolute;font-size:12.5px;font-weight:700;color:var(--faint)}
+.caption{position:absolute;left:0;right:0;bottom:0;padding:13px 20px;
+  background:rgba(255,255,255,.95);border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;min-height:52px;
+  font-size:clamp(13px,1.08vw,15.5px);color:var(--mute)}
+.caption .num{flex:none;width:24px;height:24px;border-radius:50%;background:var(--plum);
+  color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+.caption b{color:var(--ink);font-weight:700}
+.counter{position:absolute;top:16px;right:20px;text-align:right;
+  font-size:12.5px;color:var(--faint);font-weight:600;line-height:1.4}
+.counter b{display:block;font-size:clamp(26px,3vw,40px);font-weight:800;color:var(--plum);
+  font-variant-numeric:tabular-nums;transition:color .4s}
+.counter b.half{color:var(--teal)}
+
+.membrane{position:absolute;inset:0;filter:url(#goo)}
+.blob{position:absolute;border-radius:50%;background:#D3E4F2;
+  transition:all 1.05s cubic-bezier(.45,.05,.3,1)}
+.chlayer{position:absolute;inset:0;pointer-events:none}
+.ch{position:absolute;transition:all 1.05s cubic-bezier(.45,.05,.3,1);will-change:transform,left,top}
+.eq{position:absolute;height:2px;background:var(--teal);opacity:0;transition:opacity .5s;border-radius:2px}
+.eq::after{content:"적도면";position:absolute;right:0;top:-19px;font-size:11px;color:var(--teal);font-weight:700}
+.noanim,.noanim *{transition:none!important}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:100%}
+.vs .col{position:relative;background:linear-gradient(170deg,#FBFCFE,#EDF3F9);border-radius:16px;overflow:hidden}
+.vs .top{position:absolute;top:0;left:0;right:0;padding:13px 18px;z-index:3;
+  display:flex;justify-content:space-between;align-items:baseline}
+.vs .top .t{font-size:clamp(15px,1.5vw,20px);font-weight:800}
+.vs .col.a .top .t{color:var(--plum)} .vs .col.b .top .t{color:var(--teal)}
+.vs .top .e{font-size:12px;color:var(--faint);font-weight:600}
+.vs .res{position:absolute;left:0;right:0;bottom:0;padding:12px 18px 14px;z-index:3;
+  background:rgba(255,255,255,.96);border-top:1px solid var(--line);
+  font-size:clamp(12.5px,1.05vw,15px);font-weight:600;color:var(--ink);
+  display:flex;justify-content:space-between;align-items:center}
+.vs .res span{color:var(--mute);font-weight:500}
+
+.boom{display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.8vw,28px);
+  padding:clamp(16px,4vh,44px) 0}
+.boom .v{font-size:clamp(32px,5.6vw,80px);font-weight:800;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--faint);transition:color .6s}
+.boom .u{text-align:center}
+.boom .u.hot .v{color:var(--coral)}
+.boom .u.cool .v{color:var(--teal)}
+.boom .u.key .v{color:var(--plum)}
+.boom .g{font-size:12.5px;color:var(--faint);margin-top:10px;font-weight:600}
+.boom .ar{color:var(--line);font-size:clamp(18px,2.2vw,30px)}
+
+.karyo{display:flex;flex-wrap:wrap;gap:clamp(10px,1.6vw,26px) clamp(14px,2vw,32px);
+  align-items:flex-end;justify-content:center}
+.kgroup{display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.kgroup .prs{display:flex;gap:clamp(3px,.5vw,7px);align-items:flex-end;justify-content:center}
+.kgroup .brk{height:7px;border-left:1.5px solid var(--faint);border-right:1.5px solid var(--faint);
+  border-bottom:1.5px solid var(--faint);border-radius:0 0 3px 3px}
+.kgroup .gl{text-align:center;font-size:13px;font-weight:800;color:var(--plum);letter-spacing:.04em}
+.kgroup .gs{text-align:center;font-size:10.5px;font-weight:600;color:var(--faint);margin-top:-2px}
+.kgroup.sex .gl{color:var(--teal)} .kgroup.sex .brk{border-color:var(--teal)}
+.kg{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transform:translateY(-14px)}
+.kg.in{animation:drop .5s cubic-bezier(.3,1.5,.5,1) forwards}
+@keyframes drop{to{opacity:1;transform:none}}
+.kg .pr{display:flex;gap:2px;align-items:flex-end}
+.kg .no{font-size:10px;color:var(--faint);font-weight:700;font-variant-numeric:tabular-nums}
+.kg.flag{position:relative} .kg.flag .no{color:var(--coral)}
+.kg.flag::after{content:"";position:absolute;inset:-7px -6px 12px;
+  border:2px solid var(--coral);border-radius:8px;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+.extra{display:inline-block;animation:fly 1s cubic-bezier(.3,1.4,.5,1) 1s backwards}
+@keyframes fly{from{opacity:0;transform:translate(70px,-46px) rotate(45deg)}}
+.botrow{display:grid;grid-template-columns:auto 1fr 1fr;gap:clamp(12px,1.6vw,24px);
+  align-items:stretch;margin-top:clamp(10px,1.8vh,20px)}
+@media(max-width:1000px){.botrow{grid-template-columns:1fr}}
+.botrow .card{padding:14px 16px}
+.botrow .card p{font-size:13.5px;line-height:1.6}
+.shapelg{display:flex;flex-direction:column;gap:9px;justify-content:center;
+  padding:14px 18px;background:var(--tint);border-radius:14px}
+.shapelg .it{display:flex;align-items:center;gap:11px}
+.shapelg .sg{flex:none;width:26px;display:grid;place-items:center}
+.shapelg .tx b{display:block;font-size:13px;font-weight:800;color:var(--ink);line-height:1.3}
+.shapelg .tx span{font-size:11.5px;color:var(--faint);font-weight:600}
+.karyo .kgroup .gs{white-space:nowrap;font-size:10px}
+
+.pausebtn{position:absolute;left:16px;bottom:66px;z-index:5;font-family:inherit;cursor:pointer;
+  background:rgba(255,255,255,.94);border:1.5px solid var(--line);border-radius:100px;
+  padding:7px 15px 7px 12px;font-size:12.5px;font-weight:700;color:var(--mute);
+  display:flex;align-items:center;gap:7px;transition:.18s;box-shadow:0 1px 4px rgba(18,32,58,.07)}
+.pausebtn:hover{border-color:var(--faint);color:var(--ink)}
+.pausebtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.pausebtn .ic{width:11px;height:12px;flex:none;position:relative}
+.pausebtn .ic::before,.pausebtn .ic::after{content:"";position:absolute;top:0;bottom:0;
+  width:3.5px;background:var(--mute);border-radius:1px;transition:.18s}
+.pausebtn .ic::before{left:0} .pausebtn .ic::after{right:0}
+.pausebtn.on .ic::before{left:1px;width:0;height:0;top:0;background:transparent;
+  border-left:10px solid var(--plum);border-top:6px solid transparent;border-bottom:6px solid transparent;border-radius:0}
+.pausebtn.on .ic::after{width:0;background:transparent}
+.pausebtn.on{color:var(--plum);border-color:var(--plum)}
+.vsbar{display:flex;justify-content:center;margin-top:14px}
+.vsbar .pausebtn{position:static;transform:none}
+
+.swim{position:relative;height:clamp(180px,25vh,240px)}
+.egg{position:absolute;right:7%;top:50%;transform:translateY(-50%)}
+.sperm{position:absolute;left:2%;top:50%;transform:translateY(-50%);
+  transition:left 1.5s cubic-bezier(.4,0,.5,1)}
+.sperm.go{left:calc(74% - 60px)}
+.sperm .tail{animation:wig .32s ease-in-out infinite alternate;transform-origin:right center}
+@keyframes wig{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.spbtn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.spbtn button,.eyepick button{font-family:inherit;cursor:pointer;background:#fff;
+  border:2px solid var(--line);border-radius:12px;padding:15px;font-size:15.5px;
+  font-weight:700;color:var(--ink);transition:.2s;text-align:center}
+.spbtn button:hover,.eyepick button:hover{border-color:var(--faint);background:var(--tint)}
+.spbtn button:focus-visible,.eyepick button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.spbtn button.sel,.eyepick button.sel{border-color:var(--plum);background:var(--plum-l);color:var(--plum)}
+.spbtn small{display:block;font-size:12px;font-weight:600;color:var(--faint);margin-top:5px}
+.spres{margin-top:13px;padding:19px;border-radius:14px;background:var(--tint);
+  text-align:center;min-height:100px;display:grid;place-items:center}
+.spres .r{font-size:clamp(21px,2.8vw,36px);font-weight:800}
+.spres .d{font-size:14px;color:var(--mute);margin-top:8px;font-weight:600}
+
+.helixbox{position:absolute;inset:0;display:grid;place-items:center;perspective:1100px}
+.helix{position:relative;width:1px;height:1px;transform-style:preserve-3d;
+  animation:spinY 12s linear infinite}
+@keyframes spinY{to{transform:rotateY(360deg)}}
+.rung{position:absolute;left:0;top:0;transform-style:preserve-3d;transition:opacity .35s;
+  transform:translateY(calc(var(--i) * 25px - 180px)) rotateY(calc(var(--i) * 34deg))}
+.rung .bar{position:absolute;left:-105px;top:-2px;width:210px;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,var(--cl) 0 42%,#DCE4EE 42% 58%,var(--cr) 58% 100%)}
+.rung .b{position:absolute;top:-13px;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff}
+.rung .b.l{left:-118px} .rung .b.r{left:92px}
+.rung.dim{opacity:.12}
+.rung.hi .bar{height:6px;top:-3px}
+.rung.hi .b{transform:scale(1.24);box-shadow:0 0 0 4px rgba(255,255,255,.9)}
+.basebtn{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.basebtn button{font-family:inherit;cursor:pointer;border:2px solid var(--line);background:#fff;
+  border-radius:100px;padding:9px 16px;font-size:14px;font-weight:700;color:var(--mute);transition:.2s}
+.basebtn button:hover{border-color:var(--faint)}
+.basebtn button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.basebtn button.sel{color:#fff}
+.basebtn button[data-b="A"].sel{background:#E2503F;border-color:#E2503F}
+.basebtn button[data-b="T"].sel{background:#0D8E9E;border-color:#0D8E9E}
+.basebtn button[data-b="C"].sel{background:#7A2E8E;border-color:#7A2E8E}
+.basebtn button[data-b="G"].sel{background:#2C6FBF;border-color:#2C6FBF}
+.basebtn button[data-b=""].sel{background:var(--ink);border-color:var(--ink)}
+
+.flow{display:flex;align-items:stretch;flex-wrap:wrap}
+.flow .n{flex:1;min-width:150px;background:var(--tint);border-radius:14px;padding:19px;
+  opacity:0;transform:translateX(-16px);animation:fin .55s ease forwards}
+.flow .n:nth-child(1){animation-delay:.1s} .flow .n:nth-child(3){animation-delay:.5s}
+.flow .n:nth-child(5){animation-delay:.9s} .flow .n:nth-child(7){animation-delay:1.3s}
+@keyframes fin{to{opacity:1;transform:none}}
+.flow .a{flex:none;width:42px;display:grid;place-items:center;color:var(--line);
+  font-size:22px;opacity:0;animation:fin .4s ease forwards}
+.flow .a:nth-child(2){animation-delay:.4s} .flow .a:nth-child(4){animation-delay:.8s}
+.flow .a:nth-child(6){animation-delay:1.2s}
+.flow .n h4{font-size:14px;font-weight:800;color:var(--teal);margin-bottom:8px}
+.flow .n.last{background:var(--coral-l)} .flow .n.last h4{color:var(--coral)}
+.flow .n p{font-size:14.5px;line-height:1.6}
+
+.eyepick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:13px}
+.eyepick button{padding:13px 8px;font-size:17px}
+.eyepick button.rec.sel{border-color:var(--ink);background:#EAEDF2;color:var(--ink)}
+.domtag{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:100px;
+  background:var(--plum-l);color:var(--plum);margin-top:8px}
+.domtag.rec{background:#E7EAF0;color:var(--ink)}
+.eyeout{border-radius:14px;background:var(--tint);padding:20px;display:flex;
+  align-items:center;gap:20px;min-height:126px}
+.eyeball{width:84px;height:84px;border-radius:50%;flex:none;position:relative;
+  transition:background .55s;box-shadow:inset 0 -6px 14px rgba(0,0,0,.18)}
+.eyeball::after{content:"";position:absolute;inset:27px;border-radius:50%;background:#15181D}
+.eyeball::before{content:"";position:absolute;left:19px;top:15px;width:15px;height:15px;
+  border-radius:50%;background:rgba(255,255,255,.65);z-index:2}
+
+.trace{stroke-dasharray:900;stroke-dashoffset:900}
+.trace.on{animation:draw 1.8s cubic-bezier(.4,.6,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pt{opacity:0}
+.pt.on{animation:pop .45s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+
+.slide[data-supp]{background:linear-gradient(180deg,#FFFDF8,#FFF8EC)}
+.supptag{display:inline-flex;align-items:center;gap:7px;background:var(--amber);color:#fff;
+  font-size:12.5px;font-weight:800;padding:6px 14px;border-radius:100px;margin-bottom:13px;
+  flex:none;align-self:flex-start}
+.supptag::before{content:"＋";font-size:14px;line-height:1}
+.src{margin-top:auto;padding:14px 18px;background:#fff;border:1px solid #F0E2C4;
+  border-radius:12px;font-size:12.5px;line-height:1.7;color:var(--mute);flex:none}
+.src b{display:block;color:var(--amber);font-weight:800;font-size:11.5px;margin-bottom:7px;letter-spacing:.04em}
+.src i{font-style:italic;color:var(--ink)}
+.src span{display:block} .src span+span{margin-top:6px}
+
+.cover{justify-content:center;background:linear-gradient(140deg,#FFFFFF 42%,#F7F0FA)}
+.cover .eye{font-size:14.5px;font-weight:800;color:var(--plum);margin-bottom:20px}
+.cover h1{max-width:14ch;margin-bottom:24px}
+.cover .meta{font-size:15.5px;color:var(--mute);line-height:1.9;font-weight:500}
+.float{position:absolute;right:0;top:0;bottom:0;width:min(46vw,600px);pointer-events:none}
+.float .f{position:absolute;animation:bob 7s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}
+  50%{transform:translateY(-24px) rotate(calc(var(--r,0deg) + 8deg))}}
+@media(max-width:940px){.float{display:none}}
+
+.toc{display:grid;gap:8px;max-width:860px}
+.toc button{display:grid;grid-template-columns:50px 1fr;gap:14px;align-items:center;
+  text-align:left;font-family:inherit;cursor:pointer;background:var(--tint);
+  border:none;border-radius:14px;padding:17px 20px;transition:.2s}
+.toc button:hover{background:var(--plum-l);transform:translateX(6px)}
+.toc button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.toc .n{font-size:15px;font-weight:800;color:var(--plum)}
+.toc .t{font-size:clamp(17px,1.75vw,23px);font-weight:700;color:var(--ink)}
+.toc .d{grid-column:2;font-size:13.5px;color:var(--mute);margin-top:3px;font-weight:500}
+
+.rail{position:fixed;left:0;right:0;bottom:0;height:50px;display:flex;align-items:center;
+  gap:16px;padding:0 clamp(20px,4vw,38px);background:#fff;border-top:1px solid var(--line);z-index:50}
+.rail .s{font-size:12.5px;font-weight:700;color:var(--mute);white-space:nowrap}
+.bar{flex:1;height:4px;background:var(--line);border-radius:4px;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--plum);border-radius:4px;transition:width .35s}
+body[data-m="supp"] .bar i{background:var(--amber)}
+.rail .ct{font-size:12.5px;color:var(--faint);font-variant-numeric:tabular-nums;font-weight:600}
+.rail .ct b{color:var(--ink)}
+.rail .hint{font-size:11.5px;color:var(--faint);font-weight:500}
+@media(max-width:700px){.rail .hint{display:none}}
+
+.steps{display:flex;gap:6px;align-items:center;margin-top:16px;flex:none}
+.steps i{width:26px;height:3px;background:var(--line);border-radius:3px;transition:.3s}
+.steps i.on{background:var(--plum)}
+.steps span{font-size:12px;color:var(--faint);margin-left:8px;font-weight:600}
+[data-from]{opacity:0;transform:translateY(9px);transition:opacity .45s,transform .45s}
+[data-from].on{opacity:1;transform:none}
+
+body.calm .float .f{animation:none}
+body.calm .kg.flag::after{animation:none;opacity:.9}
+body.calm .sperm .tail{animation:none}
+body.calm .slide.live{animation:none}
+.motionbtn{font-family:inherit;cursor:pointer;background:#fff;border:1.5px solid var(--line);
+  border-radius:100px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--faint);
+  white-space:nowrap;transition:.18s}
+.motionbtn:hover{border-color:var(--faint);color:var(--mute)}
+.motionbtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
+
+.rangebar{display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:center;margin-bottom:16px}
+.rangebar .nm{font-size:15px;font-weight:800;text-align:right}
+.rangebar .tr{position:relative;height:34px;background:var(--tint);border-radius:8px;overflow:hidden}
+.rangebar .fl{position:absolute;left:0;top:0;bottom:0;border-radius:8px;width:0;
+  transition:width 1.5s cubic-bezier(.4,.05,.3,1)}
+.rangebar .fl.h{background:linear-gradient(90deg,#CBB6D6,var(--plum))}
+.rangebar .fl.w{background:linear-gradient(90deg,#A9DDE4,var(--teal))}
+.rangebar .tag{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:12.5px;font-weight:800;color:#fff;opacity:0;transition:opacity .5s .9s}
+.rangebar .fl.on .tag,.rangebar.on .tag{opacity:1}
+
+.corrrow{display:grid;grid-template-columns:150px 1fr 54px;gap:12px;align-items:center;margin-bottom:7px}
+.corrrow .lb{font-size:13.5px;font-weight:600;color:var(--mute);text-align:right;line-height:1.3}
+.corrrow .lb b{color:var(--ink);font-weight:800}
+.corrrow .tk{height:22px;background:var(--tint);border-radius:6px;overflow:hidden}
+.corrrow .bv{height:100%;width:0;border-radius:6px;transition:width 1s cubic-bezier(.35,.6,.3,1)}
+.corrrow .vl{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+.corrrow.sub .lb{padding-left:16px;font-size:13px}
+.corrrow.gapover{margin-top:12px}
+
+.canalwrap{position:absolute;left:0;right:0;top:0;bottom:56px}
+.ballg{transition:none}
+.dpt{opacity:0;transition:opacity .4s}
+.dpt.on{opacity:1}
+#canalStage .pausebtn{left:auto;right:14px;bottom:66px}
+#cycStage .pausebtn{left:14px;right:auto;top:12px;bottom:auto}
+.routeout{position:absolute;left:18px;top:16px;z-index:4;font-size:12.5px;font-weight:700;color:var(--faint)}
+.routeout b{color:var(--plum)}
+
+.cyc{position:relative;width:100%;height:100%;display:grid;place-items:center}
+.cnode{position:absolute;width:clamp(120px,15vw,190px);padding:14px 16px;border-radius:14px;
+  background:#fff;border:2px solid var(--line);text-align:center;transition:.45s;box-shadow:0 2px 10px rgba(18,32,58,.05)}
+.cnode h5{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:5px}
+.cnode p{font-size:12.5px;line-height:1.5;color:var(--mute);max-width:none}
+.cnode.hot{border-color:var(--plum);background:var(--plum-l);transform:scale(1.06)}
+.cnode.hot h5{color:var(--plum)}
+.slide[data-c="coral"] .cnode.hot{border-color:var(--coral);background:var(--coral-l)}
+.slide[data-c="coral"] .cnode.hot h5{color:var(--coral)}
+
+.hslider{width:100%;margin:8px 0 4px;accent-color:var(--plum);height:26px;cursor:pointer}
+.hbar{display:flex;height:46px;border-radius:10px;overflow:hidden;margin-top:6px}
+.hbar .g{background:var(--plum);transition:width .25s;display:grid;place-items:center;
+  color:#fff;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden}
+.hbar .e{background:var(--teal);transition:width .25s;display:grid;place-items:center;
+  color:#fff;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden}
+.hmark{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--faint);margin-top:7px}
+.hval{font-size:clamp(26px,3.2vw,42px);font-weight:800;color:var(--plum);font-variant-numeric:tabular-nums}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.duo .p{border-radius:14px;padding:18px 20px;background:var(--tint)}
+.duo .p.rich{background:var(--teal-l)} .duo .p.poor{background:#F0F1F4}
+.duo .p h5{font-size:14px;font-weight:800;margin-bottom:9px}
+.duo .p.rich h5{color:var(--teal)} .duo .p.poor h5{color:var(--mute)}
+.duo .p p{font-size:14px;line-height:1.6}
+.duo .res{margin-top:12px;font-size:13px;font-weight:800}
+
+.seedwrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+.seedbox{border-radius:14px;padding:16px;text-align:center}
+.seedbox.good{background:#EAF6EC} .seedbox.bad{background:#F3EFE7}
+.seedbox .t{font-size:13px;font-weight:800;margin-bottom:10px}
+.seedbox.good .t{color:#2E7D4F} .seedbox.bad{color:inherit}
+.seedbox.bad .t{color:#8A6A3A}
+.seedbox .sp{display:flex;align-items:flex-end;justify-content:center;gap:7px;height:78px}
+.seedbox .st{width:11px;border-radius:4px 4px 0 0;background:#4E9E6A;transition:height 1s cubic-bezier(.4,.1,.3,1);height:0}
+.seedbox.bad .st{background:#B79A6B}
+.seedbox .cap2{font-size:12px;color:var(--mute);margin-top:9px;font-weight:600}
+
+.parts{display:flex;align-items:center;gap:4px;flex:none}
+.parts .pl{font-size:11px;font-weight:700;color:var(--faint);margin-right:4px}
+.parts button{font-family:inherit;cursor:pointer;width:24px;height:24px;border-radius:7px;
+  border:1.5px solid var(--line);background:#fff;color:var(--faint);
+  font-size:12px;font-weight:800;transition:.18s;padding:0}
+.parts button:hover{border-color:var(--faint);color:var(--mute)}
+.parts button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.parts button.cur{background:var(--plum);border-color:var(--plum);color:#fff}
+body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(--amber)}
+.nextpart{display:inline-flex;align-items:center;gap:9px;margin-top:20px;
+  font-family:inherit;cursor:pointer;border:none;border-radius:100px;
+  background:var(--ink);color:#fff;padding:13px 24px;font-size:15px;font-weight:800;transition:.18s}
+.nextpart:hover{transform:translateX(4px)}
+.nextpart:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.nextpart::after{content:"→";font-size:17px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/>
+<feColorMatrix in="b" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -10"/>
+</filter></defs></svg>
+
+<div class="deck" id="deck">
+
+<section class="slide cover mid" data-sec="표지">
+  <div class="float" id="float"></div>
+  <div class="eye">제2장 · 인간발달의 기저</div>
+  <h1>2. 발달의 유전 및<br>경험적 기저</h1>
+  <div class="meta">유전-환경 상호작용의 개념적 모형 · 지능과 성격발달의 유전적 기저<br>교재 pp. 53–59</div>
+</section>
+
+<section class="slide mid" data-sec="도입">
+  <div class="two">
+    <blockquote class="quote">인간의 여러 심리적 특성의 유전기제에 있어서 유전자형과 표현형의 관계는 눈의 색깔처럼 그렇게 단순한 것은 아니다.<cite>교재 p. 51 — 앞 파트가 남긴 문장</cite></blockquote>
+    <div class="stack">
+      <p>심리적 특성의 발달에서 <strong>유전적 소인과 환경적 요인은 매우 복잡하게 상호작용</strong>합니다.</p>
+      <p>그래서 얼마나 많은 부분이 유전에 의해 결정되며 환경적 경험이 이를 얼마나 변화시킬 수 있는가를 밝히는 것은 <em>매우 어려운 문제</em>입니다.</p>
+      <div class="card"><h4 style="color:var(--mute)">교재의 솔직한 인정</h4>
+        <p>“많은 연구들이 이루어져 왔음에도 불구하고 <strong>이 문제에 대해서는 아직도 많은 부분이 알려져 있지 않다.</strong>”</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="도입" data-steps="3">
+  <h2>두 극단 사이에서</h2>
+  <div class="grid g3" style="margin-top:26px">
+    <div class="card" data-from="0"><h4 style="color:var(--mute)">과거 · 극단적 환경결정론</h4>
+      <p>초기 행동주의 심리학자들은 인간의 여러 심리적 특성이 <strong>후천적 경험에 의해 결정된다</strong>고 보았습니다. 그러나 이런 관점은 <strong>오늘날 더 이상 수용되지 못합니다.</strong></p></div>
+    <div class="card blue" data-from="1"><h4>최근 · 유전적 소인의 부각</h4>
+      <p>오히려 최근에는 <strong>유전적 소인에 의해 선천적으로 결정되는 발달적 특성</strong>을 강하게 부각시키는 경향이 있습니다.</p></div>
+    <div class="card plum" data-from="2"><h4>교재의 결론</h4>
+      <p>후천적 경험으로 인간을 무한히 변화시킬 수 없듯, <strong>인간의 모든 특성이 유전적으로 결정되지 않는 것 또한 사실</strong>입니다. 유전과 환경은 <strong>끊임없이 복잡한 형태로 상호작용</strong>합니다.</p></div>
+  </div>
+  <div class="steps" style="justify-content:center"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="1) 개념적 모형">
+  <div class="hd"><span class="chip">1) 유전-환경 상호작용의 개념적 모형</span><span class="sub">교재 pp. 54–57</span></div>
+  <h2>세 모형은 <span class="hl">서로 다른 질문</span>을 던집니다</h2>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card plum"><h4>반응의 범위</h4>
+      <p style="font-size:16px;font-weight:700;color:var(--ink)">유전이 정해준 <strong>폭</strong>은 얼마나 되는가?</p>
+      <p style="margin-top:10px">환경 → 아이 · 한 방향</p></div>
+    <div class="card teal"><h4>수로화</h4>
+      <p style="font-size:16px;font-weight:700;color:var(--ink)">환경이 밀어도 <strong>안 밀리는</strong> 특성은 무엇인가?</p>
+      <p style="margin-top:10px">환경 → 아이 · 한 방향</p></div>
+    <div class="card coral"><h4>거래적 상호작용</h4>
+      <p style="font-size:16px;font-weight:700;color:var(--ink)">아이가 <strong>환경을 바꾸기도</strong> 하지 않나?</p>
+      <p style="margin-top:10px">환경 ⇄ 아이 · 양방향</p></div>
+  </div>
+  <p style="margin-top:22px;font-size:clamp(16px,1.6vw,21px);font-weight:600;color:var(--ink);max-width:none">
+    앞의 둘은 <strong>한 방향</strong>, 세 번째만 <em>양방향</em>입니다. 이 대비를 기억해 주세요.</p>
+</section>
+
+<section class="slide mid" data-sec="(1) 반응의 범위">
+  <div class="hd"><span class="chip">(1) 반응의 범위 모형</span><span class="sub">Gottesman, 1963 · 교재 p. 54</span></div>
+  <h2>유전은 결과가 아니라 <span class="hl">범위</span>를 정합니다</h2>
+  <div class="sup2">반응의 범위(range of reaction)란 <strong>유전자형이 표현형으로 나타나는 과정에서 유전적 소인이 환경적 경험의 힘에 의해 변화될 수 있는 크기</strong>를 의미합니다.</div>
+  <div class="card plum" style="margin-top:24px;max-width:none">
+    <h4>이 모형의 발상 전환</h4>
+    <p style="font-size:clamp(16px,1.7vw,23px);font-weight:700;color:var(--ink);line-height:1.55">
+      유전이 어떤 특성이나 행동을 <strong>‘결정’하는 것이 아니라</strong>, 상이한 환경 내에서 개인이 발달시킬 수 있는 <strong>‘가능성의 범위’를 결정</strong>하는 것으로 봅니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="(1) 반응의 범위" data-scene="hw" data-steps="3">
+  <div class="hd"><span class="chip">(1) 반응의 범위</span><span class="sub">교재의 신장·체중 예시</span></div>
+  <h2>키와 몸무게 중 <span class="hl">환경의 영향</span>을 더 받는 쪽은?</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage" style="display:flex;flex-direction:column;justify-content:center;padding:clamp(20px,4vh,44px) clamp(20px,3vw,44px)">
+        <div class="rangebar" id="rbH"><div class="nm">신장</div>
+          <div class="tr"><div class="fl h"><span class="tag">반응의 범위 좁음</span></div></div></div>
+        <div class="rangebar" id="rbW"><div class="nm">체중</div>
+          <div class="tr"><div class="fl w"><span class="tag">반응의 범위 넓음</span></div></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--faint);padding-left:88px;margin-top:2px">
+          <span>유전이 정한 하한</span><span>환경이 밀어올릴 수 있는 최대</span></div>
+      </div>
+      <div class="stack">
+        <p data-from="0">아무리 후천적으로 가장 이상적인 환경에서 아이를 키운다고 하더라도, <strong>유전적으로 부여받은 소인의 범위를 무한정 넘어서서 신장과 체중을 늘릴 수는 없습니다.</strong></p>
+        <p data-from="1">그러나 이 경우 <strong>키보다는 체중이 환경의 영향을 더욱 크게 받는다</strong>는 것을 경험을 통해 쉽게 짐작할 수 있습니다.</p>
+        <div class="card plum" data-from="2"><h4>교재의 표현</h4>
+          <p style="font-size:16px;font-weight:700;color:var(--ink)">“체중은 신장에 비해 보다 큰 반응의 범위를 갖고 있다.”</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="steps"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide" data-sec="(1) 반응의 범위" data-scene="rr" data-steps="3">
+  <div class="hd"><span class="chip">그림 2-4</span><span class="sub">Gottesman, 1974 · 교재 p. 55</span></div>
+  <h2>반응의 범위 모형</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage tall" style="display:grid;place-items:center">
+        <svg viewBox="0 0 468 338" style="width:96%" id="rrSvg">
+          <g stroke="#DFE6EF" stroke-width="1.5"><line x1="54" y1="272" x2="352" y2="272"/><line x1="54" y1="20" x2="54" y2="272"/></g>
+          <g fill="#9AA8BC" font-size="12" font-weight="700" font-family="Pretendard">
+            <text x="60" y="292">빈곤</text><text x="190" y="292" text-anchor="middle">중립</text><text x="348" y="292" text-anchor="end">풍요</text>
+            <text x="203" y="314" text-anchor="middle" fill="#6A7A93">환경의 적합성</text></g>
+          <text x="22" y="146" text-anchor="middle" transform="rotate(-90 22 146)" fill="#6A7A93" font-size="12" font-weight="700" font-family="Pretendard">발달 수준</text>
+          <g fill="none" stroke-width="3" stroke-linecap="round">
+            <path class="rrc" id="rc3" d="M54 150 C 130 96 240 62 352 44" stroke="#7A2E8E"/>
+            <path class="rrc" id="rc2" d="M54 186 C 130 146 240 122 352 110" stroke="#2C6FBF"/>
+            <path class="rrc" id="rc1" d="M54 216 C 130 190 240 176 352 170" stroke="#0D8E9E"/>
+            <path class="rrc" id="rc0" d="M54 246 C 130 232 240 226 352 222" stroke="#9AA8BC"/>
+          </g>
+          <g font-size="12" font-weight="800" font-family="Pretendard">
+            <text x="200" y="78" fill="#7A2E8E">인자형 D</text><text x="200" y="140" fill="#2C6FBF">인자형 C</text>
+            <text x="200" y="196" fill="#0D8E9E">인자형 B</text><text x="200" y="244" fill="#6A7A93">인자형 A</text></g>
+          <g id="rrBr" opacity="0">
+            <g stroke="#12203A" stroke-width="1.6">
+              <path d="M372 44 L372 150 M366 44 L378 44 M366 150 L378 150"/>
+              <path d="M400 110 L400 186 M394 110 L406 110 M394 186 L406 186"/>
+              <path d="M424 170 L424 216 M418 170 L430 170 M418 216 L430 216"/>
+              <path d="M444 222 L444 246 M438 222 L450 222 M438 246 L450 246"/>
+            </g>
+            <g font-size="10.5" font-weight="800" font-family="Pretendard" fill="#12203A">
+              <text x="382" y="100">RR·D</text><text x="410" y="152">RR·C</text>
+              <text x="418" y="166" text-anchor="start" opacity="0">-</text></g>
+          </g>
+          <text id="rrNote" x="203" y="20" text-anchor="middle" font-size="12" font-weight="800" fill="#E2503F" font-family="Pretendard" opacity="0">RR = 반응의 범위</text>
+        </svg>
+      </div>
+      <div class="stack">
+        <p data-from="0"><strong>가로축</strong>은 환경의 적합성(빈곤→풍요), <strong>세로축</strong>은 발달 수준입니다. 곡선은 인자형 A부터 D까지 네 개입니다.</p>
+        <div class="card" data-from="1"><h4 style="color:var(--mute)">읽어야 할 세 가지</h4>
+          <p><strong>①</strong> 모든 곡선이 오른쪽으로 갈수록 올라갑니다 → 어떤 유전자형이든 환경이 좋아지면 발달수준이 올라갑니다.</p>
+          <p style="margin-top:8px"><strong>②</strong> 곡선의 높이가 서로 다릅니다 → 같은 환경이어도 유전자형에 따라 도달점이 다릅니다.</p></div>
+        <div class="card plum" data-from="2"><h4>③ 가장 중요한 것</h4>
+          <p>오른쪽 화살표 <strong>RR·A ~ RR·D</strong>가 각 유전자형의 반응의 범위입니다. <strong>범위의 크기 자체가 유전자형마다 다릅니다.</strong></p></div>
+      </div>
+    </div>
+  </div>
+  <div class="steps"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="(1) 반응의 범위">
+  <h2>교재가 직접 인정하는 <span class="hl">한계</span></h2>
+  <div class="two" style="margin-top:24px">
+    <blockquote class="quote" style="font-size:clamp(19px,2.2vw,30px)">반응의 범위 모형은 아직도 가상적 모형이며, 각 특성이나 개인의 유전자형의 반응의 범위는 밝혀져 있지 않다.<cite>교재 p. 55</cite></blockquote>
+    <div class="card plum">
+      <h4>그럼 왜 의미가 있는가</h4>
+      <p style="font-size:15.5px">유전적 소인이 발달수준을 결정하는 데 큰 영향을 미친다는 사실을 <strong>각성시켜줌으로써</strong>, 선천적으로 결정되는 <strong>개인의 잠재력의 한계를 인식하는 데 도움</strong>이 됩니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="(2) 수로화" data-c="teal">
+  <div class="hd"><span class="chip">(2) 수로화 모형</span><span class="sub">교재 p. 55</span></div>
+  <h2>수로화 <span class="hl">canalization</span></h2>
+  <div class="sup2">강력한 환경력의 영향에도 불구하고 <strong>유전자형이 결과적으로 동일한 발달상태에 도달할 수 있도록 표현형을 한정 짓는 기제</strong>를 의미합니다.</div>
+  <div class="card teal" style="margin-top:24px;max-width:none">
+    <h4>따라서</h4>
+    <p style="font-size:clamp(16px,1.7vw,23px);font-weight:700;color:var(--ink);line-height:1.55">
+      보다 <strong>강하게 수로화된 특성일수록</strong>, 환경적 경험의 차이에 의해 <strong>변화될 수 있는 가능성이 더 적습니다.</strong></p>
+  </div>
+</section>
+
+<section class="slide" data-sec="(2) 수로화" data-c="teal" data-scene="canal">
+  <div class="hd"><span class="chip">그림 2-5</span><span class="sub">Fishbein, 1976; Berk, 1994 · 자동 반복 · P키로 정지</span></div>
+  <h2>공은 <span class="hl">발달하는 유기체</span>입니다</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage tall" id="canalStage">
+        <div class="routeout">이번 경로 <b id="rtName">1 / 4</b></div>
+        <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
+        <div class="canalwrap">
+          <svg viewBox="0 0 700 358" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%" id="canalSvg">
+            <g stroke="#E3EAF2" stroke-width="26" fill="none" stroke-linecap="round">
+              <path d="M350 26 C350 90 350 110 350 150 C350 192 262 200 200 240 C162 268 140 292 122 318"/>
+              <path d="M350 26 C350 90 350 110 350 150 C350 192 262 200 200 240 C242 270 258 296 272 318"/>
+              <path d="M350 26 C350 90 350 110 350 150 C350 192 438 200 500 240 C462 270 446 296 432 318"/>
+              <path d="M350 26 C350 90 350 110 350 150 C350 192 438 200 500 240 C538 268 562 292 580 318"/>
+            </g>
+            <g id="canalPaths" fill="none" stroke="none">
+              <path id="cr0" d="M350 26 C350 90 350 110 350 150 C350 192 262 200 200 240 C162 268 140 292 122 318"/>
+              <path id="cr1" d="M350 26 C350 90 350 110 350 150 C350 192 262 200 200 240 C242 270 258 296 272 318"/>
+              <path id="cr2" d="M350 26 C350 90 350 110 350 150 C350 192 438 200 500 240 C462 270 446 296 432 318"/>
+              <path id="cr3" d="M350 26 C350 90 350 110 350 150 C350 192 438 200 500 240 C538 268 562 292 580 318"/>
+            </g>
+            <g class="dpt" id="dp1"><circle cx="350" cy="150" r="9" fill="none" stroke="#E2503F" stroke-width="2.5"/>
+              <text x="350" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#E2503F" font-family="Pretendard">결정점</text></g>
+            <g class="dpt" id="dp2"><circle cx="200" cy="240" r="9" fill="none" stroke="#E2503F" stroke-width="2.5"/>
+              <circle cx="500" cy="240" r="9" fill="none" stroke="#E2503F" stroke-width="2.5"/>
+              <text x="200" y="220" text-anchor="middle" font-size="13" font-weight="800" fill="#E2503F" font-family="Pretendard">결정점</text>
+              <text x="500" y="220" text-anchor="middle" font-size="13" font-weight="800" fill="#E2503F" font-family="Pretendard">결정점</text></g>
+            <g fill="#9AA8BC" font-size="12.5" font-weight="700" font-family="Pretendard">
+              <text x="122" y="344" text-anchor="middle">통로 1</text><text x="272" y="344" text-anchor="middle">통로 2</text>
+              <text x="432" y="344" text-anchor="middle">통로 3</text><text x="580" y="344" text-anchor="middle">통로 4</text></g>
+            <g id="ball" class="ballg">
+              <circle r="16" fill="#0D8E9E"/><circle r="16" fill="none" stroke="#fff" stroke-width="2.5"/>
+              <circle cx="-5" cy="-6" r="4.5" fill="rgba(255,255,255,.55)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="caption"><span class="num" id="cnK" style="background:var(--teal)">1</span><span id="cnCap"></span></div>
+      </div>
+      <div class="stack">
+        <p>교재의 설명 그대로입니다. <strong>공은 발달하는 유기체</strong>를 뜻하며, <strong>각 결정점에서 유기체는 두 개의 통로 중 하나를 택할 수 있습니다.</strong></p>
+        <div class="card teal"><h4>이 그림의 핵심</h4>
+          <p style="font-size:clamp(15px,1.6vw,20px);font-weight:700;color:var(--ink)">발달이 진행됨에 따라 <strong>다른 통로로 옮기는 것은 점차 더 어렵게</strong> 됩니다.</p></div>
+        <div class="card"><h4 style="color:var(--mute)">골짜기의 깊이</h4>
+          <p>골짜기가 <strong>깊게 파여 있으면</strong> 옆에서 밀어도 결국 그 골짜기로 돌아옵니다 — <strong>강하게 수로화된 특성.</strong><br>
+          <strong>얕으면</strong> 살짝만 밀어도 다른 길로 빠집니다 — <strong>덜 수로화된 특성.</strong></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="(2) 수로화" data-c="teal" data-steps="2">
+  <h2>무엇이 <span class="hl">강하게</span> 수로화되어 있는가</h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card teal" data-from="0"><h4>강하게 수로화된 특성</h4>
+      <p style="font-size:16px"><strong>앉기, 서기, 걷기</strong> 등의 초기 신체운동기능<br><strong>옹알이</strong>와 같은 초기 언어능력</p>
+      <p style="margin-top:10px">아이들이 <strong>어떤 환경에서 성장하건 간에 비교적 정상적으로 나타나기 마련</strong>입니다.</p></div>
+    <div class="card" data-from="1"><h4 style="color:var(--mute)">덜 수로화된 특성</h4>
+      <p style="font-size:16px"><strong>지능</strong></p>
+      <p style="margin-top:10px">후천적인 <strong>물리적·사회적·교육적 경험에 의해 크게 변화될 수 있는</strong>, 덜 수로화되어 있는 특성을 가집니다.</p></div>
+  </div>
+  <p style="margin-top:22px;font-size:clamp(17px,1.8vw,24px);font-weight:700;color:var(--ink);max-width:none">
+    걷기는 환경이 못 바꾸지만, <em>지능은 환경이 바꿉니다.</em></p>
+  <div class="cite">Shaffer, 1993 · 교재 p. 55</div>
+  <div class="steps"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="(2) 수로화" data-c="teal">
+  <blockquote class="quote" style="border-color:var(--teal);max-width:26ch;font-size:clamp(24px,3.2vw,44px)">
+    선천적으로 청각장애가 있는 아이도, 정상아와 같은 시기에 옹알이를 합니다.
+    <cite>Shaffer, 1993 · 교재 p. 55 (교재 표기는 현재 부적절한 용어라 바꿔 옮겼습니다)</cite>
+  </blockquote>
+  <p style="margin-top:22px;font-size:clamp(16px,1.6vw,21px);max-width:none">
+    한 번도 소리를 들어본 적이 없는 아이가 말입니다. 이 특성이 <strong>환경 입력과 거의 무관하게 강력하게 수로화되어 있음</strong>을 보여주는 근거입니다.</p>
+</section>
+
+<section class="slide mid" data-sec="(2) 수로화" data-c="teal">
+  <div class="hd"><span class="chip">회복력</span><span class="sub">Garmezy, 1981 · 교재 p. 56</span></div>
+  <h2>같은 환경, <span class="hl">다른 결과</span></h2>
+  <div class="sup2">동일하게 바람직하지 못한 환경에 놓이더라도 결과가 갈립니다.</div>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card teal"><h4>회복력이 강한 아동</h4>
+      <p><strong>스트레스에 대한 저항이 강한 아동</strong>은 그러한 환경을 극복하고 <strong>정상적인 발달상태에 도달</strong>할 수 있습니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">회복력이 약한 아동</h4>
+      <p>여러 형태의 <strong>비정상적 발달</strong>을 초래한다는 사실이 많은 연구를 통해 보고되어 왔습니다.</p></div>
+  </div>
+  <p style="margin-top:20px">회복력의 차이가 어디에서 기인하는지는 명백하지 않으나, 교재는 <em>개인의 유전자형의 수로화 차이</em>가 그 원인이 될 수 있는 가능성을 제시합니다.</p>
+</section>
+
+<section class="slide mid" data-sec="(3) 거래적 상호작용" data-c="coral">
+  <div class="hd"><span class="chip">(3) 거래적 상호작용 모형</span><span class="sub">교재 p. 56</span></div>
+  <h2>화살표의 <span class="hl">방향</span>이 다릅니다</h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card"><h4 style="color:var(--mute)">종래의 관점</h4>
+      <p>반응의 범위 모형이나 수로화 모형에서 보듯, 종래의 상호작용은 주로 <strong>‘환경이 유전자형의 발달에 미치는 영향’</strong>에 중점을 둔 것입니다.</p>
+      <p style="margin-top:12px;font-size:17px;font-weight:800;color:var(--ink)">환경 → 유전자형</p></div>
+    <div class="card coral"><h4>거래적 상호작용 모형</h4>
+      <p>이에 반해 <strong>유전자형이 환경에 미치는 영향</strong>과, 그러한 영향이 다시 <strong>유전자형의 발달로 송환되는 과정</strong>에 관심을 기울입니다.</p>
+      <p style="margin-top:12px;font-size:17px;font-weight:800;color:var(--coral)">환경 ⇄ 유전자형</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="(3) 거래적 상호작용" data-c="coral" data-scene="cyc">
+  <div class="hd"><span class="chip">교재의 예시</span><span class="sub">아동의 기질적 특성과 초기 가정환경 · 자동 반복 · P키로 정지</span></div>
+  <h2>아이가 <span class="hl">환경을 바꾸고</span>, 바뀐 환경이 다시 아이를 바꿉니다</h2>
+  <div class="body">
+    <div class="stage tall" id="cycStage">
+      <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
+      <div class="cyc" id="cyc">
+        <svg viewBox="0 0 620 300" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">
+          <g fill="none" stroke="#DFE6EF" stroke-width="2.5" stroke-linecap="round">
+            <path d="M215 62 C 300 34 340 34 425 62" marker-end="url(#ah)"/>
+            <path d="M500 108 C 528 150 528 156 500 198" marker-end="url(#ah)"/>
+            <path d="M425 244 C 340 272 300 272 215 244" marker-end="url(#ah)"/>
+            <path d="M140 198 C 112 156 112 150 140 108" marker-end="url(#ah)"/>
+          </g>
+          <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9 z" fill="#C7D2E0"/></marker></defs>
+        </svg>
+        <div class="cnode" id="cn0" style="left:6%;top:16%"><h5>① 타고난 기질</h5>
+          <p>선천적으로 보다 <strong>활동적이고 적극적인</strong> 기질</p></div>
+        <div class="cnode" id="cn1" style="right:6%;top:16%"><h5>② 환경의 반응</h5>
+          <p>부모나 환경 내의 다른 요소들로부터 <strong>더 많은 바람직한 자극</strong>을 이끌어냄</p></div>
+        <div class="cnode" id="cn2" style="right:6%;bottom:14%"><h5>③ 변화된 환경</h5>
+          <p>동일한 환경도 <strong>상이하게 작용</strong>하도록 환경 자체가 바뀜</p></div>
+        <div class="cnode" id="cn3" style="left:6%;bottom:14%"><h5>④ 다시 아이에게</h5>
+          <p>아이의 성격을 <strong>보다 적극적이고 활동적</strong>으로 만듦</p></div>
+      </div>
+      <div class="caption"><span class="num" id="cycK" style="background:var(--coral)">1</span><span id="cycCap"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="(3) 거래적 상호작용" data-c="coral">
+  <h2>그래서 <span class="hl">분리해내기가 더 어려워집니다</span></h2>
+  <div class="two" style="margin-top:22px">
+    <blockquote class="quote" style="border-color:var(--coral);font-size:clamp(18px,2.1vw,29px)">
+      유전자형과 환경 간에 끊임없는 거래적 상호작용이 이루어지고 있다는 사실은, 발달에 있어서 유전과 환경이 개인차 형성에 미치는 상대적 기여도를 분리해내는 것을 더욱 어렵게 한다.
+      <cite>Baumrind, 1991 · 교재 p. 57</cite></blockquote>
+    <div class="card coral">
+      <h4>여기서 세 모형이 하나로 모입니다</h4>
+      <p style="font-size:16px">“유전이 몇 퍼센트, 환경이 몇 퍼센트”라는 <strong>질문 자체가 왜 어려운가</strong> — 그 이유를 이 모형이 설명해줍니다.</p>
+      <p style="margin-top:12px">같은 집, 같은 부모 밑에서 자란 형제도 사실은 <strong>서로 다른 환경을 경험한 셈</strong>입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="2) 지능과 성격발달" data-c="blue">
+  <div class="hd"><span class="chip">2) 지능과 성격발달의 유전적 기저</span><span class="sub">교재 p. 57</span></div>
+  <h2>이제 <span class="hl">실제 데이터</span>를 봅니다</h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card blue"><h4>혈연관계연구 kinship studies</h4>
+      <p><strong>혈연관계가 가까울수록</strong> 두 개인 간 지능의 상관이 높게 나타난다면, 이는 지능이 <strong>유전적 소인에 의해 결정되는 확률이 높다</strong>는 사실을 의미합니다.</p></div>
+    <div class="card teal"><h4>양자연구 adoption studies</h4>
+      <p>함께 사는 <strong>양부모보다</strong> 따로 사는 <strong>친부모와 더 비슷하다면</strong>, 그것 역시 유전의 영향을 보여줍니다.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="corr">
+  <div class="hd"><span class="chip">표 2-1</span><span class="sub">Bouchard &amp; McGue, 1981 · 교재 p. 57</span></div>
+  <h2>혈연 간 지능의 <span class="hl">상관계수</span></h2>
+  <div class="body">
+    <div id="corrBox" style="max-width:900px;margin:0 auto;width:100%"></div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="2) 지능연구" data-c="blue" data-steps="2">
+  <h2>표에서 읽어야 할 <span class="hl">두 가지</span></h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card blue" data-from="0"><h4>패턴 ① 세로로 내려가며</h4>
+      <p style="font-size:17px;font-weight:700;color:var(--ink)">일란성 .86 → 이란성 .60 → 형제 .47 → 사촌 .15</p>
+      <p style="margin-top:10px"><strong>유전을 많이 공유할수록 지능이 비슷합니다.</strong> 게다가 일란성을 따로 키워도 .79로 여전히 높습니다.</p></div>
+    <div class="card teal" data-from="1"><h4>패턴 ② 같은 관계끼리 짝지어</h4>
+      <p style="font-size:17px;font-weight:700;color:var(--ink)">일란성 함께 .86 / 분리 .79<br>형제 함께 .47 / 분리 .24</p>
+      <p style="margin-top:10px"><strong>유전자가 같아도 따로 자라면 상관이 떨어집니다.</strong> 이것이 환경의 몫입니다.</p></div>
+  </div>
+  <p style="margin-top:22px;font-size:clamp(16px,1.7vw,22px);font-weight:700;color:var(--ink);max-width:none">
+    한 표 안에 <em>유전의 증거와 환경의 증거가 동시에</em> 들어 있는 셈입니다.</p>
+  <div class="steps" style="justify-content:center"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="sw">
+  <div class="hd"><span class="chip">양자연구</span><span class="sub">Scarr &amp; Weinberg, 1983 · 미네소타 양자연구 · 교재 p. 58</span></div>
+  <h2>18년을 함께 산 <span class="hl">양부모</span>보다, 얼굴도 모르는 <span class="hl">친부모</span>와 더 닮았습니다</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage" style="display:flex;flex-direction:column;justify-content:center;padding:clamp(18px,4vh,40px) clamp(24px,3.4vw,52px)">
+        <div class="corrrow" style="grid-template-columns:120px 1fr 60px">
+          <div class="lb"><b>친부모</b>와의 상관</div>
+          <div class="tk" style="height:34px"><div class="bv" id="swA" style="background:var(--plum)"></div></div>
+          <div class="vl" style="font-size:18px">.32</div></div>
+        <div class="corrrow" style="grid-template-columns:120px 1fr 60px">
+          <div class="lb"><b>양부모</b>와의 상관</div>
+          <div class="tk" style="height:34px"><div class="bv" id="swB" style="background:#C7D2E0"></div></div>
+          <div class="vl" style="font-size:18px;color:var(--mute)">.09</div></div>
+      </div>
+      <div class="stack">
+        <p><strong>출생 후 1년 이내에 양자로 간 아이</strong>의 지능을 <strong>18세</strong>에 측정한 결과입니다.</p>
+        <div class="card blue"><h4>연구 설계의 힘</h4>
+          <p>친부모는 유전만 공유하고, 양부모는 환경만 공유합니다. <strong>두 상관을 비교하면 유전과 환경을 갈라 볼 수 있습니다.</strong></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="2) 지능연구" data-c="teal">
+  <div class="hd"><span class="chip">양자연구</span><span class="sub">Duyme, 1988 · 교재 p. 58</span></div>
+  <h2>교재는 곧바로 <span class="hl">균형</span>을 잡습니다</h2>
+  <div class="two" style="margin-top:22px">
+    <blockquote class="quote" style="border-color:var(--teal);font-size:clamp(18px,2.1vw,28px)">
+      이러한 결과들을 “지능발달에 환경이 영향력을 미칠 수 없는 것”으로 받아들여서는 안 된다.
+      <cite>교재 p. 58</cite></blockquote>
+    <div class="stack">
+      <p>실제로 Duyme(1988)의 연구에서는 <strong>양부모의 사회경제적 계층의 차이가 양자의 지능발달에 결정적인 영향을 미친다</strong>는 사실을 밝혔습니다.</p>
+      <div class="card teal"><h4>주목할 점</h4>
+        <p style="font-size:16px;font-weight:700;color:var(--ink)">같은 양자연구라는 방법으로, <strong>정반대 방향의 결론</strong>이 나온 것입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2) 지능연구" data-c="teal" data-scene="rose">
+  <div class="hd"><span class="chip">실험적 조작</span><span class="sub">Rosenzweig, 1966; Rosenzweig &amp; Leiman, 1982 · 교재 p. 58</span></div>
+  <h2>환경을 바꾸자 <span class="hl">뇌 자체</span>가 달라졌습니다</h2>
+  <div class="body">
+    <div class="duo" style="margin-bottom:16px">
+      <div class="p rich"><h5>풍요로운 환경 enriched condition</h5>
+        <p>여러 가지를 탐색할 수 있는 <strong>대상물이 있는</strong> 사육 환경</p></div>
+      <div class="p poor"><h5>결핍환경 impoverished condition</h5>
+        <p>아무런 자극대상도 없는 사육상자에 <strong>한 마리씩 고립</strong>시켜 양육</p></div>
+    </div>
+    <div class="two">
+      <div>
+        <div class="corrrow" style="grid-template-columns:150px 1fr 34px">
+          <div class="lb">뇌의 해부학적·생화학적 측정치</div>
+          <div class="tk"><div class="bv" id="roA" style="background:var(--teal)"></div></div><div class="vl"></div></div>
+        <div class="corrrow" style="grid-template-columns:150px 1fr 34px">
+          <div class="lb">미로에서의 주행속도</div>
+          <div class="tk"><div class="bv" id="roB" style="background:var(--teal)"></div></div><div class="vl"></div></div>
+        <div class="cite">풍요로운 환경에서 자란 쥐가 <strong>모든 측정치에서 유의미하게 높은 수준</strong></div>
+      </div>
+      <div class="card teal"><h4>이 연구가 중요한 이유</h4>
+        <p>앞의 연구들은 <strong>상관</strong>이라 인과를 말할 수 없지만, 이것은 <strong>실험</strong>이라 말할 수 있습니다. 행동만이 아니라 <strong>뇌의 해부학적 측정치까지 달라졌다</strong>는 점이 핵심입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="유전가능비" data-c="blue">
+  <div class="hd"><span class="chip">유전가능비 연구</span><span class="sub">Jensen, 1969 · 교재 p. 58 · 슬라이더를 움직여 보세요</span></div>
+  <h2>유전가능비 <span class="hl">heritability</span></h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage" style="display:flex;flex-direction:column;justify-content:center;padding:clamp(20px,4vh,42px) clamp(24px,3.4vw,50px)">
+        <div style="text-align:center;margin-bottom:6px">
+          <span class="hval" id="hVal">0.80</span>
+          <span style="font-size:14px;font-weight:700;color:var(--faint);margin-left:8px">유전가능비</span></div>
+        <input class="hslider" id="hSl" type="range" min="0" max="100" value="80" aria-label="유전가능비 조절">
+        <div class="hbar"><div class="g" id="hG">유전 80%</div><div class="e" id="hE">환경 20%</div></div>
+        <div class="hmark"><span>0 · 차이가 전부 환경 때문</span><span>1.0 · 차이가 전부 유전 때문</span></div>
+      </div>
+      <div class="stack">
+        <p>전체 지능의 차이(<strong>Vt</strong>)를 유전에 의한 차이(<strong>Vh</strong>)와 환경에 의한 차이(<strong>Ve</strong>)로 구분할 때, 전체 차이에 대해 <strong>유전에 의한 차이가 차지하는 비율</strong>입니다.</p>
+        <div class="card blue" style="text-align:center">
+          <div style="font-size:clamp(17px,1.9vw,25px);font-weight:800;color:var(--ink);letter-spacing:.02em">Vt = Vh + Ve</div>
+          <div style="font-size:clamp(19px,2.2vw,29px);font-weight:800;color:var(--blue);margin-top:10px">유전가능비 = Vh / Vt</div>
+        </div>
+        <p style="font-size:15px">Jensen은 유전적으로 거의 유사한 쥐를 얻은 후 <strong>서로 다른 환경에서 사육</strong>해 지능의 차를 검토하는 등 여러 분석을 통해 <strong>유전가능비를 .80</strong>이라고 밝혀냈습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="유전가능비" data-c="coral">
+  <h2>Jensen의 주장을 <span class="hl">그대로 받아들인다면</span></h2>
+  <div class="two" style="margin-top:22px">
+    <div class="card coral">
+      <h4>교재의 서술</h4>
+      <p style="font-size:16px">개인과 개인 간 지능의 차이는 물론이거니와, <strong>예컨대 백인과 흑인 간의 인종 간 지능 차의 80%가 유전에 기인한다는 결론</strong>을 얻게 되는 것입니다.</p>
+      <div class="cite">교재 p. 59</div>
+    </div>
+    <div class="stack">
+      <div class="card"><h4 style="color:var(--mute)">그리고 교재는 곧바로 단서를 답니다</h4>
+        <p style="font-size:15.5px">“유전가능비는 <strong>명확하게 개인의 지능지수의 얼마만큼이 유전적으로 결정되는지를 보여주는 개념은 아니다.</strong>”</p>
+        <p style="margin-top:10px;font-size:15.5px">“이 개념은 <strong>여러 면에서 논란의 대상이 되고 있기는 하지만</strong>, 인간의 지능발달에 있어서 유전적 소인이 차지하는 비중이 크다는 것을 시사해준다.”</p></div>
+      <p style="font-size:15px;font-weight:700;color:var(--coral)">교재도 이 개념을 ‘논란의 대상’으로 명시합니다. 어떤 논란인지는 다음 두 장에서 보겠습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="보충 · 유전가능비 해석" data-c="amber" data-supp="1">
+  <span class="supptag">보충 · 개념 오해 바로잡기</span>
+  <h2>유전가능비는 <span class="hl">개인</span>에 대한 값이 아닙니다</h2>
+  <div class="body">
+    <div class="grid g2" style="margin-bottom:18px">
+      <div class="card" style="background:#F4F1F0;border-left:5px solid #C4C9D2">
+        <h4 style="color:var(--mute)">틀린 해석</h4>
+        <p style="font-size:clamp(16px,1.8vw,23px);font-weight:700;color:var(--ink)">“내 지능의 80%는 유전자가 만들었다.”</p></div>
+      <div class="card amber" style="border-left:5px solid var(--amber)">
+        <h4>맞는 해석</h4>
+        <p style="font-size:clamp(15px,1.6vw,20px);font-weight:700;color:var(--ink)">“이 집단 안에서 사람들 <strong>사이에</strong> 나타나는 지능 <strong>차이</strong>의 80%가 유전적 차이로 설명된다.”</p></div>
+    </div>
+    <p>유전가능비는 <strong>집단의 변량에 대한 값</strong>이지, 한 개인의 지능을 유전 80% + 환경 20%로 쪼갠 것이 아닙니다. 교재도 이 점을 <strong>“개인의 지능지수의 얼마만큼이 유전적으로 결정되는지를 보여주는 개념은 아니다”</strong>라고 명시하고 있습니다.</p>
+  </div>
+  <div class="src"><b>참고</b>
+    <span>이 구분은 행동유전학의 표준적 해석입니다 — Plomin, R., DeFries, J. C., Knopik, V. S., &amp; Neiderhiser, J. M. (2016). Top 10 replicated findings from behavioral genetics. <i>Perspectives on Psychological Science</i>, 11(1), 3–23. doi:10.1177/1745691615617439</span>
+  </div>
+</section>
+
+<section class="slide" data-sec="보충 · 인종 간 차이 추론" data-c="amber" data-supp="1" data-scene="seed" data-steps="2">
+  <span class="supptag">보충 · 교재가 말한 ‘논란’의 정체</span>
+  <h2>집단 <span class="hl">안</span>의 유전가능비로 집단 <span class="hl">간</span> 차이를 설명할 수 없습니다</h2>
+  <div class="body">
+    <div class="two">
+      <div class="seedwrap">
+        <div class="seedbox good"><div class="t">비옥한 밭</div>
+          <div class="sp" id="sd1"></div>
+          <div class="cap2">밭 <b>안의</b> 키 차이 = 유전</div></div>
+        <div class="seedbox bad"><div class="t">척박한 밭</div>
+          <div class="sp" id="sd2"></div>
+          <div class="cap2">밭 <b>안의</b> 키 차이 = 유전</div></div>
+      </div>
+      <div class="stack">
+        <p data-from="0"><strong>같은 봉지의 씨앗</strong>을 두 밭에 나눠 심습니다. 각 밭 <strong>안에서</strong> 나타나는 키 차이는 전적으로 유전 때문입니다. 유전가능비가 1.0인 셈이죠.</p>
+        <div class="card amber" data-from="1"><h4>그런데</h4>
+          <p style="font-size:clamp(15px,1.6vw,20px);font-weight:700;color:var(--ink)">두 밭의 <strong>평균 키 차이</strong>는 전적으로 <strong>흙</strong> 때문입니다.</p>
+          <p style="margin-top:10px">집단 안의 유전가능비가 아무리 높아도, <strong>집단 간 차이의 원인은 될 수 없습니다.</strong></p></div>
+      </div>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>Lewontin, R. C. (1970). Race and intelligence. <i>Bulletin of the Atomic Scientists</i>, 26(3), 2–8. doi:10.1080/00963402.1970.11457774 — 씨앗과 밭 비유의 원출처</span>
+    <span>Block, N. (1995). How heritability misleads about race. <i>Cognition</i>, 56(2), 99–128. doi:10.1016/0010-0277(95)00678-R</span>
+  </div>
+  <div class="steps"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide" data-sec="보충 · 유전가능비는 조건부" data-c="amber" data-supp="1" data-scene="turk">
+  <span class="supptag">보충 · 교재 이후 연구</span>
+  <h2>유전가능비는 <span class="hl">고정된 상수</span>가 아닙니다</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage" style="display:flex;flex-direction:column;justify-content:center;padding:clamp(18px,4vh,40px) clamp(24px,3.4vw,50px)">
+        <div style="font-size:12.5px;font-weight:800;color:var(--faint);margin-bottom:12px">7세 쌍생아 · 지능 변량의 설명 비율</div>
+        <div style="margin-bottom:18px">
+          <div style="font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:7px">빈곤 가정</div>
+          <div class="hbar" style="height:38px"><div class="g" id="tkA" style="width:0;background:var(--amber)">유전 ≈ 0</div>
+            <div class="e" id="tkB" style="width:0;background:#8C9BAE">공유환경 약 60%</div></div></div>
+        <div>
+          <div style="font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:7px">부유한 가정</div>
+          <div class="hbar" style="height:38px"><div class="g" id="tkC" style="width:0;background:var(--amber)">유전이 지배적</div>
+            <div class="e" id="tkD" style="width:0;background:#8C9BAE">공유환경 작음</div></div></div>
+        <div style="font-size:12px;color:var(--faint);font-weight:600;margin-top:14px">거의 정확히 반대 결과</div>
+      </div>
+      <div class="stack">
+        <p>Turkheimer 등(2003)이 <strong>7세 쌍생아</strong>를 <strong>사회경제적 지위별로 나눠</strong> 분석했습니다.</p>
+        <p><strong>빈곤 가정</strong>에서는 지능 변량의 약 <em>60%가 공유환경</em>으로 설명되고 <em>유전의 기여는 0에 가까웠으며</em>, <strong>부유한 가정</strong>에서는 결과가 거의 정반대였습니다.</p>
+        <div class="card amber"><h4>무엇을 말하는가</h4>
+          <p style="font-size:15.5px"><strong>환경이 열악하면 유전적 잠재력이 발현될 기회 자체가 없습니다.</strong> 유전가능비 .80이라는 숫자가 왜 조건부인지를 보여줍니다.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>Turkheimer, E., Haley, A., Waldron, M., D’Onofrio, B., &amp; Gottesman, I. I. (2003). Socioeconomic status modifies heritability of IQ in young children. <i>Psychological Science</i>, 14(6), 623–628. doi:10.1046/j.0956-7976.2003.psci_1475.x</span>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="(2) 성격연구" data-c="teal">
+  <div class="hd"><span class="chip">(2) 성격연구</span><span class="sub">교재 p. 59</span></div>
+  <h2>성격은 결론이 <span class="hl">조금 다릅니다</span></h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card"><h4 style="color:var(--mute)">환경결정론적 관점</h4>
+      <p>지능발달과 마찬가지로, 이 관점에서 볼 때 인간의 성격은 경험에 의해 결정됩니다. 예를 들어 <strong>공격적인 성격</strong>은 다양한 행동반응 중에서 <strong>공격적 반응이 누적적으로 강화될 때</strong> 생겨납니다.</p></div>
+    <div class="card teal"><h4>Loehlin 등(1988)의 개관논문</h4>
+      <p>유전적 요인이 성격형성에 영향을 미치기는 하지만, <strong>지능에 비해 그 영향력의 크기는 훨씬 미약한 것</strong>으로 알려져 있어 <strong>성격발달에서 환경의 중요성을 입증</strong>해줍니다.</p></div>
+  </div>
+  <p style="margin-top:22px;font-size:clamp(16px,1.7vw,22px);font-weight:700;color:var(--ink);max-width:none">
+    지능은 유전 쪽이, <em>성격은 환경 쪽이</em> 상대적으로 강합니다.</p>
+</section>
+
+<section class="slide mid" data-sec="(2) 성격연구" data-c="teal" data-steps="2">
+  <div class="hd"><span class="chip">기질 연구</span><span class="sub">Thomas 등, 1968·1986 / Hetherington &amp; Parke, 1993 · 교재 p. 59</span></div>
+  <h2>그러나 성격에도 <span class="hl">생득적 기반</span>은 있습니다</h2>
+  <div class="sup2" data-from="0"><strong>기질(temperament)</strong>이란 <strong>자극에 대한 반응, 정서의 표현, 각성수준, 자기규제</strong> 등 여러 측면에서 <strong>생물학적으로 결정된 개인차</strong>를 뜻합니다.</div>
+  <div class="grid g4" style="margin-top:22px" data-from="0">
+    <div class="card teal"><h4>자극에 대한 반응</h4></div>
+    <div class="card teal"><h4>정서의 표현</h4></div>
+    <div class="card teal"><h4>각성수준</h4></div>
+    <div class="card teal"><h4>자기규제</h4></div>
+  </div>
+  <div class="card" style="margin-top:20px" data-from="1"><h4 style="color:var(--mute)">핵심</h4>
+    <p style="font-size:clamp(15px,1.6vw,21px);font-weight:700;color:var(--ink)">이러한 기질의 개인차는 <strong>매우 안정적이며 환경에 의해 쉽게 변화하지 않는 것</strong>으로 알려져 있어, 성격특성이 유전적으로 결정될 수 있다는 것을 시사해줍니다.</p></div>
+  <div class="steps"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide" data-sec="(2) 성격연구" data-c="coral" data-scene="temp" data-steps="3">
+  <div class="hd"><span class="chip">기질의 순화</span><span class="sub">Dunn &amp; Kendrick, 1980 · 교재 p. 59</span></div>
+  <h2>그런데 교재는 다시 <span class="hl">뒤집습니다</span></h2>
+  <div class="body">
+    <div class="two">
+      <div class="stage" style="display:grid;place-items:center;padding:20px">
+        <svg viewBox="0 0 300 200" style="width:86%" id="tempSvg">
+          <g id="dots10"></g>
+          <text x="150" y="185" text-anchor="middle" font-size="13" font-weight="800" fill="#12203A" font-family="Pretendard">전체 영아의 약 10%</text>
+          <text x="150" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#9AA8BC" font-family="Pretendard">까다로운 기질</text>
+        </svg>
+      </div>
+      <div class="stack">
+        <p data-from="0">기질이 생물학적으로 결정되는 특성이라 하더라도 <strong>일상생활의 경험을 통해 변화될 가능성은 있습니다.</strong></p>
+        <p data-from="1"><strong>전체 영아의 약 10%</strong>에 해당하는 까다로운 기질은 일반적으로 <strong>사춘기까지 지속</strong>됩니다.</p>
+        <div class="card coral" data-from="2"><h4>그러나</h4>
+          <p style="font-size:clamp(15px,1.6vw,20px);font-weight:700;color:var(--ink)">아동에게 <strong>민감하고 따뜻하게 반응하는 부모와의 상호작용</strong>을 통해 까다로운 기질이 <strong>순화될 수 있다</strong>는 사실이 밝혀지고 있습니다.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="steps"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="(2) 성격연구" data-c="coral">
+  <h2>여기서 앞의 모형이 <span class="hl">데이터로 확인</span>됩니다</h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card"><h4 style="color:var(--coral)">악순환</h4>
+      <p style="font-size:15.5px">까다로운 기질의 아기 → 부모가 지치고 짜증남 → 부정적 양육 → <strong>아기가 더 까다로워짐</strong></p></div>
+    <div class="card teal"><h4>선순환</h4>
+      <p style="font-size:15.5px">까다로운 기질의 아기 → 인내심 있는 부모 → 민감하고 따뜻한 반응 → <strong>기질이 순화됨</strong></p></div>
+  </div>
+  <p style="margin-top:22px;font-size:clamp(16px,1.7vw,22px);font-weight:700;color:var(--ink);max-width:none">
+    같은 기질을 타고나도 <em>환경과 어떻게 맞물리느냐</em>에 따라 결과가 갈립니다 — <strong>거래적 상호작용 모형</strong> 그대로입니다.</p>
+  <p style="margin-top:14px">교재의 정리입니다. <strong>“성격형성에 있어서도 유전과 환경은 끊임없이 영향력을 주고받으며 상호작용하고 있다.”</strong></p>
+</section>
+
+<section class="slide" data-sec="보충 · 표 2-1 수치" data-c="amber" data-supp="1">
+  <span class="supptag">보충 · 질문 대비용</span>
+  <h2>표 2-1의 숫자가 <span class="hl">다른 책과 다를 때</span></h2>
+  <div class="body">
+    <div class="two">
+      <div>
+        <table>
+          <tr><th>관계</th><th style="text-align:right">교재</th><th style="text-align:right">원논문 기준 인용</th></tr>
+          <tr class="mark"><td>일란성 · 분리 양육</td><td class="n">.79</td><td class="n" style="color:var(--mute)">.72 (또는 .75)</td></tr>
+          <tr><td>일란성 · 함께 양육</td><td class="n">.86</td><td class="n" style="color:var(--mute)">.86</td></tr>
+          <tr><td>이란성 · 함께 양육</td><td class="n">.60</td><td class="n" style="color:var(--mute)">.60</td></tr>
+          <tr><td>형제 · 함께 / 분리</td><td class="n">.47 / .24</td><td class="n" style="color:var(--mute)">.47 / .24</td></tr>
+          <tr class="mark"><td>양부모-자녀</td><td class="n">.31</td><td class="n" style="color:var(--mute)">.19</td></tr>
+          <tr><td>사촌</td><td class="n">.15</td><td class="n" style="color:var(--mute)">.15</td></tr>
+        </table>
+      </div>
+      <div class="stack">
+        <div class="card amber"><h4>왜 다른가</h4>
+          <p>Bouchard &amp; McGue(1981)의 값은 <strong>2차 인용 문헌마다 조금씩 다르게 표기</strong>됩니다. 대부분의 값은 교재와 원논문이 일치하고, 두 행에서만 차이가 납니다.</p></div>
+        <div class="card"><h4 style="color:var(--mute)">발표 요령</h4>
+          <p style="font-size:15.5px"><strong>개별 숫자를 강조하지 말고 “패턴”에 방점을 찍으세요.</strong> 혈연이 가까울수록 상관이 높아진다는 흐름은 어느 판본에서든 동일합니다. 질문이 나오면 위 표로 답하면 됩니다.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>Bouchard, T. J., Jr., &amp; McGue, M. (1981). Familial studies of intelligence: A review. <i>Science</i>, 212(4498), 1055–1059. doi:10.1126/science.7195071 — 표 2-1의 원논문</span>
+    <span>Bouchard, T. J., Jr., Lykken, D. T., McGue, M., Segal, N. L., &amp; Tellegen, A. (1990). Sources of human psychological differences: The Minnesota Study of Twins Reared Apart. <i>Science</i>, 250(4978), 223–228. doi:10.1126/science.2218526</span>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="정리" data-steps="2">
+  <h2>정리</h2>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card plum" data-from="0"><h4>반응의 범위</h4><p>유전은 결과를 결정하는 게 아니라 <strong>범위를 정합니다.</strong></p></div>
+    <div class="card teal" data-from="0"><h4>수로화</h4><p>어떤 특성은 환경의 압력에도 <strong>깊게 수로화</strong>되어 있습니다.</p></div>
+    <div class="card coral" data-from="0"><h4>거래적 상호작용</h4><p>아이는 환경을 받기만 하는 게 아니라 <strong>환경을 바꾸기도</strong> 합니다.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card blue" data-from="1"><h4>지능</h4><p>유전의 영향이 크게 나타나지만, <strong>환경 조작으로 뇌 자체가 변합니다.</strong></p></div>
+    <div class="card" data-from="1"><h4 style="color:var(--mute)">성격</h4><p>유전의 영향이 상대적으로 작고, <strong>기질조차 양육을 통해 순화될 수 있습니다.</strong></p></div>
+  </div>
+  <div class="steps" style="justify-content:center"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="정리" data-steps="2">
+  <div class="two">
+    <blockquote class="quote">인간의 발달은 <strong>100%의 유전</strong>과 <strong>100%의 환경</strong>의 힘이 함께 작용한다.<cite>Hebb, 1980 · 교재 p. 59</cite></blockquote>
+    <div class="stack">
+      <p data-from="0">교재는 이 절을 이렇게 끝맺습니다. <strong>“발달에 있어서 유전과 환경의 영향을 분리하려는 시도는 어떤 면에서는 잘못된 것일지도 모른다.”</strong></p>
+      <div class="card plum" data-from="1"><h4>50 대 50이 아닙니다</h4>
+        <p style="font-size:clamp(15px,1.6vw,20px);font-weight:700;color:var(--ink)"><strong>100 대 100</strong>입니다. 둘 중 하나만 빠져도 발달은 일어나지 않으므로, 애초에 <strong>나누는 것 자체가 성립하지 않는다</strong>는 뜻입니다.</p></div>
+    </div>
+  </div>
+  <div class="steps"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="정리" data-c="coral">
+  <div class="two">
+    <p style="font-size:clamp(16px,1.5vw,21px)">지금까지 이야기한 ‘환경’은 주로 <strong>태어난 뒤의 환경</strong>이었습니다.<br>아이가 최초로 만나는 환경은 그보다 앞선, <strong>어머니의 자궁 안</strong>입니다.</p>
+    <div>
+      <div style="font-size:13px;font-weight:800;color:var(--coral);margin-bottom:10px">다음 파트</div>
+      <h2 style="color:var(--coral)">3. 태내발달</h2>
+      <button class="nextpart" type="button" data-p="3">다음 파트 시작</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="rail">
+  <span class="s" id="rSec">표지</span>
+  <div class="bar"><i id="rBar"></i></div>
+  <span class="parts"><span class="pl">파트</span><button type="button" data-p="1" title="1. 발달의 생물학적 기저">1</button><button type="button" data-p="2" class="cur" title="2. 발달의 유전 및 경험적 기저">2</button><button type="button" data-p="3" title="3. 태내발달">3</button></span>
+  <span class="ct"><b id="rNow">1</b> / <span id="rTot">35</span></span>
+  <button class="motionbtn" id="calmBtn" type="button">장식 효과 끄기</button>
+  <span class="hint">← → 이동 · P 정지 · F 전체화면</span>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const deck=$('#deck'), slides=$$('.slide');
+$('#rTot').textContent=slides.length;
+let idx=0, step=0, scene=null;
+const PLUM='#7A2E8E', TEAL='#0D8E9E';
+
+function chromo(color,h,cen){
+  cen=(cen==null)?0.45:cen;
+  const w=Math.round(h*0.46), T=7, B=83, y=+(T+(B-T)*cen).toFixed(1);
+  const sa=+(T+(y-T)*0.45).toFixed(1), sb=+(y-(y-T)*0.12).toFixed(1);
+  const la=+(y+(B-y)*0.16).toFixed(1), lb=+(B-(B-y)*0.42).toFixed(1);
+  const L='M14 '+T+' C 5 '+sa+' 5 '+sb+' 15 '+y+' C 5 '+la+' 5 '+lb+' 14 '+B;
+  const R='M26 '+T+' C 35 '+sa+' 35 '+sb+' 25 '+y+' C 35 '+la+' 35 '+lb+' 26 '+B;
+  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 40 90"><g fill="none" stroke-linecap="round">'+
+   '<path d="'+L+'" stroke="'+color+'" stroke-width="10"/><path d="'+R+'" stroke="'+color+'" stroke-width="10"/>'+
+   '<path d="'+L+'" stroke="rgba(0,0,0,.22)" stroke-width="10" stroke-dasharray="7 9"/>'+
+   '<path d="'+R+'" stroke="rgba(0,0,0,.22)" stroke-width="10" stroke-dasharray="9 7"/></g></svg>';
+}
+
+function loop(setFn,n,ms){
+  let p=0,t=null,paused=false;
+  const tick=()=>{p=(p+1)%n;setFn(p)};
+  const run=()=>{clearInterval(t);t=setInterval(tick,ms)};
+  setFn(0);run();
+  return {paused:()=>paused,stop(){clearInterval(t)},
+    toggle(){paused=!paused;paused?clearInterval(t):run();return paused},
+    stepFwd(){paused=true;clearInterval(t);tick()},
+    stepBack(){paused=true;clearInterval(t);p=(p-1+n)%n;setFn(p)}};
+}
+
+function hwScene(){
+  const H=$('#rbH .fl'), W=$('#rbW .fl');
+  H.style.width='0';W.style.width='0';
+  $('#rbH').classList.remove('on');$('#rbW').classList.remove('on');
+  setTimeout(()=>{H.style.width='34%';$('#rbH').classList.add('on')},250);
+  setTimeout(()=>{W.style.width='78%';$('#rbW').classList.add('on')},700);
+  return null;
+}
+
+function rrScene(){
+  const cs=$$('.rrc');
+  cs.forEach((c,i)=>{const L=c.getTotalLength();
+    c.style.transition='none';c.style.strokeDasharray=L;c.style.strokeDashoffset=L;
+    void c.getBoundingClientRect();
+    c.style.transition='stroke-dashoffset 1.3s cubic-bezier(.4,.6,.3,1) '+(i*0.18)+'s';
+    c.style.strokeDashoffset=0;});
+  const br=$('#rrBr'), nt=$('#rrNote');
+  br.style.transition='none';br.style.opacity=0;nt.style.opacity=0;
+  void br.getBoundingClientRect();
+  br.style.transition='opacity .6s ease 1.5s';br.style.opacity=1;
+  nt.style.transition='opacity .6s ease 1.9s';nt.style.opacity=1;
+  return null;
+}
+
+const CN_CAP=[
+ ['1','<b>출발.</b> 공은 발달하는 유기체를 뜻합니다.'],
+ ['2','<b>결정점.</b> 유기체는 두 개의 통로 중 하나를 택할 수 있습니다.'],
+ ['3','<b>진입.</b> 선택된 통로를 따라 내려갑니다.'],
+ ['4','<b>두 번째 결정점.</b> 다시 두 갈래로 나뉩니다.'],
+ ['5','<b>도착.</b> 발달이 진행됨에 따라 <b>다른 통로로 옮기는 것은 점차 더 어렵게</b> 됩니다.']
+];
+function canalScene(){
+  const ball=$('#ball'), paths=[0,1,2,3].map(i=>$('#cr'+i));
+  const D=[0,0.36,0.55,0.70,1.0];
+  let route=0;
+  function at(pi,t){const p=paths[pi],L=p.getTotalLength(),pt=p.getPointAtLength(L*t);return pt}
+  function set(i){
+    if(i===0) route=(route+1)%4;
+    $('#rtName').textContent=(route+1)+' / 4';
+    const pt=at(route,D[i]);
+    ball.style.transition = (i===0) ? 'none' : 'transform 1.05s cubic-bezier(.45,.05,.35,1)';
+    ball.setAttribute('transform','translate('+pt.x.toFixed(1)+','+pt.y.toFixed(1)+')');
+    $('#dp1').classList.toggle('on', i>=1);
+    $('#dp2').classList.toggle('on', i>=3);
+    $('#cnK').textContent=CN_CAP[i][0]; $('#cnCap').innerHTML=CN_CAP[i][1];
+  }
+  return loop(set,5,1900);
+}
+
+const CYC_CAP=[
+ ['1','<b>타고난 기질.</b> 선천적으로 활동적이고 적극적인 기질을 가진 아이.'],
+ ['2','<b>환경의 반응.</b> 부모나 주변으로부터 더 많은 바람직한 자극을 이끌어냅니다.'],
+ ['3','<b>변화된 환경.</b> 같은 환경도 이 아이에게는 다르게 작용하게 됩니다.'],
+ ['4','<b>다시 아이에게로.</b> 그 영향이 송환되어 성격을 더 적극적으로 만듭니다.']
+];
+function cycScene(){
+  function set(i){
+    [0,1,2,3].forEach(k=>$('#cn'+k).classList.toggle('hot',k===i));
+    $('#cycK').textContent=CYC_CAP[i][0]; $('#cycCap').innerHTML=CYC_CAP[i][1];
+  }
+  return loop(set,4,1900);
+}
+
+const CORR=[
+ {l:'<b>일란성 쌍생아</b>',s:'함께 양육',v:.86,c:PLUM},
+ {l:'',s:'분리 양육',v:.79,c:PLUM},
+ {l:'<b>이란성 쌍생아</b>',s:'함께 양육',v:.60,c:'#A85EB8'},
+ {l:'<b>형제</b>',s:'함께 양육',v:.47,c:TEAL},
+ {l:'',s:'분리 양육',v:.24,c:TEAL},
+ {l:'<b>부모-자녀</b>',s:'',v:.40,c:'#2C6FBF'},
+ {l:'<b>양부모-자녀</b>',s:'',v:.31,c:'#7EA3CE'},
+ {l:'<b>사촌</b>',s:'',v:.15,c:'#A9B6C6'}
+];
+$('#corrBox').innerHTML=CORR.map((r,i)=>
+ '<div class="corrrow'+(r.s?' sub':'')+(i===3||i===5?' gapover':'')+'">'+
+ '<div class="lb">'+(r.l||'')+(r.l&&r.s?'<br>':'')+(r.s||'')+'</div>'+
+ '<div class="tk"><div class="bv" data-v="'+r.v+'" style="background:'+r.c+'"></div></div>'+
+ '<div class="vl">'+r.v.toFixed(2).replace('0.','.')+'</div></div>').join('');
+function corrScene(){
+  $$('#corrBox .bv').forEach((b,i)=>{b.style.transition='none';b.style.width='0';
+    void b.getBoundingClientRect();
+    b.style.transition='width .95s cubic-bezier(.35,.6,.3,1) '+(i*0.11)+'s';
+    b.style.width=(b.dataset.v*100)+'%';});
+  return null;
+}
+function barsIn(list){
+  list.forEach(([id,w,d])=>{const b=$(id);b.style.transition='none';b.style.width='0';
+    void b.getBoundingClientRect();
+    b.style.transition='width 1.1s cubic-bezier(.35,.6,.3,1) '+d+'s';b.style.width=w;});
+  return null;
+}
+
+const H1=[62,74,52,68,58], H2=[26,32,21,29,24];
+function seedScene(){
+  [['#sd1',H1,'good'],['#sd2',H2,'bad']].forEach(([sel,hs])=>{
+    const box=$(sel);
+    if(!box.children.length) box.innerHTML=hs.map(()=>'<i class="st"></i>').join('');
+    [...box.children].forEach((st,i)=>{st.style.transition='none';st.style.height='0';
+      void st.getBoundingClientRect();
+      st.style.transition='height 1s cubic-bezier(.4,.1,.3,1) '+(i*0.12)+'s';
+      st.style.height=hs[i]+'px';});
+  });
+  return null;
+}
+
+(function(){
+  let h='';
+  for(let r=0;r<5;r++)for(let c=0;c<10;c++){
+    const n=r*10+c, hot=n<5;
+    h+='<circle class="tdot" data-i="'+n+'" cx="'+(38+c*25)+'" cy="'+(48+r*24)+'" r="8" fill="'+(hot?'#E2503F':'#DCE3EC')+'"/>';
+  }
+  $('#dots10').innerHTML=h;
+})();
+function tempScene(){
+  $$('.tdot').forEach((d,i)=>{d.style.transition='none';d.style.opacity=0;
+    void d.getBoundingClientRect();
+    d.style.transition='opacity .35s ease '+(i*0.012)+'s';d.style.opacity=1;});
+  return null;
+}
+
+const hSl=$('#hSl');
+function paintH(){
+  const v=+hSl.value;
+  $('#hVal').textContent=(v/100).toFixed(2);
+  $('#hG').style.width=v+'%'; $('#hE').style.width=(100-v)+'%';
+  $('#hG').textContent = v>=16 ? '유전 '+v+'%' : '';
+  $('#hE').textContent = (100-v)>=16 ? '환경 '+(100-v)+'%' : '';
+}
+hSl.addEventListener('input',paintH); paintH();
+
+const SCENES={hw:hwScene,rr:rrScene,canal:canalScene,cyc:cycScene,corr:corrScene,
+ sw:()=>barsIn([['#swA','64%',0.2],['#swB','18%',0.45]]),
+ rose:()=>barsIn([['#roA','88%',0.2],['#roB','80%',0.4]]),
+ turk:()=>barsIn([['#tkA','4%',0.2],['#tkB','96%',0.2],['#tkC','82%',0.6],['#tkD','18%',0.6]]),
+ seed:seedScene, temp:tempScene};
+
+slides.forEach(sl=>{const f=document.createElement('div');f.className='fit';
+  while(sl.firstChild) f.appendChild(sl.firstChild); sl.appendChild(f)});
+function fitSlide(sl){
+  const f=sl.querySelector('.fit'); if(!f) return;
+  f.style.width='100%';f.style.height='100%';f.style.transform='none';
+  const need=f.scrollHeight, have=f.clientHeight;
+  if(need>have+2){const k=Math.max(.5,have/need);
+    f.style.width=(100/k)+'%';f.style.height=(100/k)+'%';f.style.transform='scale('+k.toFixed(4)+')';}
+}
+function maxStep(s){return parseInt(s.dataset.steps||'1',10)-1}
+function paint(s){
+  s.querySelectorAll('[data-from]').forEach(el=>el.classList.toggle('on',step>=+el.dataset.from));
+  const bar=s.querySelector('.steps');
+  if(bar)[...bar.querySelectorAll('i')].forEach((b,i)=>b.classList.toggle('on',i<=step));
+}
+function show(n,end){
+  if(scene&&scene.stop){scene.stop()} scene=null;
+  idx=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach(s=>s.classList.remove('live'));
+  const s=slides[idx];s.classList.add('live');
+  step=end?maxStep(s):0;paint(s);
+  $('#rSec').textContent=s.dataset.sec||'';
+  $('#rNow').textContent=idx+1;
+  $('#rBar').style.width=((idx+1)/slides.length*100)+'%';
+  document.body.dataset.m=s.dataset.supp?'supp':'main';
+  fitSlide(s);
+  const sc=s.dataset.scene;
+  requestAnimationFrame(()=>{fitSlide(s); if(sc&&SCENES[sc]){scene=SCENES[sc]();syncPause()}});
+}
+function syncPause(){
+  $$('.pausebtn').forEach(b=>{const on=!!(scene&&scene.paused&&scene.paused());
+    b.classList.toggle('on',on); b.querySelector('.tx').textContent=on?'재생':'일시정지'});
+}
+function togglePause(){ if(scene&&scene.toggle){scene.toggle();syncPause()} }
+
+const PART=2;
+const PART_FILES=['part1.html','part2.html','part3.html'];
+function goPart(n,atEnd){
+  if(n<1||n>3||n===PART) return;
+  location.href = PART_FILES[n-1] + (atEnd?'#end':'');
+}
+$$('.parts button').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation(); goPart(+b.dataset.p);
+}));
+document.addEventListener('click',e=>{
+  const np=e.target.closest('.nextpart');
+  if(np){e.stopPropagation(); goPart(+np.dataset.p);}
+},true);
+
+function next(){const s=slides[idx];if(step<maxStep(s)){step++;paint(s);return}
+  if(idx>=slides.length-1){goPart(PART+1);return} show(idx+1)}
+function prev(){const s=slides[idx];if(step>0){step--;paint(s);return}
+  if(idx<=0){goPart(PART-1,true);return} show(idx-1,true)}
+addEventListener('keydown',e=>{
+  if(e.target.matches('input')) return;
+  if(e.key==='p'||e.key==='P'){e.preventDefault();togglePause();return}
+  const held=scene&&scene.paused&&scene.paused();
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();
+    if(held){scene.stepFwd();return} next()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();
+    if(held){scene.stepBack();return} prev()}
+  else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+deck.addEventListener('click',e=>{
+  if(e.target.closest('.pausebtn')){togglePause();return}
+  if(!e.target.closest('button,input'))next()});
+
+const calmBtn=$('#calmBtn');
+function setCalm(on){document.body.classList.toggle('calm',on);
+  calmBtn.textContent=on?'장식 효과 켜기':'장식 효과 끄기';
+  calmBtn.setAttribute('aria-pressed',on?'true':'false')}
+try{ setCalm(matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ setCalm(false); }
+calmBtn.addEventListener('click',e=>{e.stopPropagation();setCalm(!document.body.classList.contains('calm'))});
+
+$('#float').innerHTML=[[10,12,PLUM,120,-12],[54,40,TEAL,92,18],[24,64,PLUM,76,26],[64,78,'#2C6FBF',62,-8],[40,6,'#E2503F',58,10]]
+ .map(([l,t,c,h,r],i)=>'<div class="f" style="left:'+l+'%;top:'+t+'%;--r:'+r+'deg;animation-delay:'+(i*.7)+'s;opacity:'+(0.2+i*0.05)+'">'+chromo(c,h)+'</div>').join('');
+
+let rt;addEventListener('resize',()=>{fitSlide(slides[idx]);
+  clearTimeout(rt);rt=setTimeout(()=>show(idx),250)});
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitSlide(slides[idx]));
+const atEnd=(location.hash==='#end');
+show(atEnd?slides.length-1:0, atEnd);
+})();
+</script>
+</body>
+</html>

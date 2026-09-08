@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1. 발달의 생물학적 기저</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12203A; --mute:#6A7A93; --faint:#9AA8BC; --line:#DFE6EF;
+  --paper:#FFFFFF; --tint:#F2F6FA;
+  --plum:#7A2E8E; --plum-l:#F5EAF8;
+  --teal:#0D8E9E; --teal-l:#E3F4F6;
+  --coral:#E2503F; --coral-l:#FCEDEB;
+  --blue:#2C6FBF; --blue-l:#E9F1FB;
+  --amber:#C9820A; --amber-l:#FDF4E3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#E7ECF2;color:var(--ink);
+  font-family:Pretendard,'Noto Sans KR',system-ui,-apple-system,sans-serif;
+  overflow:hidden;-webkit-font-smoothing:antialiased}
+.deck{position:relative;width:100vw;height:100vh;background:var(--paper)}
+.slide{position:absolute;inset:0;display:none;
+  padding:clamp(24px,3.6vh,46px) clamp(30px,5vw,88px) 76px;overflow:hidden}
+.slide.live{display:block;animation:sIn .4s cubic-bezier(.2,.75,.3,1)}
+@keyframes sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fit{display:flex;flex-direction:column;width:100%;height:100%;
+  transform-origin:top center;will-change:transform}
+.slide.mid .fit{justify-content:center}
+
+.hd{display:flex;align-items:center;gap:11px;margin-bottom:14px;flex:none}
+.hd .chip{font-size:12.5px;font-weight:700;color:#fff;background:var(--plum);
+  padding:5px 13px;border-radius:100px}
+.hd .sub{font-size:13.5px;color:var(--faint);font-weight:500}
+.slide[data-c="teal"] .hd .chip{background:var(--teal)}
+.slide[data-c="blue"] .hd .chip{background:var(--blue)}
+.slide[data-c="coral"] .hd .chip{background:var(--coral)}
+.slide[data-c="amber"] .hd .chip{background:var(--amber)}
+
+h1{font-size:clamp(40px,6.6vw,86px);font-weight:800;line-height:1.12;letter-spacing:-.035em}
+h2{font-size:clamp(26px,3.4vw,46px);font-weight:800;line-height:1.24;letter-spacing:-.03em;flex:none}
+h2 .hl{color:var(--plum)}
+.slide[data-c="teal"] h2 .hl{color:var(--teal)}
+.slide[data-c="blue"] h2 .hl{color:var(--blue)}
+.slide[data-c="coral"] h2 .hl{color:var(--coral)}
+.slide[data-c="amber"] h2 .hl{color:var(--amber)}
+h3{font-size:clamp(16px,1.5vw,21px);font-weight:700}
+.sup2{font-size:clamp(15px,1.5vw,21px);color:var(--mute);font-weight:500;
+  margin-top:12px;line-height:1.65;flex:none;max-width:78ch}
+p{font-size:clamp(14.5px,1.28vw,19px);line-height:1.78;color:var(--mute);max-width:70ch}
+p+p{margin-top:13px}
+strong{color:var(--ink);font-weight:700}
+em{font-style:normal;color:var(--plum);font-weight:700}
+.slide[data-c="teal"] em{color:var(--teal)}
+.slide[data-c="coral"] em{color:var(--coral)}
+.slide[data-c="amber"] em{color:var(--amber)}
+.cite{font-size:12.5px;color:var(--faint);margin-top:12px}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(24px,3.4vw,56px);align-items:center}
+.two.even{grid-template-columns:1fr 1fr}
+.two.rev{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+@media(max-width:920px){.two,.two.even,.two.rev{grid-template-columns:1fr;gap:18px}}
+.stack>*+*{margin-top:15px}
+
+.quote{font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(21px,2.6vw,36px);line-height:1.6;color:var(--ink);
+  padding:20px 0 20px 26px;border-left:5px solid var(--plum)}
+.quote cite{display:block;font-family:Pretendard,sans-serif;font-style:normal;
+  font-size:13px;color:var(--faint);margin-top:15px;font-weight:500}
+
+.grid{display:grid;gap:13px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--tint);border-radius:14px;padding:19px 21px}
+.card.plum{background:var(--plum-l)} .card.teal{background:var(--teal-l)}
+.card.coral{background:var(--coral-l)} .card.blue{background:var(--blue-l)}
+.card.amber{background:var(--amber-l)}
+.card h4{font-size:14px;font-weight:800;margin-bottom:8px;color:var(--plum)}
+.card.teal h4{color:var(--teal)} .card.coral h4{color:var(--coral)}
+.card.blue h4{color:var(--blue)} .card.amber h4{color:var(--amber)}
+.card p{font-size:clamp(13.5px,1.08vw,16px);line-height:1.66}
+
+table{border-collapse:collapse;width:100%;font-size:clamp(13.5px,1.12vw,16.5px)}
+th{padding:9px 13px;text-align:left;font-size:12.5px;color:var(--faint);font-weight:700;border-bottom:2px solid var(--line)}
+td{padding:10px 13px;border-bottom:1px solid var(--line);color:var(--mute)}
+td strong{color:var(--ink)}
+td.n{font-variant-numeric:tabular-nums;font-weight:700;color:var(--plum);text-align:right}
+tr.mark td{background:var(--plum-l)}
+.slide[data-c="amber"] td.n{color:var(--amber)}
+.slide[data-c="amber"] tr.mark td{background:var(--amber-l)}
+.slide[data-c="coral"] tr.mark td{background:var(--coral-l)}
+
+.stage{position:relative;width:100%;height:clamp(290px,44vh,450px);
+  background:linear-gradient(170deg,#FBFCFE,#EDF3F9);border-radius:18px;overflow:hidden}
+.stage.tall{height:clamp(330px,52vh,520px)}
+.stage .lbl{position:absolute;font-size:12.5px;font-weight:700;color:var(--faint)}
+.caption{position:absolute;left:0;right:0;bottom:0;padding:13px 20px;
+  background:rgba(255,255,255,.95);border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;min-height:52px;
+  font-size:clamp(13px,1.08vw,15.5px);color:var(--mute)}
+.caption .num{flex:none;width:24px;height:24px;border-radius:50%;background:var(--plum);
+  color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+.caption b{color:var(--ink);font-weight:700}
+.counter{position:absolute;top:16px;right:20px;text-align:right;
+  font-size:12.5px;color:var(--faint);font-weight:600;line-height:1.4}
+.counter b{display:block;font-size:clamp(26px,3vw,40px);font-weight:800;color:var(--plum);
+  font-variant-numeric:tabular-nums;transition:color .4s}
+.counter b.half{color:var(--teal)}
+
+.membrane{position:absolute;inset:0;filter:url(#goo)}
+.blob{position:absolute;border-radius:50%;background:#D3E4F2;
+  transition:all 1.05s cubic-bezier(.45,.05,.3,1)}
+.chlayer{position:absolute;inset:0;pointer-events:none}
+.ch{position:absolute;transition:all 1.05s cubic-bezier(.45,.05,.3,1);will-change:transform,left,top}
+.eq{position:absolute;height:2px;background:var(--teal);opacity:0;transition:opacity .5s;border-radius:2px}
+.eq::after{content:"적도면";position:absolute;right:0;top:-19px;font-size:11px;color:var(--teal);font-weight:700}
+.noanim,.noanim *{transition:none!important}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:100%}
+.vs .col{position:relative;background:linear-gradient(170deg,#FBFCFE,#EDF3F9);border-radius:16px;overflow:hidden}
+.vs .top{position:absolute;top:0;left:0;right:0;padding:13px 18px;z-index:3;
+  display:flex;justify-content:space-between;align-items:baseline}
+.vs .top .t{font-size:clamp(15px,1.5vw,20px);font-weight:800}
+.vs .col.a .top .t{color:var(--plum)} .vs .col.b .top .t{color:var(--teal)}
+.vs .top .e{font-size:12px;color:var(--faint);font-weight:600}
+.vs .res{position:absolute;left:0;right:0;bottom:0;padding:12px 18px 14px;z-index:3;
+  background:rgba(255,255,255,.96);border-top:1px solid var(--line);
+  font-size:clamp(12.5px,1.05vw,15px);font-weight:600;color:var(--ink);
+  display:flex;justify-content:space-between;align-items:center}
+.vs .res span{color:var(--mute);font-weight:500}
+
+.boom{display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.8vw,28px);
+  padding:clamp(16px,4vh,44px) 0}
+.boom .v{font-size:clamp(32px,5.6vw,80px);font-weight:800;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--faint);transition:color .6s}
+.boom .u{text-align:center}
+.boom .u.hot .v{color:var(--coral)}
+.boom .u.cool .v{color:var(--teal)}
+.boom .u.key .v{color:var(--plum)}
+.boom .g{font-size:12.5px;color:var(--faint);margin-top:10px;font-weight:600}
+.boom .ar{color:var(--line);font-size:clamp(18px,2.2vw,30px)}
+
+.karyo{display:flex;flex-wrap:wrap;gap:clamp(10px,1.6vw,26px) clamp(14px,2vw,32px);
+  align-items:flex-end;justify-content:center}
+.kgroup{display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.kgroup .prs{display:flex;gap:clamp(3px,.5vw,7px);align-items:flex-end;justify-content:center}
+.kgroup .brk{height:7px;border-left:1.5px solid var(--faint);border-right:1.5px solid var(--faint);
+  border-bottom:1.5px solid var(--faint);border-radius:0 0 3px 3px}
+.kgroup .gl{text-align:center;font-size:13px;font-weight:800;color:var(--plum);letter-spacing:.04em}
+.kgroup .gs{text-align:center;font-size:10.5px;font-weight:600;color:var(--faint);margin-top:-2px}
+.kgroup.sex .gl{color:var(--teal)} .kgroup.sex .brk{border-color:var(--teal)}
+.kg{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transform:translateY(-14px)}
+.kg.in{animation:drop .5s cubic-bezier(.3,1.5,.5,1) forwards}
+@keyframes drop{to{opacity:1;transform:none}}
+.kg .pr{display:flex;gap:2px;align-items:flex-end}
+.kg .no{font-size:10px;color:var(--faint);font-weight:700;font-variant-numeric:tabular-nums}
+.kg.flag{position:relative} .kg.flag .no{color:var(--coral)}
+.kg.flag::after{content:"";position:absolute;inset:-7px -6px 12px;
+  border:2px solid var(--coral);border-radius:8px;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+.extra{display:inline-block;animation:fly 1s cubic-bezier(.3,1.4,.5,1) 1s backwards}
+@keyframes fly{from{opacity:0;transform:translate(70px,-46px) rotate(45deg)}}
+.botrow{display:grid;grid-template-columns:auto 1fr 1fr;gap:clamp(12px,1.6vw,24px);
+  align-items:stretch;margin-top:clamp(10px,1.8vh,20px)}
+@media(max-width:1000px){.botrow{grid-template-columns:1fr}}
+.botrow .card{padding:14px 16px}
+.botrow .card p{font-size:13.5px;line-height:1.6}
+.shapelg{display:flex;flex-direction:column;gap:9px;justify-content:center;
+  padding:14px 18px;background:var(--tint);border-radius:14px}
+.shapelg .it{display:flex;align-items:center;gap:11px}
+.shapelg .sg{flex:none;width:26px;display:grid;place-items:center}
+.shapelg .tx b{display:block;font-size:13px;font-weight:800;color:var(--ink);line-height:1.3}
+.shapelg .tx span{font-size:11.5px;color:var(--faint);font-weight:600}
+.karyo .kgroup .gs{white-space:nowrap;font-size:10px}
+
+.pausebtn{position:absolute;left:16px;bottom:66px;z-index:5;font-family:inherit;cursor:pointer;
+  background:rgba(255,255,255,.94);border:1.5px solid var(--line);border-radius:100px;
+  padding:7px 15px 7px 12px;font-size:12.5px;font-weight:700;color:var(--mute);
+  display:flex;align-items:center;gap:7px;transition:.18s;box-shadow:0 1px 4px rgba(18,32,58,.07)}
+.pausebtn:hover{border-color:var(--faint);color:var(--ink)}
+.pausebtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.pausebtn .ic{width:11px;height:12px;flex:none;position:relative}
+.pausebtn .ic::before,.pausebtn .ic::after{content:"";position:absolute;top:0;bottom:0;
+  width:3.5px;background:var(--mute);border-radius:1px;transition:.18s}
+.pausebtn .ic::before{left:0} .pausebtn .ic::after{right:0}
+.pausebtn.on .ic::before{left:1px;width:0;height:0;top:0;background:transparent;
+  border-left:10px solid var(--plum);border-top:6px solid transparent;border-bottom:6px solid transparent;border-radius:0}
+.pausebtn.on .ic::after{width:0;background:transparent}
+.pausebtn.on{color:var(--plum);border-color:var(--plum)}
+.vsbar{display:flex;justify-content:center;margin-top:14px}
+.vsbar .pausebtn{position:static;transform:none}
+
+.swim{position:relative;height:clamp(180px,25vh,240px)}
+.egg{position:absolute;right:7%;top:50%;transform:translateY(-50%)}
+.sperm{position:absolute;left:2%;top:50%;transform:translateY(-50%);
+  transition:left 1.5s cubic-bezier(.4,0,.5,1)}
+.sperm.go{left:calc(74% - 60px)}
+.sperm .tail{animation:wig .32s ease-in-out infinite alternate;transform-origin:right center}
+@keyframes wig{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.spbtn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.spbtn button,.eyepick button{font-family:inherit;cursor:pointer;background:#fff;
+  border:2px solid var(--line);border-radius:12px;padding:15px;font-size:15.5px;
+  font-weight:700;color:var(--ink);transition:.2s;text-align:center}
+.spbtn button:hover,.eyepick button:hover{border-color:var(--faint);background:var(--tint)}
+.spbtn button:focus-visible,.eyepick button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.spbtn button.sel,.eyepick button.sel{border-color:var(--plum);background:var(--plum-l);color:var(--plum)}
+.spbtn small{display:block;font-size:12px;font-weight:600;color:var(--faint);margin-top:5px}
+.spres{margin-top:13px;padding:19px;border-radius:14px;background:var(--tint);
+  text-align:center;min-height:100px;display:grid;place-items:center}
+.spres .r{font-size:clamp(21px,2.8vw,36px);font-weight:800}
+.spres .d{font-size:14px;color:var(--mute);margin-top:8px;font-weight:600}
+
+.helixbox{position:absolute;inset:0;display:grid;place-items:center;perspective:1100px}
+.helix{position:relative;width:1px;height:1px;transform-style:preserve-3d;
+  animation:spinY 12s linear infinite}
+@keyframes spinY{to{transform:rotateY(360deg)}}
+.rung{position:absolute;left:0;top:0;transform-style:preserve-3d;transition:opacity .35s;
+  transform:translateY(calc(var(--i) * 25px - 180px)) rotateY(calc(var(--i) * 34deg))}
+.rung .bar{position:absolute;left:-105px;top:-2px;width:210px;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,var(--cl) 0 42%,#DCE4EE 42% 58%,var(--cr) 58% 100%)}
+.rung .b{position:absolute;top:-13px;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff}
+.rung .b.l{left:-118px} .rung .b.r{left:92px}
+.rung.dim{opacity:.12}
+.rung.hi .bar{height:6px;top:-3px}
+.rung.hi .b{transform:scale(1.24);box-shadow:0 0 0 4px rgba(255,255,255,.9)}
+.basebtn{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.basebtn button{font-family:inherit;cursor:pointer;border:2px solid var(--line);background:#fff;
+  border-radius:100px;padding:9px 16px;font-size:14px;font-weight:700;color:var(--mute);transition:.2s}
+.basebtn button:hover{border-color:var(--faint)}
+.basebtn button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.basebtn button.sel{color:#fff}
+.basebtn button[data-b="A"].sel{background:#E2503F;border-color:#E2503F}
+.basebtn button[data-b="T"].sel{background:#0D8E9E;border-color:#0D8E9E}
+.basebtn button[data-b="C"].sel{background:#7A2E8E;border-color:#7A2E8E}
+.basebtn button[data-b="G"].sel{background:#2C6FBF;border-color:#2C6FBF}
+.basebtn button[data-b=""].sel{background:var(--ink);border-color:var(--ink)}
+
+.flow{display:flex;align-items:stretch;flex-wrap:wrap}
+.flow .n{flex:1;min-width:150px;background:var(--tint);border-radius:14px;padding:19px;
+  opacity:0;transform:translateX(-16px);animation:fin .55s ease forwards}
+.flow .n:nth-child(1){animation-delay:.1s} .flow .n:nth-child(3){animation-delay:.5s}
+.flow .n:nth-child(5){animation-delay:.9s} .flow .n:nth-child(7){animation-delay:1.3s}
+@keyframes fin{to{opacity:1;transform:none}}
+.flow .a{flex:none;width:42px;display:grid;place-items:center;color:var(--line);
+  font-size:22px;opacity:0;animation:fin .4s ease forwards}
+.flow .a:nth-child(2){animation-delay:.4s} .flow .a:nth-child(4){animation-delay:.8s}
+.flow .a:nth-child(6){animation-delay:1.2s}
+.flow .n h4{font-size:14px;font-weight:800;color:var(--teal);margin-bottom:8px}
+.flow .n.last{background:var(--coral-l)} .flow .n.last h4{color:var(--coral)}
+.flow .n p{font-size:14.5px;line-height:1.6}
+
+.eyepick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:13px}
+.eyepick button{padding:13px 8px;font-size:17px}
+.eyepick button.rec.sel{border-color:var(--ink);background:#EAEDF2;color:var(--ink)}
+.domtag{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:100px;
+  background:var(--plum-l);color:var(--plum);margin-top:8px}
+.domtag.rec{background:#E7EAF0;color:var(--ink)}
+.eyeout{border-radius:14px;background:var(--tint);padding:20px;display:flex;
+  align-items:center;gap:20px;min-height:126px}
+.eyeball{width:84px;height:84px;border-radius:50%;flex:none;position:relative;
+  transition:background .55s;box-shadow:inset 0 -6px 14px rgba(0,0,0,.18)}
+.eyeball::after{content:"";position:absolute;inset:27px;border-radius:50%;background:#15181D}
+.eyeball::before{content:"";position:absolute;left:19px;top:15px;width:15px;height:15px;
+  border-radius:50%;background:rgba(255,255,255,.65);z-index:2}
+
+.trace{stroke-dasharray:900;stroke-dashoffset:900}
+.trace.on{animation:draw 1.8s cubic-bezier(.4,.6,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pt{opacity:0}
+.pt.on{animation:pop .45s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+
+.slide[data-supp]{background:linear-gradient(180deg,#FFFDF8,#FFF8EC)}
+.supptag{display:inline-flex;align-items:center;gap:7px;background:var(--amber);color:#fff;
+  font-size:12.5px;font-weight:800;padding:6px 14px;border-radius:100px;margin-bottom:13px;
+  flex:none;align-self:flex-start}
+.supptag::before{content:"＋";font-size:14px;line-height:1}
+.src{margin-top:auto;padding:14px 18px;background:#fff;border:1px solid #F0E2C4;
+  border-radius:12px;font-size:12.5px;line-height:1.7;color:var(--mute);flex:none}
+.src b{display:block;color:var(--amber);font-weight:800;font-size:11.5px;margin-bottom:7px;letter-spacing:.04em}
+.src i{font-style:italic;color:var(--ink)}
+.src span{display:block} .src span+span{margin-top:6px}
+
+.cover{justify-content:center;background:linear-gradient(140deg,#FFFFFF 42%,#F7F0FA)}
+.cover .eye{font-size:14.5px;font-weight:800;color:var(--plum);margin-bottom:20px}
+.cover h1{max-width:14ch;margin-bottom:24px}
+.cover .meta{font-size:15.5px;color:var(--mute);line-height:1.9;font-weight:500}
+.float{position:absolute;right:0;top:0;bottom:0;width:min(46vw,600px);pointer-events:none}
+.float .f{position:absolute;animation:bob 7s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}
+  50%{transform:translateY(-24px) rotate(calc(var(--r,0deg) + 8deg))}}
+@media(max-width:940px){.float{display:none}}
+
+.toc{display:grid;gap:8px;max-width:860px}
+.toc button{display:grid;grid-template-columns:50px 1fr;gap:14px;align-items:center;
+  text-align:left;font-family:inherit;cursor:pointer;background:var(--tint);
+  border:none;border-radius:14px;padding:17px 20px;transition:.2s}
+.toc button:hover{background:var(--plum-l);transform:translateX(6px)}
+.toc button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.toc .n{font-size:15px;font-weight:800;color:var(--plum)}
+.toc .t{font-size:clamp(17px,1.75vw,23px);font-weight:700;color:var(--ink)}
+.toc .d{grid-column:2;font-size:13.5px;color:var(--mute);margin-top:3px;font-weight:500}
+
+.rail{position:fixed;left:0;right:0;bottom:0;height:50px;display:flex;align-items:center;
+  gap:16px;padding:0 clamp(20px,4vw,38px);background:#fff;border-top:1px solid var(--line);z-index:50}
+.rail .s{font-size:12.5px;font-weight:700;color:var(--mute);white-space:nowrap}
+.bar{flex:1;height:4px;background:var(--line);border-radius:4px;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--plum);border-radius:4px;transition:width .35s}
+body[data-m="supp"] .bar i{background:var(--amber)}
+.rail .ct{font-size:12.5px;color:var(--faint);font-variant-numeric:tabular-nums;font-weight:600}
+.rail .ct b{color:var(--ink)}
+.rail .hint{font-size:11.5px;color:var(--faint);font-weight:500}
+@media(max-width:700px){.rail .hint{display:none}}
+
+.steps{display:flex;gap:6px;align-items:center;margin-top:16px;flex:none}
+.steps i{width:26px;height:3px;background:var(--line);border-radius:3px;transition:.3s}
+.steps i.on{background:var(--plum)}
+.steps span{font-size:12px;color:var(--faint);margin-left:8px;font-weight:600}
+[data-from]{opacity:0;transform:translateY(9px);transition:opacity .45s,transform .45s}
+[data-from].on{opacity:1;transform:none}
+
+body.calm .float .f{animation:none}
+body.calm .kg.flag::after{animation:none;opacity:.9}
+body.calm .sperm .tail{animation:none}
+body.calm .slide.live{animation:none}
+.motionbtn{font-family:inherit;cursor:pointer;background:#fff;border:1.5px solid var(--line);
+  border-radius:100px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--faint);
+  white-space:nowrap;transition:.18s}
+.motionbtn:hover{border-color:var(--faint);color:var(--mute)}
+.motionbtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
+
+.parts{display:flex;align-items:center;gap:4px;flex:none}
+.parts .pl{font-size:11px;font-weight:700;color:var(--faint);margin-right:4px}
+.parts button{font-family:inherit;cursor:pointer;width:24px;height:24px;border-radius:7px;
+  border:1.5px solid var(--line);background:#fff;color:var(--faint);
+  font-size:12px;font-weight:800;transition:.18s;padding:0}
+.parts button:hover{border-color:var(--faint);color:var(--mute)}
+.parts button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.parts button.cur{background:var(--plum);border-color:var(--plum);color:#fff}
+body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(--amber)}
+.nextpart{display:inline-flex;align-items:center;gap:9px;margin-top:20px;
+  font-family:inherit;cursor:pointer;border:none;border-radius:100px;
+  background:var(--ink);color:#fff;padding:13px 24px;font-size:15px;font-weight:800;transition:.18s}
+.nextpart:hover{transform:translateX(4px)}
+.nextpart:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.nextpart::after{content:"→";font-size:17px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/>
+<feColorMatrix in="b" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -10"/>
+</filter></defs></svg>
+
+<div class="deck" id="deck">
+
+<section class="slide cover mid" data-sec="표지">
+  <div class="float" id="float"></div>
+  <div class="eye">제2장 · 인간발달의 기저</div>
+  <h1>1. 발달의<br>생물학적 기저</h1>
+  <div class="meta">수정과 세포분열 · 성의 결정 · 유전적 특성의 결정 · 염색체 결함<br>교재 pp. 47–53</div>
+</section>
+
+<section class="slide mid" data-sec="도입">
+  <div class="two">
+    <blockquote class="quote">인간의 발달은 난자와 정자가 결합하는 수정의 순간에서부터 시작된다.<cite>교재 p. 47</cite></blockquote>
+    <div class="stack">
+      <p>수정의 순간에 인간 생명체는 <strong>성의 구분, 유전적 특성, 정상성 여부</strong> 등 전 생애에 큰 영향을 미치는 발달적 특성을 갖게 됩니다.</p>
+      <p>이들 특성이 <em>어떤 생물학적 기제로 결정되는가</em>를 아는 것 — 그것이 이 절의 과제입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="도입">
+  <h2>이 절의 구성</h2>
+  <div class="sup2">교재의 네 단계를 그대로 따릅니다</div>
+  <div class="toc" style="margin-top:24px">
+    <button data-go="3"><span class="n">1)</span><span class="t">수정과 세포분열</span><span class="d">유사분열과 감수분열은 무엇이 다른가</span></button>
+    <button data-go="10"><span class="n">2)</span><span class="t">성의 결정</span><span class="d">46개 중 단 한 쌍이 만드는 차이</span></button>
+    <button data-go="16"><span class="n">3)</span><span class="t">유전적 특성의 결정</span><span class="d">DNA · 대립유전자 · 유전자형과 표현형</span></button>
+    <button data-go="23"><span class="n">4)</span><span class="t">염색체 결함</span><span class="d">일반염색체 결함과 성염색체 결함</span></button>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="1) 수정과 세포분열">
+  <div class="hd"><span class="chip">1) 수정과 세포분열</span><span class="sub">교재 p. 48</span></div>
+  <h2>수정체는 <span class="hl">두 갈래</span>로 나뉩니다</h2>
+  <div class="sup2">정자(sperm)와 난자(ovum)가 결합하여 수정체가 됩니다. 수정체는 구조와 기능이 상이한 두 유형의 세포로 구성됩니다.</div>
+  <div class="grid g2" style="margin-top:26px">
+    <div class="card plum"><h4>성세포 germ cells</h4><p><strong>생식기</strong>를 형성합니다. 다음 세대로 유전정보를 넘기는 세포입니다.</p></div>
+    <div class="card teal"><h4>체세포 body cells</h4><p><strong>뼈, 근육, 소화기, 순환기, 신경계</strong>를 형성합니다. 몸을 만드는 세포입니다.</p></div>
+  </div>
+  <p style="margin-top:20px;font-size:clamp(17px,1.7vw,23px);color:var(--ink);font-weight:600">역할이 다른 만큼, <em>분열하는 방식도 다릅니다.</em></p>
+</section>
+
+<section class="slide" data-sec="1) 수정과 세포분열" data-scene="mit">
+  <div class="hd"><span class="chip">유사분열 · mitosis</span><span class="sub">체세포가 늘어나는 방식 · 자동 반복 · P키로 정지</span></div>
+  <h2>몸을 만드는 <span class="hl">복사</span></h2>
+  <div class="body">
+    <div class="stage tall" id="mitStage">
+      <div class="counter">염색체 수<b id="mitN">46</b></div>
+      <div class="eq" id="mitEq" style="left:14%;right:14%;top:46%"></div>
+      <div class="membrane"><div class="blob" id="mitBlob"></div></div>
+      <div class="chlayer" id="mitCh"></div>
+      <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
+      <div class="caption"><span class="num" id="mitK">1</span><span id="mitCap"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1) 수정과 세포분열" data-c="teal" data-scene="mei">
+  <div class="hd"><span class="chip">감수분열 · meiosis</span><span class="sub">성세포가 만들어지는 방식 · 자동 반복 · P키로 정지</span></div>
+  <h2>세대를 잇는 <span class="hl">절반</span></h2>
+  <div class="body">
+    <div class="stage tall" id="meiStage">
+      <div class="counter">염색체 수<b id="meiN">46</b></div>
+      <div class="membrane"><div class="blob" id="meiBlob"></div></div>
+      <div class="chlayer" id="meiCh"></div>
+      <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
+      <div class="caption"><span class="num" id="meiK" style="background:var(--teal)">1</span><span id="meiCap"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1) 수정과 세포분열" data-scene="vs">
+  <div class="hd"><span class="chip">핵심 비교</span><span class="sub">나란히 동시 재생 · P키로 정지</span></div>
+  <h2>같은 세포, <span class="hl">다른 결말</span></h2>
+  <div class="body" style="padding-top:12px">
+    <div class="vs" style="height:clamp(300px,48vh,460px)">
+      <div class="col a">
+        <div class="top"><span class="t">유사분열</span><span class="e">체세포</span></div>
+        <div class="membrane"><div class="blob" id="vaBlob"></div></div>
+        <div class="chlayer" id="vaCh"></div>
+        <div class="res"><span>자세포 <b id="vaC">1</b>개</span><span>염색체 <b id="vaN" style="color:var(--plum)">46</b>개 · 그대로</span></div>
+      </div>
+      <div class="col b">
+        <div class="top"><span class="t">감수분열</span><span class="e">성세포</span></div>
+        <div class="membrane"><div class="blob" id="vbBlob"></div></div>
+        <div class="chlayer" id="vbCh"></div>
+        <div class="res"><span>자세포 <b id="vbC">1</b>개</span><span>염색체 <b id="vbN" style="color:var(--teal)">46</b>개 · 절반으로</span></div>
+      </div>
+    </div>
+    <div class="vsbar"><button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button></div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="1) 수정과 세포분열" data-c="coral" data-steps="3" data-scene="boom">
+  <h2>성세포도 46개를 그대로 물려준다면?</h2>
+  <div class="boom">
+    <div class="u"><div class="v">46</div><div class="g">부모</div></div>
+    <div class="ar">→</div>
+    <div class="u" id="b2"><div class="v" data-to="92">0</div><div class="g">자녀</div></div>
+    <div class="ar">→</div>
+    <div class="u" id="b3"><div class="v" data-to="184">0</div><div class="g">손자</div></div>
+    <div class="ar">→</div>
+    <div class="u" id="b4"><div class="v" data-to="368">0</div><div class="g">증손</div></div>
+  </div>
+  <p style="font-size:clamp(18px,2.1vw,29px);color:var(--ink);font-weight:700;text-align:center;max-width:none" data-from="2">
+    그래서 성세포는 <em>감수분열</em>로 염색체 수를 반으로 줄입니다.</p>
+  <div class="steps" style="justify-content:center"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="1) 수정과 세포분열">
+  <h2>다시 <span class="hl">46</span>으로</h2>
+  <div class="boom">
+    <div class="u cool"><div class="v">23</div><div class="g">난자</div></div>
+    <div class="ar">+</div>
+    <div class="u cool"><div class="v">23</div><div class="g">정자</div></div>
+    <div class="ar">=</div>
+    <div class="u key"><div class="v">46</div><div class="g">수정체</div></div>
+  </div>
+  <div class="two" style="margin-top:12px">
+    <p>감수분열을 거쳐 난자와 정자는 각기 <strong>23개씩</strong>의 염색체만 갖게 됩니다. 이렇게 다시 만나면 <strong>46개</strong>를 갖고 수정체를 형성합니다. <em>감수분열은 세대를 거듭해도 인간이 46개를 유지하게 하는 장치입니다.</em></p>
+    <div class="card teal"><h4>성세포의 크기</h4>
+      <p>난자는 인체에서 <strong>가장 큰 세포</strong>, 정자는 <strong>가장 작은 세포</strong>입니다. 난자는 정자의 약 <strong>9만 배</strong> 무게를 갖습니다.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2) 성의 결정" data-scene="kG" data-steps="3">
+  <div class="hd"><span class="chip">2) 성의 결정</span><span class="sub">교재 p. 49 · 그림 2-2의 배열 원리</span></div>
+  <h2>핵형 분석 — <span class="hl">크기와 모양</span>으로 묶습니다</h2>
+  <div class="sup2" style="max-width:96ch">46개의 염색체를 <strong>길이가 긴 것부터</strong> 번호를 매기고, <strong>동원체(잘록한 지점)의 위치</strong>가 비슷한 것끼리 A부터 G까지 일곱 그룹으로 묶습니다.</div>
+  <div class="body">
+    <div class="karyo" id="karyoG"></div>
+    <div class="botrow">
+      <div class="shapelg" data-from="1">
+        <div class="it"><span class="sg" data-cen=".47"></span><div class="tx"><b>동원체 가운데</b><span>A · F</span></div></div>
+        <div class="it"><span class="sg" data-cen=".30"></span><div class="tx"><b>동원체 치우침</b><span>B · C · E</span></div></div>
+        <div class="it"><span class="sg" data-cen=".15"></span><div class="tx"><b>동원체 끝쪽</b><span>D · G</span></div></div>
+      </div>
+      <div class="card" data-from="2"><h4 style="color:var(--mute)">왜 순서를 매기는가</h4>
+        <p>번호와 그룹이 정해져 있어야 <strong>어느 염색체가 몇 개인지</strong>를 한눈에 확인할 수 있습니다. 다운증후군이 <strong>“21번이 3개”</strong>로 특정되는 것도 이 배열 덕분입니다.</p></div>
+      <div class="card teal" data-from="2"><h4>X와 Y는 따로</h4>
+        <p>성염색체는 번호 없이 <strong>맨 끝에 따로</strong> 놓습니다. X는 C그룹, Y는 G그룹에 해당할 만큼 <strong>둘의 크기 차이가 큽니다.</strong></p></div>
+    </div>
+  </div>
+  <div class="steps"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide" data-sec="2) 성의 결정" data-scene="k1" data-steps="2">
+  <div class="hd"><span class="chip">2) 성의 결정</span><span class="sub">교재 p. 49 · 그림 2-2</span></div>
+  <h2>23쌍 중 성별을 가르는 것은 <span class="hl">한 쌍</span>뿐입니다</h2>
+  <div class="body">
+    <div class="karyo" id="karyo1" style="margin:8px 0 22px"></div>
+    <div class="grid g2" style="max-width:940px;margin:0 auto">
+      <div class="card" data-from="0"><h4 style="color:var(--mute)">상동체 autosomes · 22쌍</h4>
+        <p>크기, 구조, 기능이 유사합니다. <strong>남아와 여아가 사실상 같습니다.</strong></p></div>
+      <div class="card plum" data-from="1"><h4>성염색체 sex chromosomes · 1쌍</h4>
+        <p>23번째 한 쌍. 여기서만 남아 <strong>XY</strong>와 여아 <strong>XX</strong>가 갈립니다.</p></div>
+    </div>
+  </div>
+  <div class="steps"><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide" data-sec="2) 성의 결정">
+  <div class="hd"><span class="chip">2) 성의 결정</span><span class="sub">정자를 눌러보세요</span></div>
+  <h2>성별을 결정하는 것은 <span class="hl">정자</span>입니다</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage" style="height:auto;padding:6px 0">
+        <div class="swim">
+          <div class="egg">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="50" fill="#FAEBD0" stroke="#E3C48F" stroke-width="3"/>
+              <circle cx="65" cy="65" r="22" fill="#7A2E8E" opacity=".16"/>
+              <text x="65" y="72" text-anchor="middle" font-size="20" font-weight="800" fill="#7A2E8E" font-family="Pretendard">X</text>
+            </svg>
+            <div style="text-align:center;font-size:12px;font-weight:700;color:var(--faint);margin-top:-8px">난자</div>
+          </div>
+          <div class="sperm" id="sperm">
+            <svg width="110" height="46" viewBox="0 0 110 46">
+              <g class="tail"><path d="M62 23 C 46 8, 32 38, 10 23" stroke="#A9B6C6" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+              <ellipse cx="80" cy="23" rx="22" ry="16" fill="#A9B6C6" id="spHead"/>
+              <text x="80" y="29" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="Pretendard" id="spLabel">?</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="spbtn">
+          <button type="button" data-sp="X">정자 · X<small>X염색체를 가진 정자</small></button>
+          <button type="button" data-sp="Y">정자 · Y<small>Y염색체를 가진 정자</small></button>
+        </div>
+        <div class="spres" id="spres"><div><div class="r" style="color:var(--faint)">난자 X + 정자 ?</div>
+          <div class="d">정자를 선택하면 결과가 나타납니다</div></div></div>
+        <p style="margin-top:13px;font-size:15px">어머니는 <strong>XX</strong>이므로 모든 난자는 X만 가집니다. 아버지는 <strong>XY</strong>이므로 정자의 일부는 X, 일부는 Y를 갖습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="2) 성의 결정">
+  <div class="hd"><span class="chip">2) 성의 결정</span><span class="sub">교재 pp. 49–50</span></div>
+  <h2>교재가 제시하는 성비</h2>
+  <div class="two" style="margin-top:22px">
+    <div class="grid g2">
+      <div class="card"><h4 style="color:var(--mute)">수정되는 비율</h4>
+        <div style="font-size:clamp(26px,3.2vw,44px);font-weight:800;color:var(--plum)">120 : 100</div></div>
+      <div class="card"><h4 style="color:var(--mute)">출산되는 비율</h4>
+        <div style="font-size:clamp(26px,3.2vw,44px);font-weight:800;color:var(--plum)">106 : 100</div></div>
+    </div>
+    <div>
+      <p>교재의 설명입니다. 남아 출산의 수적 우위는 <strong>성염색체와 관련된 각종 질병</strong>과 <strong>후천적인 삶에서 남아가 여아보다 생명을 잃을 확률이 높기 때문에</strong> 자연스럽게 평형을 이루게 된다는 것입니다.</p>
+      <div class="cite">Hetherington &amp; Parke, 1993</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="보충 · 성비" data-c="amber" data-supp="1">
+  <span class="supptag">보충 · 교재 이후 갱신된 연구</span>
+  <h2>수정 시 성비는 <span class="hl">50 : 50</span>에 가깝습니다</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <p>보조생식술로 만들어진 <strong>3–6일차 배아 약 14만 개</strong>를 직접 핵형 분석한 결과, 남아 비율은 <em>50.2%</em>였습니다.</p>
+        <p>출생 시 남아가 조금 더 많은 것은 수정 단계의 차이가 아니라 <strong>임신 기간 중 태내 사망 패턴의 차이</strong> 때문으로 설명됩니다.</p>
+        <div class="card amber"><h4>교재 수치는 그대로 두세요</h4>
+          <p>출생 비율 <strong>106 : 100</strong>은 여전히 유효합니다. 달라진 것은 <strong>수정 시점 추정치</strong>뿐입니다.</p></div>
+      </div>
+      <div class="boom" style="padding:8px 0">
+        <div class="u"><div class="v" style="font-size:clamp(23px,3vw,42px)">120:100</div><div class="g">교재 · 1993년 문헌</div></div>
+        <div class="ar">→</div>
+        <div class="u"><div class="v" style="font-size:clamp(23px,3vw,42px);color:var(--amber)">50.2%</div><div class="g">2015년 연구 · 남아 비율</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>Orzack, S. H., Stubblefield, J. W., Akmaev, V. R., Colls, P., Munné, S., Scholl, T., Steinsaltz, D., &amp; Zuckerman, J. E. (2015). The human sex ratio from conception to birth. <i>Proceedings of the National Academy of Sciences</i>, 112(16), E2102–E2111. doi:10.1073/pnas.1416546112</span>
+    <span>해설 논평 — Austad, S. N. (2015). The human prenatal sex ratio: A major surprise. <i>PNAS</i>, 112(16), 4839–4840.</span>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="3) 유전적 특성의 결정" data-c="blue">
+  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재 p. 50</span></div>
+  <h2>염색체 안에는 유전인자가 <span class="hl">사슬처럼</span> 연결되어 있습니다</h2>
+  <div class="two" style="margin-top:20px">
+    <div>
+      <p>유전인자(genes)는 <strong>부모로부터 물려받은 유전적 특성을 결정하는 기본단위</strong>입니다.</p>
+      <p>교재는 46개의 염색체로 구성되는 하나의 세포에 <strong>약 1억 개</strong>의 유전인자가 있는 것으로 추산합니다.</p>
+      <div class="cite">Craig, 1989</div>
+    </div>
+    <div class="stage" style="height:clamp(170px,25vh,230px);display:grid;place-items:center">
+      <svg viewBox="0 0 300 90" style="width:88%">
+        <line x1="16" y1="45" x2="284" y2="45" stroke="#D9E2ED" stroke-width="2"/>
+        <rect x="26" y="34" width="20" height="22" rx="4" fill="#7A2E8E" opacity=".9"/>
+        <rect x="54" y="34" width="12" height="22" rx="4" fill="#7A2E8E" opacity=".45"/>
+        <rect x="74" y="34" width="26" height="22" rx="4" fill="#2C6FBF" opacity=".8"/>
+        <rect x="108" y="34" width="14" height="22" rx="4" fill="#7A2E8E" opacity=".35"/>
+        <rect x="130" y="34" width="22" height="22" rx="4" fill="#0D8E9E" opacity=".8"/>
+        <rect x="160" y="34" width="11" height="22" rx="4" fill="#7A2E8E" opacity=".5"/>
+        <rect x="179" y="34" width="28" height="22" rx="4" fill="#7A2E8E" opacity=".75"/>
+        <rect x="215" y="34" width="15" height="22" rx="4" fill="#2C6FBF" opacity=".6"/>
+        <rect x="238" y="34" width="22" height="22" rx="4" fill="#7A2E8E" opacity=".9"/>
+        <text x="150" y="18" text-anchor="middle" font-size="11" fill="#9AA8BC" font-weight="700" font-family="Pretendard">하나의 염색체</text>
+        <text x="150" y="80" text-anchor="middle" font-size="11" fill="#2C6FBF" font-weight="700" font-family="Pretendard">유전인자 genes</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="보충 · 유전자 수" data-c="amber" data-supp="1">
+  <span class="supptag">보충 · 교재 이후 갱신된 수치</span>
+  <h2>현재 추정치는 <span class="hl">2만 개</span> 안팎입니다</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <p>교재의 <strong>약 1억 개</strong>는 인간게놈프로젝트 <em>이전</em>의 추정치입니다. 게놈 해독이 진행되면서 추정치는 계속 줄어들었습니다.</p>
+        <p>참고로 <strong>염기쌍</strong>은 약 <strong>30억 개</strong>입니다. 1억이라는 숫자는 염기쌍 쪽과 혼동된 것으로 보입니다.</p>
+        <div class="card amber"><h4>왜 중요한가</h4>
+          <p>유전자 수가 예상보다 훨씬 적다는 사실은 <strong>유전자만으로 인간의 복잡성을 설명할 수 없다</strong>는 결론으로 이어졌습니다. 다음 파트의 배경이기도 합니다.</p></div>
+      </div>
+      <table>
+        <tr><th>시점</th><th style="text-align:right">단백질 암호화 유전자</th></tr>
+        <tr><td>1980년대</td><td class="n" style="color:var(--faint)">5만 – 10만</td></tr>
+        <tr><td>2001 · 게놈 초안</td><td class="n" style="color:var(--faint)">3만 – 4만</td></tr>
+        <tr><td>2004 · 프로젝트 완료</td><td class="n" style="color:var(--faint)">2만 – 2.5만</td></tr>
+        <tr class="mark"><td><strong>현재</strong></td><td class="n">약 1.9만 – 2만</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>International Human Genome Sequencing Consortium (2004). Finishing the euchromatic sequence of the human genome. <i>Nature</i>, 431, 931–945. doi:10.1038/nature03001 — 20,000–25,000개 추정</span>
+    <span>Amaral, P., et al. (2023). The status of the human gene catalogue. <i>Nature</i>, 622, 41–47. doi:10.1038/s41586-023-06490-x — 현행 카탈로그 기준 약 1.9–2만 개</span>
+  </div>
+</section>
+
+<section class="slide" data-sec="3) 유전적 특성의 결정" data-c="blue" data-scene="dna">
+  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재 p. 50 · 그림 2-3</span></div>
+  <h2>DNA의 구조</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage tall" style="background:linear-gradient(170deg,#FAFCFF,#ECF3FA)">
+        <div class="helixbox"><div class="helix" id="helix"></div></div>
+        <div class="lbl" style="left:20px;top:16px">이중나선 · 자동 회전</div>
+      </div>
+      <div>
+        <p>유전인자는 <strong>나선형 사다리꼴 모양</strong>의 디옥시리보핵산(DNA) 고리로 이루어져 있습니다. <strong>바깥쪽 긴 고리</strong>는 당과 인으로, <strong>안쪽의 짧은 고리</strong>는 네 종류의 질산염기로 구성됩니다.</p>
+        <p><em>이 안쪽의 질산염기에 유전적 정보들이 저장되어 있습니다.</em></p>
+        <div class="basebtn">
+          <button type="button" data-b="A">A 아데닌</button>
+          <button type="button" data-b="T">T 티민</button>
+          <button type="button" data-b="C">C 시토신</button>
+          <button type="button" data-b="G">G 구아닌</button>
+          <button type="button" data-b="">전체 보기</button>
+        </div>
+        <p id="baseMsg" style="margin-top:13px;font-weight:600;color:var(--blue);min-height:3.4em">염기를 눌러보세요. 짝이 되는 규칙만 남고 나머지는 흐려집니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="3) 유전적 특성의 결정" data-c="teal" data-scene="flow">
+  <h2>DNA는 <span class="hl">RNA의 주형</span>입니다</h2>
+  <div class="flow" id="flow" style="margin-top:28px">
+    <div class="n"><h4>DNA</h4><p>세포의 핵 안에서 지시를 내립니다. RNA의 <strong>주형(template)</strong>입니다.</p></div>
+    <div class="a">→</div>
+    <div class="n"><h4>RNA</h4><p>핵으로부터 DNA가 내린 지시를 <strong>세포질</strong>에 전달합니다.</p></div>
+    <div class="a">→</div>
+    <div class="n"><h4>세포의 운명</h4><p>장기·피부·뼈·신경계·근육 중 <strong>어느 부위를 형성할지</strong>가 결정됩니다.</p></div>
+    <div class="a">→</div>
+    <div class="n last"><h4>결함이 생기면</h4><p>유전인자 중 <strong>어느 하나에라도 결함이 있으면</strong> 정상아와 다른 발달장애가 나타납니다.</p></div>
+  </div>
+  <p style="margin-top:24px;font-size:clamp(17px,1.8vw,24px);font-weight:700;color:var(--ink);max-width:none">
+    이 마지막 문장이 <em style="color:var(--coral)">4) 염색체 결함</em>으로 넘어가는 다리입니다.</p>
+</section>
+
+<section class="slide mid" data-sec="3) 유전적 특성의 결정" data-c="blue">
+  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재 p. 51</span></div>
+  <h2>대립유전자 <span class="hl">alleles</span></h2>
+  <div class="sup2">염색체에는 발달상의 각 특성을 결정하는 유전인자들이 특정 부위를 차지하고 있는데, 이를 대립유전자라 부릅니다.</div>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card blue"><h4>동질접합 homozygous</h4>
+      <div style="font-size:clamp(32px,4.2vw,56px);font-weight:800;color:var(--blue);margin:8px 0">BB</div>
+      <p>양쪽 부모에게서 <strong>같은</strong> 대립유전자가 전수된 경우.</p></div>
+    <div class="card plum"><h4>이질접합 heterozygous</h4>
+      <div style="font-size:clamp(32px,4.2vw,56px);font-weight:800;color:var(--plum);margin:8px 0">Bb</div>
+      <p>서로 <strong>다른</strong> 대립유전자가 전달된 경우.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3) 유전적 특성의 결정" data-c="blue">
+  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재의 눈 색깔 예시 · 직접 조합해 보세요</span></div>
+  <h2>유전자형과 <span class="hl">표현형</span></h2>
+  <div class="body">
+    <div class="two even">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--faint);margin-bottom:10px">부모에게서 받은 조합을 선택하세요</div>
+        <div class="eyepick">
+          <button type="button" data-eye="BB">BB<small style="display:block;font-size:11.5px;color:var(--faint);font-weight:600;margin-top:4px">갈색 + 갈색</small></button>
+          <button type="button" data-eye="Bb">Bb<small style="display:block;font-size:11.5px;color:var(--faint);font-weight:600;margin-top:4px">갈색 + 검은색</small></button>
+          <button type="button" class="rec" data-eye="bb">bb<small style="display:block;font-size:11.5px;color:var(--faint);font-weight:600;margin-top:4px">검은색 + 검은색</small></button>
+        </div>
+        <div class="eyeout">
+          <div class="eyeball" id="eyeball" style="background:#C9CFD8"></div>
+          <div>
+            <div id="eyeGeno" style="font-size:13px;font-weight:700;color:var(--faint)">유전자형 genotype</div>
+            <div id="eyePheno" style="font-size:clamp(18px,2.1vw,27px);font-weight:800;color:var(--faint);margin-top:4px">조합을 선택하세요</div>
+            <div id="eyeWhy" style="font-size:14px;color:var(--mute);margin-top:8px;font-weight:500">&nbsp;</div>
+            <div id="eyeTag"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card blue"><h4>유전자형 genotype</h4><p>양쪽 부모로부터 물려받은 대립유전자의 결합형태, 즉 <strong>유전인자의 특징</strong>입니다.</p></div>
+        <div class="card plum"><h4>표현형 phenotype</h4><p><strong>겉으로 나타난</strong> 유전적 특징입니다.</p></div>
+        <p style="font-size:15px">교재는 곧바로 단서를 답니다. 우성·열성 관계만이 아니라 두 특징이 합해져 중간 색깔로 나타나는 <em>혼합형(blending)</em>도 있습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="3) 유전적 특성의 결정">
+  <blockquote class="quote" style="max-width:24ch;font-size:clamp(25px,3.4vw,48px)">
+    인간의 여러 심리적 특성의 유전기제에 있어서 유전자형과 표현형의 관계는 눈의 색깔처럼 그렇게 단순한 것은 아니다.
+    <cite>교재 p. 51 — 교재가 직접 남긴 다음 장 예고</cite>
+  </blockquote>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함" data-c="coral">
+  <div class="hd"><span class="chip">4) 염색체 결함</span><span class="sub">교재 p. 51</span></div>
+  <h2>수정 시에 염색체 결합에 <span class="hl">잘못이 생기면</span></h2>
+  <div class="two" style="margin-top:24px">
+    <div>
+      <div style="font-size:clamp(60px,10vw,140px);font-weight:800;color:var(--coral);line-height:.95">약 1%</div>
+      <p style="margin-top:12px">새로 태어나는 신생아 중 <strong>진단을 통해 식별해낼 수 있는 염색체 결함</strong>을 가지고 있는 비율</p>
+      <div class="cite">Hetherington &amp; Parke, 1993</div>
+    </div>
+    <div class="grid g2">
+      <div class="card coral"><h4>일반염색체 결함</h4><p>다운증후군</p></div>
+      <div class="card"><h4 style="color:var(--mute)">성염색체 결함</h4><p>터너 · 세 개의 X · 클라인펠터 · XYY · X결함</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="4) 염색체 결함" data-c="coral" data-scene="k2">
+  <div class="hd"><span class="chip">일반염색체 결함</span><span class="sub">교재 p. 52</span></div>
+  <h2>다운증후군 — <span class="hl">21번 염색체가 3개</span></h2>
+  <div class="body">
+    <div class="karyo" id="karyo2" style="margin:8px 0 20px"></div>
+    <div class="two">
+      <p>일반염색체 결함에서 오는 대표적인 장애가 <strong>다운증후군(Down syndrome)</strong>입니다. 염색체 배열에서 <em>21번 염색체가 3개일 때</em> 나타나는 장애입니다.</p>
+      <p><strong>신체적인 장애와 지적인 장애를 함께 동반</strong>하며, 외모에서 뚜렷이 장애의 징후가 나타납니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함" data-c="coral">
+  <h2>다운증후군의 특징</h2>
+  <div class="grid g4" style="margin-top:24px">
+    <div class="card"><h4 style="color:var(--mute)">신체</h4><p>눈초리가 치켜 올라가고 뒷머리가 납작하며, 목이 짧고 혀가 삐죽 나오며 코가 작습니다. 손가락 길이가 매우 짧고 걸음걸이가 어색합니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">건강</h4><p>백혈병, 심장병, 순환기 질환에 잘 감염되어 조기사망률이 높았으나 <strong>근래에는 치료효과가 높아 생존율이 급격하게 증가</strong>하고 있습니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">인지</h4><p>생후 첫 1년은 정상아와 구분이 어렵고, <strong>한 살 이후부터</strong> 변별이 어려워집니다. 그러나 따뜻한 관심과 교육적 배려가 있으면 <strong>기본 생활을 영위할 만큼 훈련이 가능</strong>합니다.</p></div>
+    <div class="card teal"><h4>성격</h4><p>교재의 서술입니다. <strong>성격은 밝고 사람을 좋아하며, 정상적인 사회성을 보이기도</strong> 합니다.</p></div>
+  </div>
+  <div class="cite">Kopp, 1983 · 교재 p. 52</div>
+</section>
+
+<section class="slide" data-sec="4) 염색체 결함" data-c="coral" data-scene="age">
+  <div class="hd"><span class="chip">일반염색체 결함</span><span class="sub">Hook &amp; Lindsjo, 1978 · 교재 p. 52</span></div>
+  <h2>산모의 <span class="hl">연령</span>과 밀접하게 관련됩니다</h2>
+  <div class="body">
+    <div class="two rev">
+      <div class="stage" style="display:grid;place-items:center">
+        <svg viewBox="0 0 420 262" style="width:94%">
+          <g stroke="#DFE6EF" stroke-width="1.5"><line x1="56" y1="212" x2="398" y2="212"/><line x1="56" y1="22" x2="56" y2="212"/></g>
+          <g fill="#9AA8BC" font-size="12" font-weight="700" font-family="Pretendard">
+            <text x="56" y="234" text-anchor="middle">30</text><text x="141" y="234" text-anchor="middle">35</text>
+            <text x="226" y="234" text-anchor="middle">40</text><text x="311" y="234" text-anchor="middle">45</text>
+            <text x="379" y="234" text-anchor="middle">49</text>
+            <text x="226" y="256" text-anchor="middle" fill="#6A7A93">산모 연령 (세)</text></g>
+          <text x="20" y="118" text-anchor="middle" transform="rotate(-90 20 118)" fill="#6A7A93" font-size="12" font-weight="700" font-family="Pretendard">발생 확률</text>
+          <path class="trace" id="ageTrace" d="M56 206 C 96 202, 118 194, 141 186 C 178 174, 198 148, 226 124 C 262 92, 282 50, 311 34 C 336 22, 360 18, 379 15"
+            fill="none" stroke="#E2503F" stroke-width="3.4" stroke-linecap="round"/>
+          <g id="agePts">
+            <g class="pt"><circle cx="56" cy="206" r="5" fill="#E2503F"/><text x="66" y="200" font-size="12" font-weight="700" fill="#9AA8BC" font-family="Pretendard">1 : 885</text></g>
+            <g class="pt"><circle cx="141" cy="186" r="5" fill="#E2503F"/></g>
+            <g class="pt"><circle cx="226" cy="124" r="5" fill="#E2503F"/></g>
+            <g class="pt"><circle cx="311" cy="34" r="5" fill="#E2503F"/></g>
+            <g class="pt"><circle cx="379" cy="15" r="7" fill="#E2503F"/><text x="370" y="10" text-anchor="end" font-size="15" font-weight="800" fill="#E2503F" font-family="Pretendard">1 : 12</text></g>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <p>교재는 <strong>정확한 원인은 아직 밝혀지지 않고 있다</strong>고 서술합니다. 다만 산모의 연령과의 관련은 뚜렷합니다.</p>
+        <table style="margin-top:12px">
+          <tr><th>산모 연령</th><th style="text-align:right">발생 확률</th></tr>
+          <tr><td>30세</td><td class="n" style="color:var(--coral)">1 : 885</td></tr>
+          <tr><td>35세</td><td class="n" style="color:var(--coral)">1 : 365</td></tr>
+          <tr><td>40세</td><td class="n" style="color:var(--coral)">1 : 109</td></tr>
+          <tr><td>45세</td><td class="n" style="color:var(--coral)">1 : 32</td></tr>
+          <tr class="mark"><td><strong>49세</strong></td><td class="n" style="color:var(--coral)">1 : 12</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="보충 · 다운증후군 원인" data-c="amber" data-supp="1">
+  <span class="supptag">보충 · 교재 이후 규명된 기제</span>
+  <h2>원인은 감수분열 중의 <span class="hl">비분리</span>로 규명되었습니다</h2>
+  <div class="body">
+    <div class="two">
+      <div class="stack">
+        <p>교재는 <strong>"정확한 원인은 아직 밝혀지지 않고 있다"</strong>고 쓰지만, 현재는 기제가 확인되어 있습니다. 감수분열에서 21번 염색체가 제대로 분리되지 않는 <em>비분리(nondisjunction)</em>가 원인입니다.</p>
+        <p>연령과 관련되는 이유도 설명됩니다. 여성은 <strong>태아기에 이미 평생 쓸 난자를 다 만들어 놓고 태어나므로</strong>, 나이가 들수록 난자도 함께 나이가 들고 분열 오류가 늘어납니다.</p>
+      </div>
+      <div class="stack">
+        <table>
+          <tr><th>유형</th><th style="text-align:right">비율</th></tr>
+          <tr class="mark"><td><strong>삼체형</strong> · 비분리</td><td class="n">약 95%</td></tr>
+          <tr><td>전좌형</td><td class="n" style="color:var(--faint)">약 3–4%</td></tr>
+          <tr><td>모자이크형</td><td class="n" style="color:var(--faint)">약 2%</td></tr>
+        </table>
+        <div class="card amber"><h4>함께 짚을 통계적 함정</h4>
+          <p><strong>개인의 확률</strong>은 고령에서 높지만, <strong>전체 다운증후군 아기의 다수는 오히려 35세 미만 산모에게서 태어납니다.</strong> 젊은 연령대의 출산 수 자체가 훨씬 많기 때문입니다.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>Bull, M. J. (2020). Down syndrome. <i>New England Journal of Medicine</i>, 382(24), 2344–2352. doi:10.1056/NEJMra1706537 — 비분리 기제 및 유형별 비율</span>
+    <span>Antonarakis, S. E., Skotko, B. G., Rafii, M. S., et al. (2020). Down syndrome. <i>Nature Reviews Disease Primers</i>, 6, 9. doi:10.1038/s41572-019-0143-7 — 삼체형 95% / 전좌형 3–4% / 모자이크형 2%</span>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함" data-c="coral">
+  <h2>성염색체 결함</h2>
+  <div class="sup2">교재는 성염색체 결함을 여성 염색체 결함과 남성 염색체 결함으로 나누어 살펴봅니다.</div>
+  <div class="two even" style="margin-top:22px;align-items:start">
+    <div>
+      <h3 style="color:var(--plum);margin-bottom:11px">여성 성염색체 결함</h3>
+      <div class="grid" style="gap:10px">
+        <div class="card plum"><h4>터너증후군 · XO</h4><p>X염색체가 1개만 있을 때 나타납니다.</p></div>
+        <div class="card plum"><h4>세 개의 X염색체 증후군 · XXX</h4><p>X염색체가 하나 더 있는 경우입니다.</p></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--teal);margin-bottom:11px">남성 성염색체 결함</h3>
+      <div class="grid" style="gap:10px">
+        <div class="card teal"><h4>클라인펠터증후군 · XXY</h4><p>X염색체가 하나 더 있는 XXY 배열입니다.</p></div>
+        <div class="card teal"><h4>XYY증후군</h4><p>Y염색체가 하나 더 있는 경우입니다.</p></div>
+        <div class="card teal"><h4>X결함증후군 · fragile-X</h4><p>X염색체가 구부러지거나 가늘어서 생기는 결함입니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함">
+  <div class="hd"><span class="chip">여성 성염색체 결함</span><span class="sub">교재 p. 52</span></div>
+  <h2>터너증후군 <span class="hl">XO</span></h2>
+  <div class="sup2">정상적인 여성의 성염색체가 XX인 데 반해, XO로서 1개의 X염색체만을 가질 때 나타나는 증상입니다.</div>
+  <div class="grid g4" style="margin-top:24px">
+    <div class="card"><h4 style="color:var(--mute)">신체</h4><p>대체로 몸집이 작고 손가락이 짧습니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">지능</h4><p>일반적으로 정상이며 언어능력도 정상이나, <strong>공간지각과제와 쓰기</strong>에 어려움을 보이는 경우가 있습니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">성격</h4><p>유순하고 밝으며 쉽게 흥분하지 않습니다. 그러나 <strong>사회성이 낮아 대인관계가 미숙하며 자기주장이 부족</strong>합니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">사춘기</h4><p>이차 성징이 정상적으로 나타나지 않아 어린아이의 모습을 유지하며, 임신이 불가능합니다.</p></div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함">
+  <div class="two even" style="align-items:start">
+    <div>
+      <h2 style="font-size:clamp(21px,2.5vw,33px)">세 개의 X염색체 증후군 <span class="hl">XXX</span></h2>
+      <p style="margin-top:15px">터너증후군보다 드문 경우이지만, X염색체가 하나 더 있는 <strong>세 개의 X염색체 증후군(triple X syndrome)</strong>도 있습니다. 이 증후군은 <strong>인지발달장애</strong>를 보입니다.</p>
+    </div>
+    <div>
+      <h2 style="font-size:clamp(21px,2.5vw,33px)">클라인펠터증후군 <span class="hl" style="color:var(--teal)">XXY</span></h2>
+      <p style="margin-top:15px">정상 남성의 <strong>XY</strong>에 X염색체가 하나 더 있는 <strong>XXY</strong> 배열입니다. 고환은 있으나 정자를 배출하지 못하므로 불임입니다.</p>
+      <p>X염색체가 하나 더 있으므로 <strong>유방이 발달하고 엉덩이가 둥근 여성적 특징</strong>이 있습니다. 이러한 외모로 인해 <strong>수줍고 자아존중감이 낮으며, 사춘기에 또래관계에 문제</strong>가 나타납니다.</p>
+      <div class="card teal" style="margin-top:14px"><h4>주목할 점</h4>
+        <p>신체적 특징이 곧바로 <strong>심리적·사회적 어려움</strong>으로 이어진다는 서술 — 발달심리학이 왜 염색체를 다루는지 보여주는 대목입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함" data-c="coral">
+  <div class="two">
+    <blockquote class="quote" style="border-color:var(--coral)">한때 XYY증후군은 난폭하고 충동적이며 범죄경향이 높은 것으로 알려졌으나, 근래에는 타당성이 없는 것으로 밝혀지고 있다.<cite>Schaivi et al., 1984 · 교재 p. 53</cite></blockquote>
+    <div class="card coral">
+      <h4>이 사례가 남기는 교훈</h4>
+      <p>1960년대에 <strong>교도소 수감자 표본</strong>에서 XYY 비율이 높게 관찰된 것이 발단이었습니다. 그러나 일반 인구를 포함한 후속 연구에서 인과관계는 성립하지 않는 것으로 밝혀졌습니다.</p>
+      <p style="margin-top:11px;font-weight:700;color:var(--coral)">편향된 표본이 어떻게 잘못된 결론과 낙인으로 이어지는가를 보여주는 대표 사례입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="4) 염색체 결함">
+  <div class="hd"><span class="chip">남성 성염색체 결함</span><span class="sub">Barnes, 1989 · 교재 p. 53</span></div>
+  <h2>X결함증후군 <span class="hl">fragile-X</span></h2>
+  <div class="sup2">X염색체가 구부러져 있거나 너무 가늘어서 나타나는 결함입니다. 여성에게도 나타날 수 있으나 흔히 남성에게서 발생하는데, 이는 어머니의 X염색체 결함이 아들에게 전달되는 경우가 많기 때문입니다.</div>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card"><h4 style="color:var(--mute)">지능</h4><p>정상인 경우도 있으나 대체로 <strong>정신지체의 확률이 높습니다.</strong></p></div>
+    <div class="card"><h4 style="color:var(--mute)">신체</h4><p>비정상적인 뇌파, 마비 등의 신체장애가 나타날 수 있습니다.</p></div>
+    <div class="card"><h4 style="color:var(--mute)">심리</h4><p>불안, 과잉활동, 주의결함, 비정상적 의사소통, 대인관계 결함이 수반되기도 합니다.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="보충 · 발생률" data-c="amber" data-supp="1">
+  <span class="supptag">보충 · 교재에 없는 수치</span>
+  <h2>성염색체 이상의 <span class="hl">실제 발생률</span></h2>
+  <div class="body">
+    <div class="two">
+      <table>
+        <tr><th>증후군</th><th>핵형</th><th style="text-align:right">발생률</th></tr>
+        <tr><td>클라인펠터</td><td>XXY</td><td class="n">남아 600명당 1명</td></tr>
+        <tr class="mark"><td>세 개의 X염색체</td><td>XXX</td><td class="n">여아 1,000명당 1명</td></tr>
+        <tr><td>XYY</td><td>XYY</td><td class="n">남아 1,000명당 1명</td></tr>
+        <tr class="mark"><td>터너</td><td>XO</td><td class="n">여아 2,000–2,500명당 1명</td></tr>
+        <tr><td>다운증후군</td><td>21삼체</td><td class="n">신생아 700명당 1명</td></tr>
+      </table>
+      <div class="card amber">
+        <h4>교재 서술과의 차이</h4>
+        <p>교재는 세 개의 X염색체 증후군을 <strong>"터너증후군보다 드문 경우"</strong>라고 서술합니다. 그러나 <strong>실제 발생률은 XXX가 터너보다 높습니다.</strong></p>
+        <p style="margin-top:11px">다만 XXX는 증상이 뚜렷하지 않아 <strong>평생 진단받는 비율이 약 10%</strong>에 그칩니다. 임상에서 관찰되는 사례 수로 보면 교재 서술이 맞습니다.</p>
+        <p style="margin-top:11px;font-weight:700;color:var(--amber)">발표에서는 교재대로 말하고, 질문이 나올 때만 설명하세요.</p>
+      </div>
+    </div>
+  </div>
+  <div class="src"><b>출처</b>
+    <span>Berglund, A., Stochholm, K., &amp; Gravholt, C. H. (2020). The epidemiology of sex chromosome abnormalities. <i>American Journal of Medical Genetics Part C: Seminars in Medical Genetics</i>, 184(2), 202–215. doi:10.1002/ajmg.c.31805</span>
+    <span>Tartaglia, N. R., Howell, S., Sutherland, A., Wilson, R., &amp; Wilson, L. (2010). A review of trisomy X (47,XXX). <i>Orphanet Journal of Rare Diseases</i>, 5, 8. doi:10.1186/1750-1172-5-8 — 발생률 1/1,000, 평생 진단율 약 10%</span>
+    <span>Bull, M. J. (2020). Down syndrome. <i>NEJM</i>, 382(24), 2344–2352. — 신생아 약 700명당 1명</span>
+  </div>
+</section>
+
+<section class="slide mid" data-sec="정리" data-steps="4">
+  <h2>정리</h2>
+  <div class="grid g4" style="margin-top:24px">
+    <div class="card plum" data-from="0"><h4>1) 수정과 세포분열</h4><p>유사분열은 <strong>몸을 만들고</strong>, 감수분열은 <strong>세대를 잇습니다.</strong></p></div>
+    <div class="card teal" data-from="1"><h4>2) 성의 결정</h4><p>23번째 한 쌍, 그중에서도 <strong>정자가 어떤 염색체를 가져오느냐</strong>가 성별을 결정합니다.</p></div>
+    <div class="card blue" data-from="2"><h4>3) 유전적 특성의 결정</h4><p>유전정보는 DNA의 질산염기에 저장되며, 대립유전자의 결합 형태에 따라 <strong>유전자형이 표현형으로</strong> 드러납니다.</p></div>
+    <div class="card coral" data-from="3"><h4>4) 염색체 결함</h4><p>이 과정에 오류가 생기면 염색체 결함이 나타나며, <strong>신생아의 약 1%</strong>가 여기 해당합니다.</p></div>
+  </div>
+  <div class="steps" style="justify-content:center"><i></i><i></i><i></i><i></i><span>→ 키로 진행</span></div>
+</section>
+
+<section class="slide mid" data-sec="정리" data-c="teal">
+  <div class="two">
+    <p style="font-size:clamp(16px,1.5vw,21px)">지능이나 성격 같은 심리적 특성은 유전자만으로 설명되지 않습니다.<br>그렇다면 유전과 환경은 어떻게 맞물리는 걸까요?</p>
+    <div>
+      <div style="font-size:13px;font-weight:800;color:var(--teal);margin-bottom:10px">다음 파트</div>
+      <h2 style="color:var(--teal)">2. 발달의 유전 및<br>경험적 기저</h2>
+      <button class="nextpart" type="button" data-p="2">다음 파트 시작</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="rail">
+  <span class="s" id="rSec">표지</span>
+  <div class="bar"><i id="rBar"></i></div>
+  <span class="parts"><span class="pl">파트</span><button type="button" data-p="1" class="cur" title="1. 발달의 생물학적 기저">1</button><button type="button" data-p="2" title="2. 발달의 유전 및 경험적 기저">2</button><button type="button" data-p="3" title="3. 태내발달">3</button></span>
+  <span class="ct"><b id="rNow">1</b> / <span id="rTot">34</span></span>
+  <button class="motionbtn" id="calmBtn" type="button">장식 효과 끄기</button>
+  <span class="hint">← → 이동 · P 정지 · F 전체화면</span>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const deck=$('#deck'), slides=$$('.slide');
+$('#rTot').textContent=slides.length;
+let idx=0, step=0, scene=null;
+
+slides.forEach(sl=>{
+  const f=document.createElement('div'); f.className='fit';
+  while(sl.firstChild) f.appendChild(sl.firstChild);
+  sl.appendChild(f);
+});
+function fitSlide(sl){
+  const f=sl.querySelector('.fit'); if(!f) return;
+  f.style.width='100%'; f.style.height='100%'; f.style.transform='none';
+  const need=f.scrollHeight, have=f.clientHeight;
+  if(need>have+2){
+    const k=Math.max(.5, have/need);
+    f.style.width=(100/k)+'%'; f.style.height=(100/k)+'%';
+    f.style.transform='scale('+k.toFixed(4)+')';
+  }
+}
+const PLUM='#7A2E8E', TEAL='#0D8E9E';
+
+function chromo(color,h,cen){
+  cen=(cen==null)?0.45:cen;
+  const w=Math.round(h*0.46), T=7, B=83, y=+(T+(B-T)*cen).toFixed(1);
+  const sa=+(T+(y-T)*0.45).toFixed(1), sb=+(y-(y-T)*0.12).toFixed(1);
+  const la=+(y+(B-y)*0.16).toFixed(1), lb=+(B-(B-y)*0.42).toFixed(1);
+  const L='M14 '+T+' C 5 '+sa+' 5 '+sb+' 15 '+y+' C 5 '+la+' 5 '+lb+' 14 '+B;
+  const R='M26 '+T+' C 35 '+sa+' 35 '+sb+' 25 '+y+' C 35 '+la+' 35 '+lb+' 26 '+B;
+  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 40 90">'+
+   '<g fill="none" stroke-linecap="round">'+
+   '<path d="'+L+'" stroke="'+color+'" stroke-width="10"/>'+
+   '<path d="'+R+'" stroke="'+color+'" stroke-width="10"/>'+
+   '<path d="'+L+'" stroke="rgba(0,0,0,.22)" stroke-width="10" stroke-dasharray="7 9"/>'+
+   '<path d="'+R+'" stroke="rgba(0,0,0,.22)" stroke-width="10" stroke-dasharray="9 7"/>'+
+   '</g></svg>';
+}
+function rod(color,h){
+  return '<svg width="'+Math.round(h*0.32)+'" height="'+h+'" viewBox="0 0 26 90">'+
+   '<path d="M13 7 C 4 22 4 34 13 45 C 4 56 4 68 13 83" fill="none" stroke="'+color+'" stroke-width="11" stroke-linecap="round"/>'+
+   '<path d="M13 7 C 4 22 4 34 13 45 C 4 56 4 68 13 83" fill="none" stroke="rgba(0,0,0,.2)" stroke-width="11" stroke-dasharray="7 9" stroke-linecap="round"/>'+
+   '</svg>';
+}
+function mk(layer,list){
+  layer.innerHTML=list.map(c=>'<div class="ch" style="left:'+c.x+'px;top:'+c.y+'px;opacity:'+(c.o==null?1:c.o)+'">'+c.svg+'</div>').join('');
+  return [...layer.children];
+}
+function put(el,x,y,o){el.style.left=x+'px';el.style.top=y+'px';if(o!=null)el.style.opacity=o}
+
+function loop(setFn,n,ms){
+  let p=0,t=null,paused=false;
+  const tick=()=>{p=(p+1)%n;setFn(p)};
+  const run=()=>{clearInterval(t);t=setInterval(tick,ms)};
+  setFn(0);run();
+  return {
+    paused:()=>paused,
+    stop(){clearInterval(t)},
+    toggle(){paused=!paused;paused?clearInterval(t):run();return paused},
+    stepFwd(){paused=true;clearInterval(t);tick()},
+    stepBack(){paused=true;clearInterval(t);p=(p-1+n)%n;setFn(p)}
+  };
+}
+function dyn(mem,cfg){
+  mem.querySelectorAll('.dyn').forEach(n=>n.remove());
+  cfg.forEach(c=>{const d=document.createElement('div');d.className='blob dyn';
+    d.style.cssText='width:'+c.w+'px;height:'+c.w+'px;left:'+(c.x-c.w/2)+'px;top:'+(c.y-c.w/2)+'px';
+    mem.appendChild(d)});
+}
+
+const MITC=[['1','<b>부모세포.</b> 편의상 2쌍의 염색체만 표시합니다. 염색체 수는 46개.'],
+ ['2','<b>염색체 복제.</b> 각 염색체가 자기 짝과 똑같은 염색체를 만듭니다.'],
+ ['3','<b>정렬.</b> 복제된 염색체가 세포 중앙 적도면에 늘어섭니다.'],
+ ['4','<b>분리.</b> 세포가 늘어나며 염색체가 양쪽 끝으로 끌려갑니다.'],
+ ['5','<b>완료.</b> 부모세포와 완전히 동일한 자세포 2개. 염색체는 그대로 46개.']];
+
+function mitScene(){
+  const st=$('#mitStage'),blob=$('#mitBlob'),lay=$('#mitCh'),eq=$('#mitEq'),mem=st.querySelector('.membrane');
+  const W=st.clientWidth,cy=st.clientHeight*0.36,H=68;
+  const c=mk(lay,[{x:0,y:0,svg:chromo(PLUM,H)},{x:0,y:0,svg:chromo(TEAL,H)},
+                  {x:0,y:0,svg:chromo(PLUM,H),o:0},{x:0,y:0,svg:chromo(TEAL,H),o:0}]);
+  const cx=W/2;
+  function set(i){
+    $('#mitK').textContent=MITC[i][0]; $('#mitCap').innerHTML=MITC[i][1];
+    eq.style.opacity=(i===2)?1:0;
+    if(i===0){ st.classList.add('noanim'); dyn(mem,[]);
+      blob.style.cssText='width:200px;height:200px;left:'+(cx-100)+'px;top:'+(cy-70)+'px;opacity:1';
+      put(c[0],cx-58,cy-24,1);put(c[1],cx+16,cy-24,1);put(c[2],cx-58,cy-24,0);put(c[3],cx+16,cy-24,0);
+      setTimeout(()=>st.classList.remove('noanim'),40); }
+    if(i===1){ blob.style.width='240px';blob.style.height='240px';blob.style.left=(cx-120)+'px';blob.style.top=(cy-90)+'px';
+      put(c[0],cx-88,cy-24,1);put(c[1],cx-16,cy-24,1);put(c[2],cx+18,cy-24,1);put(c[3],cx+56,cy-24,1); }
+    if(i===2){ put(c[0],cx-76,cy-24,1);put(c[1],cx-28,cy-24,1);put(c[2],cx+12,cy-24,1);put(c[3],cx+52,cy-24,1); }
+    if(i===3){ blob.style.opacity='0'; dyn(mem,[{x:cx-80,y:cy+28,w:210},{x:cx+80,y:cy+28,w:210}]);
+      put(c[0],cx-136,cy-24,1);put(c[1],cx-92,cy-24,1);put(c[2],cx+52,cy-24,1);put(c[3],cx+96,cy-24,1); }
+    if(i===4){ dyn(mem,[{x:cx-135,y:cy+28,w:190},{x:cx+135,y:cy+28,w:190}]);
+      put(c[0],cx-186,cy-24,1);put(c[1],cx-142,cy-24,1);put(c[2],cx+102,cy-24,1);put(c[3],cx+146,cy-24,1); }
+  }
+  return loop(set,5,2200);
+}
+
+const MEIC=[['1','<b>부모세포.</b> 23쌍, 46개의 염색체.'],
+ ['2','<b>복제 후 정렬.</b> 여기까지는 유사분열과 똑같습니다.'],
+ ['3','<b>1차 분열.</b> 상동염색체가 갈라져 세포 2개가 됩니다.'],
+ ['4','<b>2차 분열.</b> 여기서 끝나지 않고 한 번 더 나뉩니다.'],
+ ['5','<b>완료.</b> 자세포 4개, 각각 염색체 수는 절반인 23개.']];
+
+function meiScene(){
+  const st=$('#meiStage'),blob=$('#meiBlob'),lay=$('#meiCh'),mem=st.querySelector('.membrane');
+  const W=st.clientWidth,cx=W/2;
+  const c=mk(lay,[{x:0,y:0,svg:chromo(PLUM,58)},{x:0,y:0,svg:chromo(TEAL,58)},
+   {x:0,y:0,svg:chromo(PLUM,58),o:0},{x:0,y:0,svg:chromo(TEAL,58),o:0},
+   {x:0,y:0,svg:rod(PLUM,52),o:0},{x:0,y:0,svg:rod(TEAL,52),o:0},
+   {x:0,y:0,svg:rod(PLUM,52),o:0},{x:0,y:0,svg:rod(TEAL,52),o:0}]);
+  function set(i){
+    $('#meiK').textContent=MEIC[i][0];$('#meiCap').innerHTML=MEIC[i][1];
+    const n=$('#meiN');n.textContent=(i>=4)?'23':'46';n.classList.toggle('half',i>=4);
+    if(i===0){ st.classList.add('noanim'); dyn(mem,[]);
+      blob.style.cssText='width:170px;height:170px;left:'+(cx-85)+'px;top:26px;opacity:1';
+      put(c[0],cx-50,84,1);put(c[1],cx+14,84,1);
+      for(let k=2;k<8;k++) put(c[k],cx-20,84,0);
+      setTimeout(()=>st.classList.remove('noanim'),40); }
+    if(i===1){ blob.style.width='205px';blob.style.height='205px';blob.style.left=(cx-102)+'px';blob.style.top='16px';
+      put(c[0],cx-76,84,1);put(c[1],cx-30,84,1);put(c[2],cx+8,84,1);put(c[3],cx+50,84,1); }
+    if(i===2){ blob.style.opacity='0'; dyn(mem,[{x:cx-105,y:132,w:158},{x:cx+105,y:132,w:158}]);
+      put(c[0],cx-134,106,1);put(c[2],cx-90,106,1);put(c[1],cx+62,106,1);put(c[3],cx+108,106,1); }
+    if(i===3){ dyn(mem,[{x:cx-165,y:168,w:132},{x:cx-58,y:168,w:132},{x:cx+58,y:168,w:132},{x:cx+165,y:168,w:132}]);
+      put(c[0],cx-180,142,1);put(c[2],cx-74,142,1);put(c[1],cx+42,142,1);put(c[3],cx+148,142,1);
+      for(let k=4;k<8;k++) put(c[k],cx-20,142,0); }
+    if(i===4){ dyn(mem,[{x:cx-168,y:176,w:112},{x:cx-56,y:176,w:112},{x:cx+56,y:176,w:112},{x:cx+168,y:176,w:112}]);
+      for(let k=0;k<4;k++) put(c[k],cx-20,150,0);
+      [[4,cx-176],[5,cx-64],[6,cx+48],[7,cx+160]].forEach(([k,X])=>put(c[k],X,152,1)); }
+  }
+  return loop(set,5,2200);
+}
+
+function vsScene(){
+  const A=$('.vs .col.a'),B=$('.vs .col.b');
+  const aB=$('#vaBlob'),bB=$('#vbBlob');
+  const aM=A.querySelector('.membrane'),bM=B.querySelector('.membrane');
+  const ax=A.clientWidth/2,bx=B.clientWidth/2;
+  const a=mk($('#vaCh'),[{x:0,y:0,svg:chromo(PLUM,46)},{x:0,y:0,svg:chromo(TEAL,46)},
+    {x:0,y:0,svg:chromo(PLUM,46),o:0},{x:0,y:0,svg:chromo(TEAL,46),o:0}]);
+  const b=mk($('#vbCh'),[{x:0,y:0,svg:chromo(PLUM,46)},{x:0,y:0,svg:chromo(TEAL,46)},
+    {x:0,y:0,svg:chromo(PLUM,46),o:0},{x:0,y:0,svg:chromo(TEAL,46),o:0},
+    {x:0,y:0,svg:rod(PLUM,40),o:0},{x:0,y:0,svg:rod(TEAL,40),o:0},
+    {x:0,y:0,svg:rod(PLUM,40),o:0},{x:0,y:0,svg:rod(TEAL,40),o:0}]);
+  function set(i){
+    if(i===0){ A.classList.add('noanim');B.classList.add('noanim');
+      dyn(aM,[]);dyn(bM,[]);
+      aB.style.cssText='width:130px;height:130px;left:'+(ax-65)+'px;top:62px;opacity:1';
+      bB.style.cssText='width:130px;height:130px;left:'+(bx-65)+'px;top:52px;opacity:1';
+      put(a[0],ax-36,84,1);put(a[1],ax+8,84,1);put(a[2],ax-36,84,0);put(a[3],ax+8,84,0);
+      put(b[0],bx-36,74,1);put(b[1],bx+8,74,1);
+      for(let k=2;k<8;k++) put(b[k],bx-16,74,0);
+      $('#vaC').textContent='1';$('#vbC').textContent='1';$('#vbN').textContent='46';
+      setTimeout(()=>{A.classList.remove('noanim');B.classList.remove('noanim')},40); }
+    if(i===1){
+      aB.style.width='160px';aB.style.height='160px';aB.style.left=(ax-80)+'px';aB.style.top='50px';
+      bB.style.width='160px';bB.style.height='160px';bB.style.left=(bx-80)+'px';bB.style.top='40px';
+      put(a[0],ax-58,84,1);put(a[1],ax-24,84,1);put(a[2],ax+8,84,1);put(a[3],ax+40,84,1);
+      put(b[0],bx-58,74,1);put(b[1],bx-24,74,1);put(b[2],bx+8,74,1);put(b[3],bx+40,74,1); }
+    if(i===2){
+      aB.style.opacity='0'; dyn(aM,[{x:ax-72,y:118,w:128},{x:ax+72,y:118,w:128}]);
+      put(a[0],ax-96,94,1);put(a[2],ax-64,94,1);put(a[1],ax+44,94,1);put(a[3],ax+76,94,1);
+      $('#vaC').textContent='2';
+      bB.style.opacity='0'; dyn(bM,[{x:bx-68,y:104,w:114},{x:bx+68,y:104,w:114}]);
+      put(b[0],bx-88,84,1);put(b[2],bx-58,84,1);put(b[1],bx+40,84,1);put(b[3],bx+70,84,1);
+      $('#vbC').textContent='2';$('#vbN').textContent='46'; }
+    if(i===3){
+      dyn(bM,[{x:bx-102,y:158,w:82},{x:bx-34,y:158,w:82},{x:bx+34,y:158,w:82},{x:bx+102,y:158,w:82}]);
+      for(let k=0;k<4;k++) put(b[k],bx-16,120,0);
+      [[4,bx-110],[5,bx-42],[6,bx+26],[7,bx+94]].forEach(([k,X])=>put(b[k],X,140,1));
+      $('#vbC').textContent='4';$('#vbN').textContent='23'; }
+  }
+  return loop(set,4,2300);
+}
+
+function countUp(el,to,ms){const t0=performance.now();
+  (function f(t){const k=Math.min(1,(t-t0)/ms);
+    el.textContent=Math.round(to*(1-Math.pow(1-k,3)));
+    if(k<1)requestAnimationFrame(f)})(t0)}
+
+const KARYO=[
+ {g:'A',note:'가장 큼 · 가운데',ids:[
+   {n:1,len:1.00,cen:.48},{n:2,len:.97,cen:.39},{n:3,len:.80,cen:.46}]},
+ {g:'B',note:'큼 · 치우침',ids:[
+   {n:4,len:.77,cen:.27},{n:5,len:.73,cen:.27}]},
+ {g:'C',note:'중간 · 치우침',ids:[
+   {n:6,len:.70,cen:.37},{n:7,len:.65,cen:.39},{n:8,len:.60,cen:.34},{n:9,len:.58,cen:.35},
+   {n:10,len:.56,cen:.33},{n:11,len:.56,cen:.40},{n:12,len:.55,cen:.27}]},
+ {g:'D',note:'중간 · 끝쪽',ids:[
+   {n:13,len:.47,cen:.15},{n:14,len:.44,cen:.15},{n:15,len:.42,cen:.16}]},
+ {g:'E',note:'작음 · 치우침',ids:[
+   {n:16,len:.38,cen:.45},{n:17,len:.35,cen:.31},{n:18,len:.33,cen:.26}]},
+ {g:'F',note:'작음 · 가운데',ids:[
+   {n:19,len:.28,cen:.47},{n:20,len:.27,cen:.44}]},
+ {g:'G',note:'가장 작음 · 끝쪽',ids:[
+   {n:21,len:.21,cen:.16},{n:22,len:.22,cen:.16}]}
+];
+const SEXG={g:'성염색체',note:'X는 C · Y는 G 크기',ids:[
+  {n:'X',len:.56,cen:.38},{n:'Y',len:.22,cen:.20}]};
+
+function buildKaryo(el,opt){
+  opt=opt||{};
+  const S=opt.scale||58;
+  const flag=opt.flag, triple=opt.triple, sex=opt.sex||'XY';
+  let out='';
+  KARYO.forEach(G=>{
+    let prs='';
+    G.ids.forEach(c=>{
+      const isF=(c.n===flag), col=isF?'#E2503F':PLUM, H=Math.max(13,Math.round(c.len*S));
+      let pr=chromo(col,H,c.cen)+chromo(col,H,c.cen);
+      if(isF&&triple) pr+='<span class="extra">'+chromo('#E2503F',H,c.cen)+'</span>';
+      prs+='<div class="kg'+(isF?' flag':'')+'"><div class="pr">'+pr+'</div><div class="no">'+c.n+'</div></div>';
+    });
+    out+='<div class="kgroup"><div class="prs">'+prs+'</div><div class="brk"></div>'+
+         '<div class="gl">'+G.g+'</div>'+(opt.notes?'<div class="gs">'+G.note+'</div>':'')+'</div>';
+  });
+  if(opt.sexGroup!==false){
+    const a=SEXG.ids[0], b=(sex==='XX')?{n:'X',len:.56,cen:.38}:SEXG.ids[1];
+    const HA=Math.round(a.len*S), HB=Math.round(b.len*S);
+    out+='<div class="kgroup sex"><div class="prs">'+
+      '<div class="kg"><div class="pr">'+chromo(TEAL,HA,a.cen)+chromo(TEAL,HB,b.cen)+
+      '</div><div class="no">'+sex+'</div></div></div><div class="brk"></div>'+
+      '<div class="gl">성</div>'+(opt.notes?'<div class="gs">'+SEXG.note+'</div>':'')+'</div>';
+  }
+  el.innerHTML=out;
+}
+function playKaryo(el){[...el.querySelectorAll('.kg')].forEach((k,i)=>{k.classList.remove('in');
+  void k.offsetWidth;k.style.animationDelay=(i*0.028)+'s';k.classList.add('in')})}
+
+buildKaryo($('#karyo1'),{scale:Math.max(40,Math.min(70,Math.round(innerHeight*0.076)))});
+buildKaryo($('#karyoG'),{scale:Math.max(46,Math.min(78,Math.round(innerHeight*0.088))),notes:true});
+buildKaryo($('#karyo2'),{scale:Math.max(40,Math.min(70,Math.round(innerHeight*0.076))),flag:21,triple:true});
+$$('.sg').forEach(e=>{e.innerHTML=chromo(PLUM,46,parseFloat(e.dataset.cen))});
+
+const SEQ=[['C','G'],['T','A'],['G','C'],['A','T'],['C','G'],['T','A'],['A','T'],['G','C'],['C','G'],['T','A'],['G','C'],['A','T'],['C','G'],['T','A'],['A','T']];
+const BC={A:'#E2503F',T:'#0D8E9E',C:'#7A2E8E',G:'#2C6FBF'};
+$('#helix').innerHTML=SEQ.map((p,i)=>
+ '<div class="rung" data-l="'+p[0]+'" data-r="'+p[1]+'" style="--i:'+i+';--cl:'+BC[p[0]]+';--cr:'+BC[p[1]]+'">'+
+ '<div class="bar"></div><div class="b l" style="background:'+BC[p[0]]+'">'+p[0]+'</div>'+
+ '<div class="b r" style="background:'+BC[p[1]]+'">'+p[1]+'</div></div>').join('');
+const BT={A:'A(아데닌)는 반드시 T(티민)와 짝을 이룹니다.',T:'T(티민)는 반드시 A(아데닌)와 짝을 이룹니다.',
+ C:'C(시토신)는 반드시 G(구아닌)와 짝을 이룹니다.',G:'G(구아닌)는 반드시 C(시토신)와 짝을 이룹니다.'};
+$$('[data-b]').forEach(btn=>btn.addEventListener('click',()=>{
+  $$('[data-b]').forEach(x=>x.classList.remove('sel'));btn.classList.add('sel');
+  const v=btn.dataset.b,rs=$$('.rung');
+  if(!v){rs.forEach(r=>r.classList.remove('dim','hi'));
+    $('#baseMsg').textContent='짝이 정해져 있기 때문에, 세포가 분열할 때 유전정보를 오류 없이 복사할 수 있습니다.';return}
+  rs.forEach(r=>{const hit=r.dataset.l===v||r.dataset.r===v;
+    r.classList.toggle('hi',hit);r.classList.toggle('dim',!hit)});
+  $('#baseMsg').textContent=BT[v];
+}));
+
+$$('[data-sp]').forEach(b=>b.addEventListener('click',()=>{
+  $$('[data-sp]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');
+  const v=b.dataset.sp,sp=$('#sperm');
+  sp.classList.remove('go');$('#spLabel').textContent=v;
+  $('#spHead').setAttribute('fill',v==='X'?TEAL:PLUM);
+  void sp.offsetWidth;sp.classList.add('go');
+  setTimeout(()=>{const g=v==='X';
+    $('#spres').innerHTML='<div><div class="r">X + '+v+' = <span style="color:'+(g?TEAL:PLUM)+'">'+(g?'XX':'XY')+'</span></div>'+
+      '<div class="d">'+(g?'여아가 됩니다':'남아가 됩니다')+'</div></div>'},1500);
+}));
+
+const EYE={
+ BB:['#7B4A22','갈색','우성 대립유전자 B만 있으므로 표현형이 명백하게 갈색입니다.','동질접합 · 우성',0],
+ Bb:['#7B4A22','갈색','열성 b를 갖고 있지만, 우성 B에 가려져 겉으로 드러나지 않습니다.','이질접합 · 보인자',0],
+ bb:['#2A1B12','검은색','열성 b만 있어 가려줄 우성이 없습니다. 이때 비로소 열성이 표현형으로 드러납니다.','동질접합 · 열성',1]};
+$$('[data-eye]').forEach(b=>b.addEventListener('click',()=>{
+  $$('[data-eye]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');
+  const g=b.dataset.eye,e=EYE[g];
+  $('#eyeball').style.background=e[0];
+  $('#eyeGeno').textContent='유전자형 '+g;
+  $('#eyePheno').textContent='표현형 · '+e[1]+' 눈';$('#eyePheno').style.color='#12203A';
+  $('#eyeWhy').textContent=e[2];
+  $('#eyeTag').innerHTML='<span class="domtag'+(e[4]?' rec':'')+'">'+e[3]+'</span>';
+}));
+
+const SCENES={mit:mitScene,mei:meiScene,vs:vsScene,
+ k1:()=>{playKaryo($('#karyo1'));return null},
+ kG:()=>{playKaryo($('#karyoG'));return null},
+ k2:()=>{playKaryo($('#karyo2'));return null},
+ age:()=>{const t=$('#ageTrace');t.classList.remove('on');void t.offsetWidth;t.classList.add('on');
+   $$('#agePts .pt').forEach((p,i)=>{p.classList.remove('on');p.style.animationDelay=(0.7+i*0.22)+'s';
+     void p.offsetWidth;p.classList.add('on')});return null},
+ dna:()=>null,
+ flow:()=>{const f=$('#flow'),c=f.cloneNode(true);f.replaceWith(c);return null},
+ boom:()=>null};
+
+function maxStep(s){return parseInt(s.dataset.steps||'1',10)-1}
+function paint(s){
+  s.querySelectorAll('[data-from]').forEach(el=>el.classList.toggle('on',step>=+el.dataset.from));
+  const bar=s.querySelector('.steps');
+  if(bar)[...bar.querySelectorAll('i')].forEach((b,i)=>b.classList.toggle('on',i<=step));
+  if(s.dataset.scene==='boom'){
+    if(step>=1){['b2','b3','b4'].forEach((id,i)=>{const v=$('#'+id+' .v');
+      setTimeout(()=>countUp(v,+v.dataset.to,700),i*280);$('#'+id).classList.add('hot')})}
+    else{['b2','b3','b4'].forEach(id=>{$('#'+id+' .v').textContent='0';$('#'+id).classList.remove('hot')})}
+  }
+}
+function show(n,end){
+  if(scene&&scene.stop){scene.stop()} scene=null;
+  idx=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach(s=>s.classList.remove('live'));
+  const s=slides[idx];s.classList.add('live');
+  step=end?maxStep(s):0;paint(s);
+  $('#rSec').textContent=s.dataset.sec||'';
+  $('#rNow').textContent=idx+1;
+  $('#rBar').style.width=((idx+1)/slides.length*100)+'%';
+  document.body.dataset.m=s.dataset.supp?'supp':'main';
+  fitSlide(s);
+  const sc=s.dataset.scene;
+  requestAnimationFrame(()=>{
+    fitSlide(s);
+    if(sc&&SCENES[sc]){scene=SCENES[sc]();syncPause()}
+  });
+}
+function syncPause(){
+  $$('.pausebtn').forEach(b=>{
+    const on=!!(scene&&scene.paused&&scene.paused());
+    b.classList.toggle('on',on);
+    b.querySelector('.tx').textContent=on?'재생':'일시정지';
+  });
+}
+function togglePause(){ if(scene&&scene.toggle){scene.toggle();syncPause()} }
+
+const PART=1;
+const PART_FILES=['part1.html','part2.html','part3.html'];
+function goPart(n,atEnd){
+  if(n<1||n>3||n===PART) return;
+  location.href = PART_FILES[n-1] + (atEnd?'#end':'');
+}
+$$('.parts button').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation(); goPart(+b.dataset.p);
+}));
+document.addEventListener('click',e=>{
+  const np=e.target.closest('.nextpart');
+  if(np){e.stopPropagation(); goPart(+np.dataset.p);}
+},true);
+
+function next(){const s=slides[idx];if(step<maxStep(s)){step++;paint(s);return}
+  if(idx>=slides.length-1){goPart(PART+1);return} show(idx+1)}
+function prev(){const s=slides[idx];if(step>0){step--;paint(s);return}
+  if(idx<=0){goPart(PART-1,true);return} show(idx-1,true)}
+addEventListener('keydown',e=>{
+  if(e.key==='p'||e.key==='P'){e.preventDefault();togglePause();return}
+  const held=scene&&scene.paused&&scene.paused();
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();
+    if(held){scene.stepFwd();return} next()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();
+    if(held){scene.stepBack();return} prev()}
+  else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+deck.addEventListener('click',e=>{
+  if(e.target.closest('.pausebtn')){togglePause();return}
+  if(!e.target.closest('button'))next()});
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>show(+b.dataset.go)));
+
+const calmBtn=$('#calmBtn');
+function setCalm(on){
+  document.body.classList.toggle('calm',on);
+  calmBtn.textContent = on ? '장식 효과 켜기' : '장식 효과 끄기';
+  calmBtn.setAttribute('aria-pressed', on?'true':'false');
+}
+try{ setCalm(matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ setCalm(false); }
+calmBtn.addEventListener('click',e=>{e.stopPropagation();setCalm(!document.body.classList.contains('calm'))});
+
+$('#float').innerHTML=[[10,12,PLUM,120,-12],[54,40,TEAL,92,18],[24,64,PLUM,76,26],[64,78,'#2C6FBF',62,-8],[40,6,'#E2503F',58,10]]
+ .map(([l,t,c,h,r],i)=>'<div class="f" style="left:'+l+'%;top:'+t+'%;--r:'+r+'deg;animation-delay:'+(i*.7)+'s;opacity:'+(0.2+i*0.05)+'">'+chromo(c,h)+'</div>').join('');
+
+let rt;addEventListener('resize',()=>{
+  fitSlide(slides[idx]);
+  clearTimeout(rt);rt=setTimeout(()=>{show(idx)},250)});
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitSlide(slides[idx]));
+const atEnd=(location.hash==='#end');
+show(atEnd?slides.length-1:0, atEnd);
+})();
+</script>
+</body>
+</html>
