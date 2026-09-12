@@ -357,6 +357,41 @@ body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
 .corrrow.sub .lb{padding-left:16px;font-size:13px}
 .corrrow.gapover{margin-top:12px}
 
+/* --- 표 2-1 : 패턴 주석 오버레이 --- */
+.corrwrap{position:relative;max-width:900px;margin:0 auto;width:100%;padding-top:28px}
+.corrrow{transition:opacity .45s,filter .45s}
+.corrrow.dim{opacity:.16;filter:saturate(.15)}
+.corrann{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.ag{opacity:0;transition:opacity .4s}
+.ag.on{opacity:1}
+.ag .trail{fill:none;stroke:var(--plum);stroke-width:2.6;stroke-dasharray:8 7;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dashoffset:var(--dl,0);transition:stroke-dashoffset 1.1s cubic-bezier(.35,.6,.3,1)}
+.ag.on .trail{stroke-dashoffset:0}
+.ag .dot{fill:#fff;stroke:var(--plum);stroke-width:2.6}
+.ag .gapr{fill:rgba(13,142,158,.15);stroke:var(--teal);stroke-width:1.6;stroke-dasharray:5 4;
+  transform:scaleX(0);transform-box:fill-box;transform-origin:left center;
+  transition:transform .8s cubic-bezier(.35,.6,.3,1)}
+.ag.on .gapr{transform:none}
+.ag .tlab{font:800 13.5px Pretendard,sans-serif;fill:var(--plum)}
+.ag .glab{font:800 15px Pretendard,sans-serif;fill:var(--teal);font-variant-numeric:tabular-nums}
+.ag .tlab,.ag .glab{opacity:0;transition:opacity .4s .5s}
+.ag.on .tlab,.ag.on .glab{opacity:1}
+body.calm .ag .trail,body.calm .ag .gapr{transition:none}
+
+.cnote{display:grid;width:100%;max-width:900px;margin:18px auto 0}
+.cnote .nb{grid-area:1/1;opacity:0;transform:translateY(9px);transition:opacity .4s,transform .4s;
+  background:var(--blue-l);border-radius:13px;padding:14px 20px;
+  font-size:clamp(13.5px,1.15vw,16.5px);line-height:1.65;color:var(--mute)}
+.cnote .nb.on{opacity:1;transform:none}
+.cnote .nb b{color:var(--ink);font-weight:700}
+.cnote .nb .tag{font-size:12.5px;font-weight:800;color:var(--blue);margin-right:11px;white-space:nowrap}
+.cnote .nb .num{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cnote .nb.t2{background:var(--teal-l)}
+.cnote .nb.t2 .tag{color:var(--teal)}
+.cnote .nb.t3{background:var(--plum-l)}
+.cnote .nb.t3 .tag{color:var(--plum)}
+
 .canalwrap{position:absolute;left:0;right:0;top:0;bottom:56px}
 .ballg{transition:none}
 .dpt{opacity:0;transition:opacity .4s}
@@ -741,27 +776,28 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   </div>
 </section>
 
-<section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="corr">
+<section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="corr" data-steps="4">
   <div class="hd"><span class="chip">표 2-1</span><span class="sub">Bouchard &amp; McGue, 1981 · 교재 p. 57</span></div>
   <h2>혈연 간 지능의 <span class="hl">상관계수</span></h2>
   <div class="body">
-    <div id="corrBox" style="max-width:900px;margin:0 auto;width:100%"></div>
+    <div class="corrwrap" id="corrWrap">
+      <div id="corrBox"></div>
+      <svg class="corrann" id="corrAnn" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </div>
+    <div class="cnote">
+      <div class="nb t1" id="nb1"><span class="tag">패턴 ① 세로로 내려가며</span>
+        <span class="num">일란성 .86 → 이란성 .60 → 형제 .47 → 사촌 .15</span> —
+        <b>유전을 많이 공유할수록 지능이 비슷합니다.</b> 게다가 일란성은 따로 키워도 .79로 여전히 높습니다.</div>
+      <div class="nb t2" id="nb2"><span class="tag">패턴 ② 같은 관계끼리 짝지어</span>
+        <span class="num">일란성 함께 .86 / 분리 .79</span>,
+        <span class="num">형제 함께 .47 / 분리 .24</span> —
+        <b>유전자가 같아도 따로 자라면 상관이 떨어집니다.</b> 벌어진 폭이 곧 환경의 몫입니다.</div>
+      <div class="nb t3" id="nb3"><span class="tag">그래서</span>
+        한 표 안에 <b>유전의 증거와 환경의 증거가 동시에</b> 들어 있는 셈입니다.
+        유전이냐 환경이냐가 아니라, <b>둘이 함께 작동한다</b>는 것을 같은 표가 보여 줍니다.</div>
+    </div>
   </div>
-</section>
-
-<section class="slide mid" data-sec="2) 지능연구" data-c="blue" data-steps="2">
-  <h2>표에서 읽어야 할 <span class="hl">두 가지</span></h2>
-  <div class="grid g2" style="margin-top:24px">
-    <div class="card blue" data-from="0"><h4>패턴 ① 세로로 내려가며</h4>
-      <p style="font-size:17px;font-weight:700;color:var(--ink)">일란성 .86 → 이란성 .60 → 형제 .47 → 사촌 .15</p>
-      <p style="margin-top:10px"><strong>유전을 많이 공유할수록 지능이 비슷합니다.</strong> 게다가 일란성을 따로 키워도 .79로 여전히 높습니다.</p></div>
-    <div class="card teal" data-from="1"><h4>패턴 ② 같은 관계끼리 짝지어</h4>
-      <p style="font-size:17px;font-weight:700;color:var(--ink)">일란성 함께 .86 / 분리 .79<br>형제 함께 .47 / 분리 .24</p>
-      <p style="margin-top:10px"><strong>유전자가 같아도 따로 자라면 상관이 떨어집니다.</strong> 이것이 환경의 몫입니다.</p></div>
-  </div>
-  <p style="margin-top:22px;font-size:clamp(16px,1.7vw,22px);font-weight:700;color:var(--ink);max-width:none">
-    한 표 안에 <em>유전의 증거와 환경의 증거가 동시에</em> 들어 있는 셈입니다.</p>
-  <div class="steps" style="justify-content:center"><i></i><i></i><span>→ 키로 진행</span></div>
+  <div class="steps"><i></i><i></i><i></i><i></i><span>→ 키로 진행</span></div>
 </section>
 
 <section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="sw">
@@ -1198,11 +1234,51 @@ $('#corrBox').innerHTML=CORR.map((r,i)=>
  '<div class="lb">'+(r.l||'')+(r.l&&r.s?'<br>':'')+(r.s||'')+'</div>'+
  '<div class="tk"><div class="bv" data-v="'+r.v+'" style="background:'+r.c+'"></div></div>'+
  '<div class="vl">'+r.v.toFixed(2).replace('0.','.')+'</div></div>').join('');
+const CP1=[0,2,3,7], CP2=[0,1,3,4], CPAIR=[[0,1],[3,4]];
+function corrDraw(){
+  const wrap=$('#corrWrap'), svg=$('#corrAnn');
+  if(!wrap||!svg||!wrap.offsetWidth) return;
+  const R=$$('#corrBox .corrrow').map(r=>{const tk=r.querySelector('.tk');
+    return {cy:r.offsetTop+r.offsetHeight/2, x0:tk.offsetLeft, w:tk.offsetWidth,
+            v:+r.querySelector('.bv').dataset.v};});
+  if(R.length<8) return;
+  svg.setAttribute('viewBox','0 0 '+wrap.offsetWidth+' '+wrap.offsetHeight);
+  const px=i=>R[i].x0+R[i].w*R[i].v, f=n=>n.toFixed(1);
+  const pts=CP1.map(i=>[px(i),R[i].cy]);
+  let L=0; for(let i=1;i<pts.length;i++)L+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);
+  let h='<g class="ag" id="agTrail">';
+  h+='<path class="trail" style="--dl:'+f(L)+'" stroke-dasharray="'+f(L)+'" d="M'+
+      pts.map(p=>f(p[0])+' '+f(p[1])).join(' L')+'"/>';
+  h+=pts.map(p=>'<circle class="dot" cx="'+f(p[0])+'" cy="'+f(p[1])+'" r="5.5"/>').join('');
+  h+='<text class="tlab" x="'+f(pts[1][0]+18)+'" y="'+f(pts[1][1]+5)+'">유전 공유 ↓ → 상관 ↓</text>';
+  h+='</g><g class="ag" id="agGap">';
+  CPAIR.forEach(([a,b])=>{
+    const xa=px(b), wd=px(a)-xa, y1=R[a].cy-16, y2=R[b].cy+16;
+    h+='<rect class="gapr" x="'+f(xa)+'" y="'+f(y1)+'" width="'+f(wd)+'" height="'+f(y2-y1)+
+       '" rx="5" vector-effect="non-scaling-stroke"/>';
+    const d='−'+(R[a].v-R[b].v).toFixed(2).replace('0.','.');
+    h+= wd>=74
+      ? '<text class="glab" x="'+f(xa+wd/2)+'" y="'+f((y1+y2)/2+6)+'" text-anchor="middle">'+d+'</text>'
+      : '<text class="glab" x="'+f(xa+wd/2)+'" y="'+f(y1-9)+'" text-anchor="middle">'+d+'</text>';
+  });
+  h+='</g>';
+  svg.innerHTML=h; void svg.getBoundingClientRect();
+}
+function corrStep(st){
+  if(!$('#agTrail')) corrDraw();
+  if(!$('#agTrail')) return;
+  const keep = st===1?CP1 : st===2?CP2 : null;
+  $$('#corrBox .corrrow').forEach((r,i)=>r.classList.toggle('dim', !!keep && keep.indexOf(i)<0));
+  $('#agTrail').classList.toggle('on', st===1||st===3);
+  $('#agGap').classList.toggle('on', st===2||st===3);
+  ['#nb1','#nb2','#nb3'].forEach((id,k)=>$(id).classList.toggle('on', st===k+1));
+}
 function corrScene(){
   $$('#corrBox .bv').forEach((b,i)=>{b.style.transition='none';b.style.width='0';
     void b.getBoundingClientRect();
     b.style.transition='width .95s cubic-bezier(.35,.6,.3,1) '+(i*0.11)+'s';
     b.style.width=(b.dataset.v*100)+'%';});
+  corrDraw(); corrStep(step);
   return null;
 }
 function barsIn(list){
@@ -1268,6 +1344,8 @@ function fitSlide(sl){
 function maxStep(s){return parseInt(s.dataset.steps||'1',10)-1}
 function paint(s){
   s.querySelectorAll('[data-from]').forEach(el=>el.classList.toggle('on',step>=+el.dataset.from));
+  s.dataset.st=step;
+  if(s.dataset.scene==='corr') corrStep(step);
   const bar=s.querySelector('.steps');
   if(bar)[...bar.querySelectorAll('i')].forEach((b,i)=>b.classList.toggle('on',i<=step));
 }
