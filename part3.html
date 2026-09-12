@@ -349,7 +349,7 @@ body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
 .sens .wks{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
 .sens .wks span{text-align:center;font-size:10.5px;font-weight:700;color:var(--faint)}
 .sens .phase{display:grid;grid-template-columns:104px 1fr;gap:10px;margin-bottom:10px}
-.sens .ph{display:grid;grid-template-columns:2fr 6fr 4fr;gap:2px}
+.sens .ph{display:grid;grid-template-columns:2fr 5fr 5fr;gap:2px}
 .sens .ph div{text-align:center;font-size:11px;font-weight:800;color:#fff;padding:5px 0;border-radius:5px}
 .sens .ph .p1{background:#9AA8BC} .sens .ph .p2{background:var(--coral)} .sens .ph .p3{background:var(--teal)}
 .sens .row{display:grid;grid-template-columns:104px 1fr;gap:10px;align-items:center;margin-bottom:7px;
@@ -361,6 +361,7 @@ body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
 .sens .track .gl{position:absolute;top:0;bottom:0;width:1px;background:#E6EBF2}
 .sens .bar{position:absolute;top:2px;bottom:2px;border-radius:4px}
 .sens .bar.s{background:var(--coral)} .sens .bar.w{background:#F5B9AF}
+.sens .track .gl.b9{background:#C7D2E0;width:1.5px}
 .sens .legend{display:flex;gap:18px;justify-content:flex-end;margin-top:10px;font-size:11.5px;font-weight:700;color:var(--mute)}
 .sens .legend i{display:inline-block;width:16px;height:9px;border-radius:3px;margin-right:6px;vertical-align:middle}
 
@@ -1148,26 +1149,28 @@ $$('[data-ly]').forEach(b=>b.addEventListener('click',()=>{
   });
 }));
 
+// 교재 그림 2-6 기준. 단위는 주(週), 12는 12주 시작·13은 12주 끝
+const SWK=['1','2','3','4','5','6','7','8','9','10','11','12'];
 const SENS=[
- {n:'중추신경계',s:[3,6],w:[6,12]},
- {n:'심장',s:[3.5,6.5],w:[6.5,8]},
- {n:'상지',s:[4.5,7],w:[7,8]},
- {n:'눈',s:[4.5,8.5],w:[8.5,12]},
- {n:'하지',s:[4.5,7],w:[7,8]},
- {n:'이',s:[6.5,8],w:[8,12]},
- {n:'입천장',s:[6.5,9],w:[9,12]},
- {n:'외성기',s:[7,9],w:[9,12]},
- {n:'귀',s:[4.5,9],w:[9,12]}];
+ {n:'중추신경계',s:[3,11.1],w:[11.1,13]},
+ {n:'심장',s:[3.5,6.75],w:[6.75,9]},
+ {n:'상지',s:[4.05,5.95],w:[5.95,9]},
+ {n:'눈',s:[4.55,8.6],w:[8.6,13]},
+ {n:'하지',s:[4.3,6.25],w:[6.25,9]},
+ {n:'이',s:[6.8,9],w:[9,13]},
+ {n:'입천장',s:[6.8,9.25],w:[9.25,10.05]},
+ {n:'외성기',s:[7.35,9.9],w:[9.9,13]},
+ {n:'귀',s:[4.3,9.5],w:[9.5,11.1]}];
 (function(){
-  const pc=x=>((x-1)/12*100);
+  const pc=u=>((u-1)/12*100);
   let h='<div class="hdr"><div></div><div class="wks">'+
-    Array.from({length:12},(_,i)=>'<span>'+(i+1)+'</span>').join('')+'</div></div>';
+    SWK.map(v=>'<span>'+v+'</span>').join('')+'</div></div>';
   h+='<div class="phase"><div style="font-size:11px;font-weight:800;color:var(--faint);text-align:right;align-self:center">주 (週)</div>'+
-     '<div class="ph"><div class="p1">난체기 1–2</div><div class="p2">배아기 3–8 · 구조적 장애</div>'+
-     '<div class="p3">태아기 9– · 심리적 장애 및 구조적 장애</div></div></div>';
+     '<div class="ph"><div class="p1">난체기 1–2 · 출생 전 유산</div><div class="p2">구조적 장애</div>'+
+     '<div class="p3">심리적 장애 및 구조적 장애</div></div></div>';
   SENS.forEach(r=>{
     h+='<div class="row"><div class="nm">'+r.n+'</div><div class="track">'+
-      Array.from({length:11},(_,i)=>'<div class="gl" style="left:'+((i+1)/12*100)+'%"></div>').join('')+
+      Array.from({length:11},(_,i)=>'<div class="gl'+(i===6?' b9':'')+'" style="left:'+((i+1)/12*100)+'%"></div>').join('')+
       '<div class="bar w" style="left:'+pc(r.w[0])+'%;width:'+(pc(r.w[1])-pc(r.w[0]))+'%"></div>'+
       '<div class="bar s" style="left:'+pc(r.s[0])+'%;width:'+(pc(r.s[1])-pc(r.s[0]))+'%"></div>'+
       '</div></div>';
@@ -1175,7 +1178,8 @@ const SENS=[
   h+='<div class="legend"><span><i style="background:var(--coral)"></i>가장 민감한 시기</span>'+
      '<span><i style="background:#F5B9AF"></i>덜 민감한 시기</span></div>';
   h+='<div style="margin-top:6px;font-size:11.5px;color:var(--faint);font-weight:600;text-align:right">'+
-     '난체기 구간은 “기형발생 물질의 영향을 받지 않음 · 출생 전 유산”으로 표시됩니다</div>';
+     '난체기 구간은 “기형발생 물질의 영향을 받지 않음 · 출생 전 유산”으로 표시됩니다<br>'+
+     '교재 그림 2-6을 그대로 옮긴 것입니다 · 발달 단계 구분으로는 배아기가 3–8주, 태아기가 9주부터입니다</div>';
   $('#sens').innerHTML=h;
 })();
 function sensScene(){
