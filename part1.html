@@ -179,22 +179,6 @@ tr.mark td{background:var(--plum-l)}
 .shapelg .tx span{font-size:11.5px;color:var(--faint);font-weight:600}
 .karyo .kgroup .gs{white-space:nowrap;font-size:10px}
 
-.pausebtn{position:absolute;left:16px;bottom:66px;z-index:5;font-family:inherit;cursor:pointer;
-  background:rgba(255,255,255,.94);border:1.5px solid var(--line);border-radius:100px;
-  padding:7px 15px 7px 12px;font-size:12.5px;font-weight:700;color:var(--mute);
-  display:flex;align-items:center;gap:7px;transition:.18s;box-shadow:0 1px 4px rgba(18,32,58,.07)}
-.pausebtn:hover{border-color:var(--faint);color:var(--ink)}
-.pausebtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-.pausebtn .ic{width:11px;height:12px;flex:none;position:relative}
-.pausebtn .ic::before,.pausebtn .ic::after{content:"";position:absolute;top:0;bottom:0;
-  width:3.5px;background:var(--mute);border-radius:1px;transition:.18s}
-.pausebtn .ic::before{left:0} .pausebtn .ic::after{right:0}
-.pausebtn.on .ic::before{left:1px;width:0;height:0;top:0;background:transparent;
-  border-left:10px solid var(--plum);border-top:6px solid transparent;border-bottom:6px solid transparent;border-radius:0}
-.pausebtn.on .ic::after{width:0;background:transparent}
-.pausebtn.on{color:var(--plum);border-color:var(--plum)}
-.vsbar{display:flex;justify-content:center;margin-top:14px}
-.vsbar .pausebtn{position:static;transform:none}
 
 .swim{position:relative;height:clamp(180px,25vh,240px)}
 .egg{position:absolute;right:7%;top:50%;transform:translateY(-50%)}
@@ -286,8 +270,6 @@ tr.mark td{background:var(--plum-l)}
 #flowSvg .fan{fill:none;stroke:#B9C6D6;stroke-width:2;stroke-dasharray:4 5;
   opacity:0;transition:opacity .5s ease var(--d)}
 #flowSvg .chip rect{fill:#F2F6FA;stroke:#F2F6FA;stroke-width:2;transition:fill .5s var(--d),stroke .5s var(--d)}
-#flowSvg .chip .ic{fill:#FFFFFF;transition:fill .5s var(--d)}
-#flowSvg .chip .gl{fill:#9AA8BC;stroke:#9AA8BC;transition:fill .5s var(--d),stroke .5s var(--d)}
 #flowSvg .chip text{font-size:19px;fill:#9AA8BC;transition:fill .5s var(--d)}
 
 /* 결함 */
@@ -311,14 +293,12 @@ tr.mark td{background:var(--plum-l)}
 #flowScene[data-k="2"] .pore circle{opacity:.85;r:6.5}
 #flowScene[data-k="3"] .fan,#flowScene[data-k="4"] .fan{opacity:1}
 #flowScene[data-k="3"] .chip rect,#flowScene[data-k="4"] .chip rect{fill:#E3F4F6;stroke:#9BD3DA}
-#flowScene[data-k="3"] .chip .gl,#flowScene[data-k="4"] .chip .gl{fill:#0D8E9E;stroke:#0D8E9E}
 #flowScene[data-k="3"] .chip text,#flowScene[data-k="4"] .chip text{fill:#12203A}
 #flowScene[data-k="4"] .flaw,#flowScene[data-k="4"] .alert{opacity:1}
 #flowScene[data-k="4"] .rung{opacity:.25}
 #flowScene[data-k="4"] .flawrung{opacity:1}
 #flowScene[data-k="4"] .rflaw{fill:#E2503F}
 #flowScene[data-k="4"] .chip rect{fill:#FCEDEB;stroke:#F0B5AC}
-#flowScene[data-k="4"] .chip .gl{fill:#E2503F;stroke:#E2503F}
 #flowScene[data-k="4"] .chip text{fill:#E2503F}
 #flowScene[data-k="4"] .fan{stroke:#E9A69B}
 @media(prefers-reduced-motion:reduce){#flowSvg *{transition-duration:.01ms !important}}
@@ -397,12 +377,6 @@ body.calm .float .f{animation:none}
 body.calm .kg.flag::after{animation:none;opacity:.9}
 body.calm .sperm .tail{animation:none}
 body.calm .slide.live{animation:none}
-.motionbtn{font-family:inherit;cursor:pointer;background:#fff;border:1.5px solid var(--line);
-  border-radius:100px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--faint);
-  white-space:nowrap;transition:.18s}
-.motionbtn:hover{border-color:var(--faint);color:var(--mute)}
-.motionbtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
 
 .parts{display:flex;align-items:center;gap:4px;flex:none}
 .parts .pl{font-size:11px;font-weight:700;color:var(--faint);margin-right:4px}
@@ -454,7 +428,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
     <button data-go="3"><span class="n">1)</span><span class="t">수정과 세포분열</span><span class="d">유사분열과 감수분열은 무엇이 다른가</span></button>
     <button data-go="10"><span class="n">2)</span><span class="t">성의 결정</span><span class="d">46개 중 단 한 쌍이 만드는 차이</span></button>
     <button data-go="16"><span class="n">3)</span><span class="t">유전적 특성의 결정</span><span class="d">DNA · 대립유전자 · 유전자형과 표현형</span></button>
-    <button data-go="23"><span class="n">4)</span><span class="t">염색체 결함</span><span class="d">일반염색체 결함과 성염색체 결함</span></button>
+    <button data-go="22"><span class="n">4)</span><span class="t">염색체 결함</span><span class="d">일반염색체 결함과 성염색체 결함</span></button>
   </div>
 </section>
 
@@ -470,7 +444,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="1) 수정과 세포분열" data-scene="mit">
-  <div class="hd"><span class="chip">유사분열 · mitosis</span><span class="sub">체세포가 늘어나는 방식 · 자동 반복 · P키로 정지</span></div>
+  <div class="hd"><span class="chip">유사분열 · mitosis</span><span class="sub">체세포가 늘어나는 방식 · ← → 로 단계 이동</span></div>
   <h2>몸을 만드는 <span class="hl">복사</span></h2>
   <div class="body">
     <div class="stage tall" id="mitStage">
@@ -478,28 +452,26 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
       <div class="eq" id="mitEq" style="left:14%;right:14%;top:46%"></div>
       <div class="membrane"><div class="blob" id="mitBlob"></div></div>
       <div class="chlayer" id="mitCh"></div>
-      <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
       <div class="caption"><span class="num" id="mitK">1</span><span id="mitCap"></span></div>
     </div>
   </div>
 </section>
 
 <section class="slide" data-sec="1) 수정과 세포분열" data-c="teal" data-scene="mei">
-  <div class="hd"><span class="chip">감수분열 · meiosis</span><span class="sub">성세포가 만들어지는 방식 · 자동 반복 · P키로 정지</span></div>
+  <div class="hd"><span class="chip">감수분열 · meiosis</span><span class="sub">성세포가 만들어지는 방식 · ← → 로 단계 이동</span></div>
   <h2>세대를 잇는 <span class="hl">절반</span></h2>
   <div class="body">
     <div class="stage tall" id="meiStage">
       <div class="counter">염색체 수<b id="meiN">46</b></div>
       <div class="membrane"><div class="blob" id="meiBlob"></div></div>
       <div class="chlayer" id="meiCh"></div>
-      <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
       <div class="caption"><span class="num" id="meiK" style="background:var(--teal)">1</span><span id="meiCap"></span></div>
     </div>
   </div>
 </section>
 
 <section class="slide" data-sec="1) 수정과 세포분열" data-scene="vs">
-  <div class="hd"><span class="chip">핵심 비교</span><span class="sub">나란히 동시 재생 · P키로 정지</span></div>
+  <div class="hd"><span class="chip">핵심 비교</span><span class="sub">나란히 비교 · ← → 로 단계 이동</span></div>
   <h2>같은 세포, <span class="hl">다른 결말</span></h2>
   <div class="body" style="padding-top:12px">
     <div class="vs" style="height:clamp(300px,48vh,460px)">
@@ -516,7 +488,6 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
         <div class="res"><span>자세포 <b id="vbC">1</b>개</span><span>염색체 <b id="vbN" style="color:var(--teal)">46</b>개 · 절반으로</span></div>
       </div>
     </div>
-    <div class="vsbar"><button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button></div>
   </div>
 </section>
 
@@ -746,7 +717,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="3) 유전적 특성의 결정" data-c="teal" data-scene="flow">
-  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재 p. 51 · 자동 반복 · P키로 정지</span></div>
+  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재 p. 51 · ← → 로 단계 이동</span></div>
   <h2>DNA는 <span class="hl">RNA의 주형</span>입니다</h2>
   <div class="body">
     <div class="flowwrap" id="flowScene" data-k="0">
@@ -844,33 +815,23 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
       <text class="tag fatet" x="1010" y="52">세포의 운명 · 어느 부위를 형성할지</text>
       <g class="chip" style="--d:0.0s">
         <rect x="758" y="67" width="252" height="58" rx="16"/>
-        <circle class="ic" cx="792" cy="96" r="19"/>
-        <g class="gl"><path d="M792 102 c-9-6-13-10.5-13-15 0-3.6 2.8-6 6-6 2.6 0 5 1.6 7 4.4 2-2.8 4.4-4.4 7-4.4 3.2 0 6 2.4 6 6 0 4.5-4 9-13 15z"/></g>
-        <text x="824" y="96" dominant-baseline="central">장기</text>
+        <text x="782" y="96" dominant-baseline="central">장기</text>
       </g>
       <g class="chip" style="--d:0.12s">
         <rect x="758" y="135" width="252" height="58" rx="16"/>
-        <circle class="ic" cx="792" cy="164" r="19"/>
-        <g class="gl"><path d="M781 157 q5.5 -4 11 0 t11 0" fill="none" stroke-width="2.4" stroke-linecap="round"/><path d="M781 164 q5.5 -4 11 0 t11 0" fill="none" stroke-width="2.4" stroke-linecap="round"/><path d="M781 171 q5.5 -4 11 0 t11 0" fill="none" stroke-width="2.4" stroke-linecap="round"/></g>
-        <text x="824" y="164" dominant-baseline="central">피부</text>
+        <text x="782" y="164" dominant-baseline="central">피부</text>
       </g>
       <g class="chip" style="--d:0.24s">
         <rect x="758" y="203" width="252" height="58" rx="16"/>
-        <circle class="ic" cx="792" cy="232" r="19"/>
-        <g class="gl"><rect x="781" y="228.6" width="22" height="6.8" rx="3.4"/><circle cx="781" cy="227.2" r="4.4"/><circle cx="781" cy="236.8" r="4.4"/><circle cx="803" cy="227.2" r="4.4"/><circle cx="803" cy="236.8" r="4.4"/></g>
-        <text x="824" y="232" dominant-baseline="central">뼈</text>
+        <text x="782" y="232" dominant-baseline="central">뼈</text>
       </g>
       <g class="chip" style="--d:0.36s">
         <rect x="758" y="271" width="252" height="58" rx="16"/>
-        <circle class="ic" cx="792" cy="300" r="19"/>
-        <g class="gl"><path d="M791 288 v24 M791 294 l-9 -6 M791 300 l-9 6 M791 291 l9 -4 M791 304 l9 5" fill="none" stroke-width="2.2" stroke-linecap="round"/><circle cx="781" cy="287" r="3"/><circle cx="781" cy="307" r="3"/><circle cx="801" cy="286" r="3"/><circle cx="801" cy="310" r="3"/></g>
-        <text x="824" y="300" dominant-baseline="central">신경계</text>
+        <text x="782" y="300" dominant-baseline="central">신경계</text>
       </g>
       <g class="chip" style="--d:0.48s">
         <rect x="758" y="339" width="252" height="58" rx="16"/>
-        <circle class="ic" cx="792" cy="368" r="19"/>
-        <g class="gl"><path d="M779 368 q6 -11 13 -11 q9 0 13 11 q-4 11 -13 11 q-7 0 -13 -11z" fill="none" stroke-width="2.4"/><path d="M788 362 q4 6 0 12 M795 361 q4 7 0 14" fill="none" stroke-width="2" stroke-linecap="round"/></g>
-        <text x="824" y="368" dominant-baseline="central">근육</text>
+        <text x="782" y="368" dominant-baseline="central">근육</text>
       </g>
 
       <g class="alert">
@@ -883,7 +844,6 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
     </svg>
       <div class="caption"><span class="num" id="flowK">1</span><span id="flowCap"></span></div>
     </div>
-    <div class="vsbar"><button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button></div>
     <p style="margin-top:16px;font-size:clamp(16px,1.7vw,23px);font-weight:700;color:var(--ink);max-width:none">
       이 마지막 문장이 <em style="color:var(--coral)">4) 염색체 결함</em>으로 넘어가는 다리입니다.</p>
   </div>
@@ -934,13 +894,6 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   </div>
 </section>
 
-<section class="slide mid" data-sec="3) 유전적 특성의 결정">
-  <blockquote class="quote" style="max-width:24ch;font-size:clamp(25px,3.4vw,48px)">
-    인간의 여러 심리적 특성의 유전기제에 있어서 유전자형과 표현형의 관계는 눈의 색깔처럼 그렇게 단순한 것은 아니다.
-    <cite>교재 p. 51 — 교재가 직접 남긴 다음 장 예고</cite>
-  </blockquote>
-</section>
-
 <section class="slide mid" data-sec="4) 염색체 결함" data-c="coral">
   <div class="hd"><span class="chip">4) 염색체 결함</span><span class="sub">교재 p. 51</span></div>
   <h2>수정 시에 염색체 결합에 <span class="hl">잘못이 생기면</span></h2>
@@ -986,7 +939,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   <div class="body">
     <div class="two rev">
       <div class="stage" style="display:grid;place-items:center">
-        <svg viewBox="0 0 420 262" style="width:94%">
+        <svg viewBox="0 -16 420 278" style="width:94%;height:94%;display:block">
           <g stroke="#DFE6EF" stroke-width="1.5"><line x1="56" y1="212" x2="398" y2="212"/><line x1="56" y1="22" x2="56" y2="212"/></g>
           <g fill="#9AA8BC" font-size="12" font-weight="700" font-family="Pretendard">
             <text x="56" y="234" text-anchor="middle">30</text><text x="141" y="234" text-anchor="middle">35</text>
@@ -997,7 +950,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
           <path class="trace" id="ageTrace" d="M56 206 C 96 202, 118 194, 141 186 C 178 174, 198 148, 226 124 C 262 92, 282 50, 311 34 C 336 22, 360 18, 379 15"
             fill="none" stroke="#E2503F" stroke-width="3.4" stroke-linecap="round"/>
           <g id="agePts">
-            <g class="pt"><circle cx="56" cy="206" r="5" fill="#E2503F"/><text x="66" y="200" font-size="12" font-weight="700" fill="#9AA8BC" font-family="Pretendard">1 : 885</text></g>
+            <g class="pt"><circle cx="56" cy="206" r="5" fill="#E2503F"/><text x="68" y="196" font-size="12" font-weight="700" fill="#9AA8BC" font-family="Pretendard">1 : 885</text></g>
             <g class="pt"><circle cx="141" cy="186" r="5" fill="#E2503F"/></g>
             <g class="pt"><circle cx="226" cy="124" r="5" fill="#E2503F"/></g>
             <g class="pt"><circle cx="311" cy="34" r="5" fill="#E2503F"/></g>
@@ -1175,9 +1128,8 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   <span class="s" id="rSec">표지</span>
   <div class="bar"><i id="rBar"></i></div>
   <span class="parts"><span class="pl">파트</span><button type="button" data-p="1" class="cur" title="1. 발달의 생물학적 기저">1</button><button type="button" data-p="2" title="2. 발달의 유전 및 경험적 기저">2</button><button type="button" data-p="3" title="3. 태내발달">3</button></span>
-  <span class="ct"><b id="rNow">1</b> / <span id="rTot">34</span></span>
-  <button class="motionbtn" id="calmBtn" type="button">장식 효과 끄기</button>
-  <span class="hint">← → 이동 · P 정지 · F 전체화면</span>
+  <span class="ct"><b id="rNow">1</b> / <span id="rTot">33</span></span>
+  <span class="hint">← → 이동 · F 전체화면</span>
 </div>
 
 <script>
@@ -1231,17 +1183,16 @@ function mk(layer,list){
 }
 function put(el,x,y,o){el.style.left=x+'px';el.style.top=y+'px';if(o!=null)el.style.opacity=o}
 
-function loop(setFn,n,ms){
-  let p=0,t=null,paused=false;
-  const tick=()=>{p=(p+1)%n;setFn(p)};
-  const run=()=>{clearInterval(t);t=setInterval(tick,ms)};
-  setFn(0);run();
+function seq(setFn,n){
+  let p=0; setFn(0);
   return {
-    paused:()=>paused,
-    stop(){clearInterval(t)},
-    toggle(){paused=!paused;paused?clearInterval(t):run();return paused},
-    stepFwd(){paused=true;clearInterval(t);tick()},
-    stepBack(){paused=true;clearInterval(t);p=(p-1+n)%n;setFn(p)}
+    len:n,
+    at(){return p},
+    stop(){},
+    first(){p=0;setFn(0)},
+    last(){p=n-1;setFn(p)},
+    fwd(){ if(p>=n-1) return false; p++; setFn(p); return true },
+    back(){ if(p<=0) return false; p--; setFn(p); return true }
   };
 }
 function dyn(mem,cfg){
@@ -1278,7 +1229,7 @@ function mitScene(){
     if(i===4){ dyn(mem,[{x:cx-135,y:cy+28,w:190},{x:cx+135,y:cy+28,w:190}]);
       put(c[0],cx-186,cy-24,1);put(c[1],cx-142,cy-24,1);put(c[2],cx+102,cy-24,1);put(c[3],cx+146,cy-24,1); }
   }
-  return loop(set,5,2200);
+  return seq(set,5);
 }
 
 const MEIC=[['1','<b>부모세포.</b> 23쌍, 46개의 염색체.'],
@@ -1313,7 +1264,7 @@ function meiScene(){
       for(let k=0;k<4;k++) put(c[k],cx-20,150,0);
       [[4,cx-176],[5,cx-64],[6,cx+48],[7,cx+160]].forEach(([k,X])=>put(c[k],X,152,1)); }
   }
-  return loop(set,5,2200);
+  return seq(set,5);
 }
 
 function vsScene(){
@@ -1355,7 +1306,7 @@ function vsScene(){
       [[4,bx-110],[5,bx-42],[6,bx+26],[7,bx+94]].forEach(([k,X])=>put(b[k],X,140,1));
       $('#vbC').textContent='4';$('#vbN').textContent='23'; }
   }
-  return loop(set,4,2300);
+  return seq(set,4);
 }
 
 function countUp(el,to,ms){const t0=performance.now();
@@ -1473,7 +1424,7 @@ function flowScene(){
   const set=i=>{s.dataset.k=i;
     document.getElementById('flowK').textContent=i+1;
     document.getElementById('flowCap').innerHTML=FLOWC[i];};
-  return loop(set,5,3200);
+  return seq(set,5);
 }
 
 const SCENES={mit:mitScene,mei:meiScene,vs:vsScene,
@@ -1512,17 +1463,9 @@ function show(n,end){
   const sc=s.dataset.scene;
   requestAnimationFrame(()=>{
     fitSlide(s);
-    if(sc&&SCENES[sc]){scene=SCENES[sc]();syncPause()}
+    if(sc&&SCENES[sc]){scene=SCENES[sc]();if(end&&scene&&scene.last)scene.last()}
   });
 }
-function syncPause(){
-  $$('.pausebtn').forEach(b=>{
-    const on=!!(scene&&scene.paused&&scene.paused());
-    b.classList.toggle('on',on);
-    b.querySelector('.tx').textContent=on?'재생':'일시정지';
-  });
-}
-function togglePause(){ if(scene&&scene.toggle){scene.toggle();syncPause()} }
 
 const PART=1;
 const PART_FILES=['part1.html','part2.html','part3.html'];
@@ -1538,33 +1481,25 @@ document.addEventListener('click',e=>{
   if(np){e.stopPropagation(); goPart(+np.dataset.p);}
 },true);
 
-function next(){const s=slides[idx];if(step<maxStep(s)){step++;paint(s);return}
+function next(){const s=slides[idx];
+  if(scene&&scene.fwd&&scene.fwd())return;
+  if(step<maxStep(s)){step++;paint(s);return}
   if(idx>=slides.length-1){goPart(PART+1);return} show(idx+1)}
-function prev(){const s=slides[idx];if(step>0){step--;paint(s);return}
+function prev(){const s=slides[idx];
+  if(scene&&scene.back&&scene.back())return;
+  if(step>0){step--;paint(s);return}
   if(idx<=0){goPart(PART-1,true);return} show(idx-1,true)}
 addEventListener('keydown',e=>{
-  if(e.key==='p'||e.key==='P'){e.preventDefault();togglePause();return}
-  const held=scene&&scene.paused&&scene.paused();
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();
-    if(held){scene.stepFwd();return} next()}
-  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();
-    if(held){scene.stepBack();return} prev()}
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
   else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
   else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
 });
 deck.addEventListener('click',e=>{
-  if(e.target.closest('.pausebtn')){togglePause();return}
   if(!e.target.closest('button'))next()});
 $$('[data-go]').forEach(b=>b.addEventListener('click',()=>show(+b.dataset.go)));
 
-const calmBtn=$('#calmBtn');
-function setCalm(on){
-  document.body.classList.toggle('calm',on);
-  calmBtn.textContent = on ? '장식 효과 켜기' : '장식 효과 끄기';
-  calmBtn.setAttribute('aria-pressed', on?'true':'false');
-}
-try{ setCalm(matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ setCalm(false); }
-calmBtn.addEventListener('click',e=>{e.stopPropagation();setCalm(!document.body.classList.contains('calm'))});
+try{ document.body.classList.toggle('calm', matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){}
 
 $('#float').innerHTML=[[10,12,PLUM,120,-12],[54,40,TEAL,92,18],[24,64,PLUM,76,26],[64,78,'#2C6FBF',62,-8],[40,6,'#E2503F',58,10]]
  .map(([l,t,c,h,r],i)=>'<div class="f" style="left:'+l+'%;top:'+t+'%;--r:'+r+'deg;animation-delay:'+(i*.7)+'s;opacity:'+(0.2+i*0.05)+'">'+chromo(c,h)+'</div>').join('');
