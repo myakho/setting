@@ -179,22 +179,6 @@ tr.mark td{background:var(--plum-l)}
 .shapelg .tx span{font-size:11.5px;color:var(--faint);font-weight:600}
 .karyo .kgroup .gs{white-space:nowrap;font-size:10px}
 
-.pausebtn{position:absolute;left:16px;bottom:66px;z-index:5;font-family:inherit;cursor:pointer;
-  background:rgba(255,255,255,.94);border:1.5px solid var(--line);border-radius:100px;
-  padding:7px 15px 7px 12px;font-size:12.5px;font-weight:700;color:var(--mute);
-  display:flex;align-items:center;gap:7px;transition:.18s;box-shadow:0 1px 4px rgba(18,32,58,.07)}
-.pausebtn:hover{border-color:var(--faint);color:var(--ink)}
-.pausebtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-.pausebtn .ic{width:11px;height:12px;flex:none;position:relative}
-.pausebtn .ic::before,.pausebtn .ic::after{content:"";position:absolute;top:0;bottom:0;
-  width:3.5px;background:var(--mute);border-radius:1px;transition:.18s}
-.pausebtn .ic::before{left:0} .pausebtn .ic::after{right:0}
-.pausebtn.on .ic::before{left:1px;width:0;height:0;top:0;background:transparent;
-  border-left:10px solid var(--plum);border-top:6px solid transparent;border-bottom:6px solid transparent;border-radius:0}
-.pausebtn.on .ic::after{width:0;background:transparent}
-.pausebtn.on{color:var(--plum);border-color:var(--plum)}
-.vsbar{display:flex;justify-content:center;margin-top:14px}
-.vsbar .pausebtn{position:static;transform:none}
 
 .swim{position:relative;height:clamp(180px,25vh,240px)}
 .egg{position:absolute;right:7%;top:50%;transform:translateY(-50%)}
@@ -330,12 +314,6 @@ body.calm .float .f{animation:none}
 body.calm .kg.flag::after{animation:none;opacity:.9}
 body.calm .sperm .tail{animation:none}
 body.calm .slide.live{animation:none}
-.motionbtn{font-family:inherit;cursor:pointer;background:#fff;border:1.5px solid var(--line);
-  border-radius:100px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--faint);
-  white-space:nowrap;transition:.18s}
-.motionbtn:hover{border-color:var(--faint);color:var(--mute)}
-.motionbtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-body.calm .motionbtn{border-color:var(--plum);color:var(--plum)}
 
 .tl{display:flex;align-items:stretch;gap:0;width:100%;border-radius:14px;overflow:hidden}
 .tl .seg{padding:16px 18px;color:#fff;position:relative;transition:flex .8s cubic-bezier(.4,.1,.3,1)}
@@ -499,12 +477,11 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="(1) 난체기" data-scene="imp">
-  <div class="hd"><span class="chip">(1) 난체기 · period of zygote</span><span class="sub">수정 ~ 2주 · 자동 반복 · P키로 정지</span></div>
+  <div class="hd"><span class="chip">(1) 난체기 · period of zygote</span><span class="sub">수정 ~ 2주 · ← → 로 단계 이동</span></div>
   <h2>착상은 <span class="hl">의존관계의 시작</span>입니다</h2>
   <div class="body">
     <div class="two rev">
       <div class="stage" id="impStage">
-        <button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button>
         <svg viewBox="0 0 560 260" style="width:100%;height:100%" preserveAspectRatio="xMidYMid meet">
           <path class="uter" d="M100 60 C 60 110 70 190 150 210 L 400 210 C 480 195 500 120 460 66 C 430 30 380 44 360 78 L 200 78 C 176 42 130 34 100 60 Z"/>
           <path id="impPath" fill="none" stroke="none" d="M118 76 C 160 62 210 74 250 96 C 300 122 350 150 386 170"/>
@@ -1076,8 +1053,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   <div class="bar"><i id="rBar"></i></div>
   <span class="parts"><span class="pl">파트</span><button type="button" data-p="1" title="1. 발달의 생물학적 기저">1</button><button type="button" data-p="2" title="2. 발달의 유전 및 경험적 기저">2</button><button type="button" data-p="3" class="cur" title="3. 태내발달">3</button></span>
   <span class="ct"><b id="rNow">1</b> / <span id="rTot">35</span></span>
-  <button class="motionbtn" id="calmBtn" type="button">장식 효과 끄기</button>
-  <span class="hint">← → 이동 · P 정지 · F 전체화면</span>
+  <span class="hint">← → 이동 · F 전체화면</span>
 </div>
 
 <script>
@@ -1100,15 +1076,17 @@ function chromo(color,h,cen){
    '<path d="'+L+'" stroke="rgba(0,0,0,.22)" stroke-width="10" stroke-dasharray="7 9"/>'+
    '<path d="'+R+'" stroke="rgba(0,0,0,.22)" stroke-width="10" stroke-dasharray="9 7"/></g></svg>';
 }
-function loop(setFn,n,ms){
-  let p=0,t=null,paused=false;
-  const tick=()=>{p=(p+1)%n;setFn(p)};
-  const run=()=>{clearInterval(t);t=setInterval(tick,ms)};
-  setFn(0);run();
-  return {paused:()=>paused,stop(){clearInterval(t)},
-    toggle(){paused=!paused;paused?clearInterval(t):run();return paused},
-    stepFwd(){paused=true;clearInterval(t);tick()},
-    stepBack(){paused=true;clearInterval(t);p=(p-1+n)%n;setFn(p)}};
+function seq(setFn,n){
+  let p=0; setFn(0);
+  return {
+    len:n,
+    at(){return p},
+    stop(){},
+    first(){p=0;setFn(0)},
+    last(){p=n-1;setFn(p)},
+    fwd(){ if(p>=n-1) return false; p++; setFn(p); return true },
+    back(){ if(p<=0) return false; p--; setFn(p); return true }
+  };
 }
 function barsIn(list){
   list.forEach(([id,w,d])=>{const b=$(id);if(!b)return;
@@ -1131,7 +1109,7 @@ function impScene(){
     at.style.transition='opacity .5s'; at.style.opacity=(i===3)?1:0;
     $('#impK').textContent=IMP[i][0]; $('#impCap').innerHTML=IMP[i][1];
   }
-  return loop(set,4,1900);
+  return seq(set,4);
 }
 
 const LY={
@@ -1238,13 +1216,8 @@ function show(n,end){
   document.body.dataset.m=s.dataset.supp?'supp':'main';
   fitSlide(s);
   const sc=s.dataset.scene;
-  requestAnimationFrame(()=>{fitSlide(s); if(sc&&SCENES[sc]){scene=SCENES[sc]();syncPause()}});
+  requestAnimationFrame(()=>{fitSlide(s); if(sc&&SCENES[sc]){scene=SCENES[sc]();if(end&&scene&&scene.last)scene.last()}});
 }
-function syncPause(){
-  $$('.pausebtn').forEach(b=>{const on=!!(scene&&scene.paused&&scene.paused());
-    b.classList.toggle('on',on); b.querySelector('.tx').textContent=on?'재생':'일시정지'});
-}
-function togglePause(){ if(scene&&scene.toggle){scene.toggle();syncPause()} }
 
 const PART=3;
 const PART_FILES=['part1.html','part2.html','part3.html'];
@@ -1260,31 +1233,25 @@ document.addEventListener('click',e=>{
   if(np){e.stopPropagation(); goPart(+np.dataset.p);}
 },true);
 
-function next(){const s=slides[idx];if(step<maxStep(s)){step++;paint(s);return}
+function next(){const s=slides[idx];
+  if(scene&&scene.fwd&&scene.fwd())return;
+  if(step<maxStep(s)){step++;paint(s);return}
   if(idx>=slides.length-1){goPart(PART+1);return} show(idx+1)}
-function prev(){const s=slides[idx];if(step>0){step--;paint(s);return}
+function prev(){const s=slides[idx];
+  if(scene&&scene.back&&scene.back())return;
+  if(step>0){step--;paint(s);return}
   if(idx<=0){goPart(PART-1,true);return} show(idx-1,true)}
 addEventListener('keydown',e=>{
   if(e.target.matches('input')) return;
-  if(e.key==='p'||e.key==='P'){e.preventDefault();togglePause();return}
-  const held=scene&&scene.paused&&scene.paused();
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();
-    if(held){scene.stepFwd();return} next()}
-  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();
-    if(held){scene.stepBack();return} prev()}
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
   else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
   else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
 });
 deck.addEventListener('click',e=>{
-  if(e.target.closest('.pausebtn')){togglePause();return}
   if(!e.target.closest('button,input'))next()});
 
-const calmBtn=$('#calmBtn');
-function setCalm(on){document.body.classList.toggle('calm',on);
-  calmBtn.textContent=on?'장식 효과 켜기':'장식 효과 끄기';
-  calmBtn.setAttribute('aria-pressed',on?'true':'false')}
-try{ setCalm(matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ setCalm(false); }
-calmBtn.addEventListener('click',e=>{e.stopPropagation();setCalm(!document.body.classList.contains('calm'))});
+try{ document.body.classList.toggle('calm', matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){}
 
 $('#float').innerHTML=[[10,12,CORAL,120,-12],[54,40,TEAL,92,18],[24,64,CORAL,76,26],[64,78,'#2C6FBF',62,-8],[40,6,PLUM,58,10]]
  .map(([l,t,c,h,r],i)=>'<div class="f" style="left:'+l+'%;top:'+t+'%;--r:'+r+'deg;animation-delay:'+(i*.7)+'s;opacity:'+(0.2+i*0.05)+'">'+chromo(c,h)+'</div>').join('');
