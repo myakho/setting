@@ -428,6 +428,55 @@ body.calm .ag .trail,body.calm .ag .gapr{transition:none}
 .duo .p p{font-size:14px;line-height:1.6}
 .duo .res{margin-top:12px;font-size:13px;font-weight:800}
 
+
+/* --- Rosenzweig 실험 장면 --- */
+.rz{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);
+  gap:clamp(16px,2.2vw,32px);align-items:center}
+@media(max-width:900px){.rz{grid-template-columns:1fr}}
+.rzcages{display:grid;gap:10px}
+.cagebox{border-radius:13px;padding:9px 12px 10px;background:var(--teal-l)}
+.cagebox.poor{background:#F0F1F4}
+.cagebox .ct{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.cagebox .ct b{font-size:13px;font-weight:800;color:var(--teal)}
+.cagebox.poor .ct b{color:var(--mute)}
+.cagebox .ct span{font-size:11.5px;font-weight:600;color:var(--faint)}
+.cagebox svg{display:block;width:100%;height:auto}
+.rzitem{transform-box:fill-box;transform-origin:center;opacity:0;transform:scale(.55);
+  transition:opacity .4s,transform .55s cubic-bezier(.3,1.5,.5,1)}
+.rzitem.on{opacity:1;transform:none}
+body.calm .rzitem{transition:opacity .3s}
+
+.rzres{min-width:0;opacity:.45;transition:opacity .5s}
+.rzres.on{opacity:1}
+.rzhd{font-size:11.5px;font-weight:800;color:var(--faint);letter-spacing:.02em;margin-bottom:9px}
+.rzrow{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:12px;
+  background:var(--tint);margin-bottom:8px}
+.rzrow .tx{flex:1;min-width:0}
+.rzrow .n{display:block;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.rzrow u{text-decoration:none;font-size:10.5px;font-weight:800;color:var(--faint)}
+.rzrow .cmp{flex:none;font-size:12px;font-weight:800;color:var(--teal);background:#fff;
+  border:1.5px solid #BFE3E8;border-radius:100px;padding:5px 12px;white-space:nowrap;
+  opacity:0;transform:scale(.85);transition:opacity .35s,transform .4s cubic-bezier(.3,1.5,.5,1)}
+.rzrow .cmp s{text-decoration:none;color:var(--faint);font-weight:700}
+.rzres.on .rzrow:nth-child(2) .cmp{transition-delay:.15s}
+.rzres.on .rzrow:nth-child(3) .cmp{transition-delay:.3s}
+.rzres.on .rzrow:nth-child(4) .cmp{transition-delay:.45s}
+.rzres.on .rzrow .cmp{opacity:1;transform:none}
+body.calm .rzrow .cmp{transition:opacity .3s}
+.rzsig{display:inline-block;font-size:12px;font-weight:700;color:var(--teal);
+  background:var(--teal-l);border-radius:100px;padding:6px 13px;margin-top:4px;
+  opacity:0;transform:translateY(5px);transition:opacity .4s .6s,transform .4s .6s}
+.rzsig b{font-weight:800}
+.rzsig.on{opacity:1;transform:none}
+.rznote{font-size:11px;line-height:1.5;color:var(--faint);margin-top:9px}
+.rznote b{color:var(--mute);font-weight:700}
+.slide[data-scene="rose"] .body{flex:none;justify-content:flex-start;
+  padding-top:clamp(10px,2.6vh,28px)}
+.slide[data-c="teal"] .steps i.on{background:var(--teal)}
+.slide[data-c="blue"] .steps i.on{background:var(--blue)}
+.slide[data-c="coral"] .steps i.on{background:var(--coral)}
+.slide[data-c="amber"] .steps i.on{background:var(--amber)}
+
 .seedwrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
 .seedbox{border-radius:14px;padding:16px;text-align:center}
 .seedbox.good{background:#EAF6EC} .seedbox.bad{background:#F3EFE7}
@@ -459,6 +508,16 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="ratI" viewBox="0 0 64 36">
+<path d="M9 25 C1 23 2 11 10 10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+<ellipse cx="20" cy="31.5" rx="3.6" ry="2.3" fill="currentColor" opacity=".75"/>
+<ellipse cx="34" cy="31.5" rx="3.6" ry="2.3" fill="currentColor" opacity=".75"/>
+<ellipse cx="27" cy="22" rx="18" ry="10.5" fill="currentColor"/>
+<circle cx="42" cy="14" r="4.6" fill="currentColor"/>
+<ellipse cx="49" cy="21" rx="11.5" ry="8.2" fill="currentColor"/>
+<path d="M58.5 19.4 L63 21.8 L58.5 24 Z" fill="currentColor"/>
+<circle cx="52" cy="18.6" r="1.5" fill="#fff"/>
+</symbol>
 <filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/>
 <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -10"/>
 </filter></defs></svg>
@@ -514,7 +573,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide mid" data-sec="(1) 반응의 범위">
-  <div class="hd"><span class="chip">(1) 반응의 범위 모형</span><span class="sub">Gottesman, 1963 · 교재 p. 54</span></div>
+  <div class="hd"><span class="chip">(1) 반응의 범위 모형</span><span class="sub">Gottesman(고테스먼), 1963 · 교재 p. 54</span></div>
   <h2>유전은 결과가 아니라 <span class="hl">범위</span>를 정합니다</h2>
   <div class="sup2">반응의 범위(range of reaction)란 <strong>유전자형이 표현형으로 나타나는 과정에서 유전적 소인이 환경적 경험의 힘에 의해 변화될 수 있는 크기</strong>를 의미합니다.</div>
   <div class="card plum" style="margin-top:24px;max-width:none">
@@ -549,7 +608,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="(1) 반응의 범위" data-scene="rr" data-steps="3">
-  <div class="hd"><span class="chip">그림 2-4</span><span class="sub">Gottesman, 1974 · 교재 p. 55</span></div>
+  <div class="hd"><span class="chip">그림 2-4</span><span class="sub">Gottesman(고테스먼), 1974 · 교재 p. 55</span></div>
   <h2>반응의 범위 모형</h2>
   <div class="body">
     <div class="two rev">
@@ -619,7 +678,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="(2) 수로화" data-c="teal" data-scene="canal">
-  <div class="hd"><span class="chip">그림 2-5</span><span class="sub">Fishbein, 1976; Berk, 1994 · 자동 반복 · P키로 정지</span></div>
+  <div class="hd"><span class="chip">그림 2-5</span><span class="sub">Fishbein(피시바인), 1976; Berk(버크), 1994 · 자동 반복 · P키로 정지</span></div>
   <h2>공은 <span class="hl">발달하는 유기체</span>입니다</h2>
   <div class="body">
     <div class="two rev">
@@ -681,21 +740,21 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   </div>
   <p style="margin-top:22px;font-size:clamp(17px,1.8vw,24px);font-weight:700;color:var(--ink);max-width:none">
     걷기는 환경이 못 바꾸지만, <em>지능은 환경이 바꿉니다.</em></p>
-  <div class="cite">Shaffer, 1993 · 교재 p. 55</div>
+  <div class="cite">Shaffer(섀퍼), 1993 · 교재 p. 55</div>
   <div class="steps"><i></i><i></i><span>→ 키로 진행</span></div>
 </section>
 
 <section class="slide mid" data-sec="(2) 수로화" data-c="teal">
   <blockquote class="quote" style="border-color:var(--teal);max-width:26ch;font-size:clamp(24px,3.2vw,44px)">
     선천적으로 청각장애가 있는 아이도, 정상아와 같은 시기에 옹알이를 합니다.
-    <cite>Shaffer, 1993 · 교재 p. 55 (교재 표기는 현재 부적절한 용어라 바꿔 옮겼습니다)</cite>
+    <cite>Shaffer(섀퍼), 1993 · 교재 p. 55 (교재 표기는 현재 부적절한 용어라 바꿔 옮겼습니다)</cite>
   </blockquote>
   <p style="margin-top:22px;font-size:clamp(16px,1.6vw,21px);max-width:none">
     한 번도 소리를 들어본 적이 없는 아이가 말입니다. 이 특성이 <strong>환경 입력과 거의 무관하게 강력하게 수로화되어 있음</strong>을 보여주는 근거입니다.</p>
 </section>
 
 <section class="slide mid" data-sec="(2) 수로화" data-c="teal">
-  <div class="hd"><span class="chip">회복력</span><span class="sub">Garmezy, 1981 · 교재 p. 56</span></div>
+  <div class="hd"><span class="chip">회복력</span><span class="sub">Garmezy(가메지), 1981 · 교재 p. 56</span></div>
   <h2>같은 환경, <span class="hl">다른 결과</span></h2>
   <div class="sup2">동일하게 바람직하지 못한 환경에 놓이더라도 결과가 갈립니다.</div>
   <div class="grid g2" style="margin-top:24px">
@@ -756,7 +815,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   <div class="two" style="margin-top:22px">
     <blockquote class="quote" style="border-color:var(--coral);font-size:clamp(18px,2.1vw,29px)">
       유전자형과 환경 간에 끊임없는 거래적 상호작용이 이루어지고 있다는 사실은, 발달에 있어서 유전과 환경이 개인차 형성에 미치는 상대적 기여도를 분리해내는 것을 더욱 어렵게 한다.
-      <cite>Baumrind, 1991 · 교재 p. 57</cite></blockquote>
+      <cite>Baumrind(바움린드), 1991 · 교재 p. 57</cite></blockquote>
     <div class="card coral">
       <h4>여기서 세 모형이 하나로 모입니다</h4>
       <p style="font-size:16px">“유전이 몇 퍼센트, 환경이 몇 퍼센트”라는 <strong>질문 자체가 왜 어려운가</strong> — 그 이유를 이 모형이 설명해줍니다.</p>
@@ -777,7 +836,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="corr" data-steps="4">
-  <div class="hd"><span class="chip">표 2-1</span><span class="sub">Bouchard &amp; McGue, 1981 · 교재 p. 57</span></div>
+  <div class="hd"><span class="chip">표 2-1</span><span class="sub">Bouchard &amp; McGue(부샤드와 맥규), 1981 · 교재 p. 57</span></div>
   <h2>혈연 간 지능의 <span class="hl">상관계수</span></h2>
   <div class="body">
     <div class="corrwrap" id="corrWrap">
@@ -801,7 +860,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="2) 지능연구" data-c="blue" data-scene="sw">
-  <div class="hd"><span class="chip">양자연구</span><span class="sub">Scarr &amp; Weinberg, 1983 · 미네소타 양자연구 · 교재 p. 58</span></div>
+  <div class="hd"><span class="chip">양자연구</span><span class="sub">Scarr &amp; Weinberg(스카와 와인버그), 1983 · 미네소타 양자연구 · 교재 p. 58</span></div>
   <h2>18년을 함께 산 <span class="hl">양부모</span>보다, 얼굴도 모르는 <span class="hl">친부모</span>와 더 닮았습니다</h2>
   <div class="body">
     <div class="two rev">
@@ -825,48 +884,59 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide mid" data-sec="2) 지능연구" data-c="teal">
-  <div class="hd"><span class="chip">양자연구</span><span class="sub">Duyme, 1988 · 교재 p. 58</span></div>
+  <div class="hd"><span class="chip">양자연구</span><span class="sub">Duyme(뒤임), 1988 · 교재 p. 58</span></div>
   <h2>교재는 곧바로 <span class="hl">균형</span>을 잡습니다</h2>
   <div class="two" style="margin-top:22px">
     <blockquote class="quote" style="border-color:var(--teal);font-size:clamp(18px,2.1vw,28px)">
       이러한 결과들을 “지능발달에 환경이 영향력을 미칠 수 없는 것”으로 받아들여서는 안 된다.
       <cite>교재 p. 58</cite></blockquote>
     <div class="stack">
-      <p>실제로 Duyme(1988)의 연구에서는 <strong>양부모의 사회경제적 계층의 차이가 양자의 지능발달에 결정적인 영향을 미친다</strong>는 사실을 밝혔습니다.</p>
+      <p>실제로 Duyme(뒤임, 1988)의 연구에서는 <strong>양부모의 사회경제적 계층의 차이가 양자의 지능발달에 결정적인 영향을 미친다</strong>는 사실을 밝혔습니다.</p>
       <div class="card teal"><h4>주목할 점</h4>
         <p style="font-size:16px;font-weight:700;color:var(--ink)">같은 양자연구라는 방법으로, <strong>정반대 방향의 결론</strong>이 나온 것입니다.</p></div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-sec="2) 지능연구" data-c="teal" data-scene="rose">
-  <div class="hd"><span class="chip">실험적 조작</span><span class="sub">Rosenzweig, 1966; Rosenzweig &amp; Leiman, 1982 · 교재 p. 58</span></div>
+<section class="slide" data-sec="2) 지능연구" data-c="teal" data-scene="rose" data-steps="3">
+  <div class="hd"><span class="chip">실험적 조작</span><span class="sub">Rosenzweig(로젠츠바이크), 1966; Rosenzweig &amp; Leiman(로젠츠바이크와 레이먼), 1982 · 교재 p. 58</span></div>
   <h2>환경을 바꾸자 <span class="hl">뇌 자체</span>가 달라졌습니다</h2>
   <div class="body">
-    <div class="duo" style="margin-bottom:16px">
-      <div class="p rich"><h5>풍요로운 환경 enriched condition</h5>
-        <p>여러 가지를 탐색할 수 있는 <strong>대상물이 있는</strong> 사육 환경</p></div>
-      <div class="p poor"><h5>결핍환경 impoverished condition</h5>
-        <p>아무런 자극대상도 없는 사육상자에 <strong>한 마리씩 고립</strong>시켜 양육</p></div>
-    </div>
-    <div class="two">
-      <div>
-        <div class="corrrow" style="grid-template-columns:150px 1fr 34px">
-          <div class="lb">뇌의 해부학적·생화학적 측정치</div>
-          <div class="tk"><div class="bv" id="roA" style="background:var(--teal)"></div></div><div class="vl"></div></div>
-        <div class="corrrow" style="grid-template-columns:150px 1fr 34px">
-          <div class="lb">미로에서의 주행속도</div>
-          <div class="tk"><div class="bv" id="roB" style="background:var(--teal)"></div></div><div class="vl"></div></div>
-        <div class="cite">풍요로운 환경에서 자란 쥐가 <strong>모든 측정치에서 유의미하게 높은 수준</strong></div>
+    <div class="rz">
+      <div class="rzcages" id="rzCages">
+        <div class="cagebox rich">
+          <div class="ct"><b>풍요로운 환경 enriched condition</b><span>여러 가지를 탐색할 수 있는 대상물이 있는 사육 환경</span></div>
+          <svg viewBox="0 0 460 100" role="img" aria-label="탐색할 대상물이 여럿 있고 쥐 세 마리가 함께 지내는 풍요로운 사육환경"><rect x="3" y="3" width="454" height="94" rx="11" fill="#fff" stroke="#CBDDE1" stroke-width="2"/><line x1="26" y1="12" x2="26" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="52" y1="12" x2="52" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="78" y1="12" x2="78" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="104" y1="12" x2="104" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="130" y1="12" x2="130" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="156" y1="12" x2="156" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="182" y1="12" x2="182" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="208" y1="12" x2="208" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="234" y1="12" x2="234" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="260" y1="12" x2="260" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="286" y1="12" x2="286" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="312" y1="12" x2="312" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="338" y1="12" x2="338" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="364" y1="12" x2="364" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="390" y1="12" x2="390" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="416" y1="12" x2="416" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><line x1="442" y1="12" x2="442" y2="88" stroke="#E4EFF1" stroke-width="1.8"/><rect x="10" y="80" width="440" height="14" rx="6" fill="#EFE3D0"/><g class="rzitem"><circle cx="56" cy="50" r="24" fill="#fff" stroke="#0D8E9E" stroke-width="3.4"/><circle cx="56" cy="50" r="4" fill="#0D8E9E"/><g stroke="#9FD3DA" stroke-width="2.2"><line x1="56" y1="28" x2="56" y2="72"/><line x1="34" y1="50" x2="78" y2="50"/><line x1="41" y1="35" x2="71" y2="65"/><line x1="41" y1="65" x2="71" y2="35"/></g><path d="M43 70 L56 80 L69 70" fill="none" stroke="#0D8E9E" stroke-width="3" stroke-linecap="round"/></g><g class="rzitem"><g stroke="#C9820A" stroke-width="3.4" stroke-linecap="round"><line x1="152" y1="82" x2="166" y2="30"/><line x1="172" y1="84" x2="186" y2="32"/></g><g stroke="#E7B860" stroke-width="2.8" stroke-linecap="round"><line x1="158" y1="70" x2="178" y2="72"/><line x1="162" y1="56" x2="182" y2="58"/><line x1="165" y1="43" x2="185" y2="45"/></g></g><g class="rzitem"><path d="M206 84 L206 58 A31 31 0 0 1 268 58 L268 84 Z" fill="#FBE2DE" stroke="#E2503F" stroke-width="2.8" stroke-linejoin="round"/><path d="M222 84 L222 64 A15 15 0 0 1 252 64 L252 84 Z" fill="#12203A" opacity=".75"/></g><g class="rzitem"><rect x="332" y="58" width="22" height="22" rx="4" fill="#2C6FBF"/><rect x="356" y="66" width="16" height="14" rx="4" fill="#89B3E2"/><rect x="338" y="40" width="14" height="16" rx="4" fill="#5C93D3"/></g><g class="rzitem" style="color:#6B5544"><g transform="translate(94,56)"><use href="#ratI" width="44" height="24.8"/></g></g><g class="rzitem" style="color:#7C6553"><g transform="translate(322,56) scale(-1,1)"><use href="#ratI" width="42" height="23.6"/></g></g><g class="rzitem" style="color:#5E4A3B"><g transform="translate(386,55)"><use href="#ratI" width="44" height="24.8"/></g></g></svg>
+        </div>
+        <div class="cagebox poor">
+          <div class="ct"><b>결핍환경 impoverished condition</b><span>아무런 자극대상도 없는 사육상자에 한 마리씩 고립</span></div>
+          <svg viewBox="0 0 460 100" role="img" aria-label="아무 자극 대상도 없는 사육상자에 쥐 한 마리만 고립되어 있는 모습"><rect x="3" y="3" width="454" height="94" rx="11" fill="#fff" stroke="#DCDFE5" stroke-width="2"/><line x1="26" y1="12" x2="26" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="52" y1="12" x2="52" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="78" y1="12" x2="78" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="104" y1="12" x2="104" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="130" y1="12" x2="130" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="156" y1="12" x2="156" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="182" y1="12" x2="182" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="208" y1="12" x2="208" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="234" y1="12" x2="234" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="260" y1="12" x2="260" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="286" y1="12" x2="286" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="312" y1="12" x2="312" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="338" y1="12" x2="338" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="364" y1="12" x2="364" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="390" y1="12" x2="390" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="416" y1="12" x2="416" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><line x1="442" y1="12" x2="442" y2="88" stroke="#EBEDF1" stroke-width="1.8"/><rect x="10" y="80" width="440" height="14" rx="6" fill="#E6E8EC"/><text x="290" y="46" font-family="Pretendard,sans-serif" font-size="12.5" font-weight="700" fill="#B9C0CB">자극 대상물 없음</text><text x="290" y="65" font-family="Pretendard,sans-serif" font-size="12.5" font-weight="700" fill="#B9C0CB">동료 없음</text><g class="rzitem" style="color:#A3AAB6"><g transform="translate(120,56)"><use href="#ratI" width="46" height="25.9"/></g></g></svg>
+        </div>
       </div>
-      <div class="card teal"><h4>이 연구가 중요한 이유</h4>
-        <p>앞의 연구들은 <strong>상관</strong>이라 인과를 말할 수 없지만, 이것은 <strong>실험</strong>이라 말할 수 있습니다. 행동만이 아니라 <strong>뇌의 해부학적 측정치까지 달라졌다</strong>는 점이 핵심입니다.</p></div>
+      <div class="rzres" id="rzRes">
+        <div class="rzhd">일정 기간 뒤 측정한 것</div>
+        <div id="rzRows"></div>
+        <div class="rzsig" id="rzSig">세 측정치 <b>모두</b> 풍요로운 환경 쪽이 유의미하게 높음</div>
+        <div class="rznote">교재는 구체적 수치를 제시하지 않으므로 <b>차이의 방향만</b> 표시했습니다.</div>
+      </div>
+    </div>
+    <div class="cnote" style="max-width:none;margin-top:14px">
+      <div class="nb t2" id="rzn1"><span class="tag">① 무엇을 조작했나</span>
+        쥐를 두 집단으로 나누어 한쪽은 <b>탐색할 대상물이 많은 환경</b>에서, 다른 쪽은 <b>아무 자극도 없는 상자에 한 마리씩 고립</b>시켜 길렀습니다.
+        환경을 <b>연구자가 직접 조작했다</b>는 점이 앞의 연구들과 다릅니다.</div>
+      <div class="nb t2" id="rzn2"><span class="tag">② 결과</span>
+        일정 기간 뒤 <b>뇌의 해부학적·생화학적 측정치</b>와 <b>미로에서의 주행속도</b>를 쟀습니다.
+        풍요로운 환경에서 자란 쥐가 <b>모든 측정치에서 유의미하게 높은 수준</b>이었습니다.</div>
+      <div class="nb t3" id="rzn3"><span class="tag">③ 이 연구가 중요한 이유</span>
+        앞의 연구들은 <b>상관</b>이라 인과를 말할 수 없지만, 이것은 <b>실험</b>이라 말할 수 있습니다.
+        게다가 행동만 달라진 것이 아니라 <b>뇌 자체가 물리적으로 달라졌습니다.</b></div>
     </div>
   </div>
+  <div class="steps"><i></i><i></i><i></i><span>→ 키로 진행</span></div>
 </section>
 
 <section class="slide" data-sec="유전가능비" data-c="blue">
-  <div class="hd"><span class="chip">유전가능비 연구</span><span class="sub">Jensen, 1969 · 교재 p. 58 · 슬라이더를 움직여 보세요</span></div>
+  <div class="hd"><span class="chip">유전가능비 연구</span><span class="sub">Jensen(젠슨), 1969 · 교재 p. 58 · 슬라이더를 움직여 보세요</span></div>
   <h2>유전가능비 <span class="hl">heritability</span></h2>
   <div class="body">
     <div class="two rev">
@@ -884,14 +954,14 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
           <div style="font-size:clamp(17px,1.9vw,25px);font-weight:800;color:var(--ink);letter-spacing:.02em">Vt = Vh + Ve</div>
           <div style="font-size:clamp(19px,2.2vw,29px);font-weight:800;color:var(--blue);margin-top:10px">유전가능비 = Vh / Vt</div>
         </div>
-        <p style="font-size:15px">Jensen은 유전적으로 거의 유사한 쥐를 얻은 후 <strong>서로 다른 환경에서 사육</strong>해 지능의 차를 검토하는 등 여러 분석을 통해 <strong>유전가능비를 .80</strong>이라고 밝혀냈습니다.</p>
+        <p style="font-size:15px">Jensen(젠슨)은 유전적으로 거의 유사한 쥐를 얻은 후 <strong>서로 다른 환경에서 사육</strong>해 지능의 차를 검토하는 등 여러 분석을 통해 <strong>유전가능비를 .80</strong>이라고 밝혀냈습니다.</p>
       </div>
     </div>
   </div>
 </section>
 
 <section class="slide mid" data-sec="유전가능비" data-c="coral">
-  <h2>Jensen의 주장을 <span class="hl">그대로 받아들인다면</span></h2>
+  <h2>Jensen(젠슨)의 주장을 <span class="hl">그대로 받아들인다면</span></h2>
   <div class="two" style="margin-top:22px">
     <div class="card coral">
       <h4>교재의 서술</h4>
@@ -972,7 +1042,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
         <div style="font-size:12px;color:var(--faint);font-weight:600;margin-top:14px">거의 정확히 반대 결과</div>
       </div>
       <div class="stack">
-        <p>Turkheimer 등(2003)이 <strong>7세 쌍생아</strong>를 <strong>사회경제적 지위별로 나눠</strong> 분석했습니다.</p>
+        <p>Turkheimer(터크하이머) 등(2003)이 <strong>7세 쌍생아</strong>를 <strong>사회경제적 지위별로 나눠</strong> 분석했습니다.</p>
         <p><strong>빈곤 가정</strong>에서는 지능 변량의 약 <em>60%가 공유환경</em>으로 설명되고 <em>유전의 기여는 0에 가까웠으며</em>, <strong>부유한 가정</strong>에서는 결과가 거의 정반대였습니다.</p>
         <div class="card amber"><h4>무엇을 말하는가</h4>
           <p style="font-size:15.5px"><strong>환경이 열악하면 유전적 잠재력이 발현될 기회 자체가 없습니다.</strong> 유전가능비 .80이라는 숫자가 왜 조건부인지를 보여줍니다.</p></div>
@@ -998,7 +1068,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide mid" data-sec="(2) 성격연구" data-c="teal" data-steps="2">
-  <div class="hd"><span class="chip">기질 연구</span><span class="sub">Thomas 등, 1968·1986 / Hetherington &amp; Parke, 1993 · 교재 p. 59</span></div>
+  <div class="hd"><span class="chip">기질 연구</span><span class="sub">Thomas(토머스) 등, 1968·1986 / Hetherington &amp; Parke(헤더링턴과 파크), 1993 · 교재 p. 59</span></div>
   <h2>그러나 성격에도 <span class="hl">생득적 기반</span>은 있습니다</h2>
   <div class="sup2" data-from="0"><strong>기질(temperament)</strong>이란 <strong>자극에 대한 반응, 정서의 표현, 각성수준, 자기규제</strong> 등 여러 측면에서 <strong>생물학적으로 결정된 개인차</strong>를 뜻합니다.</div>
   <div class="grid g4" style="margin-top:22px" data-from="0">
@@ -1013,7 +1083,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="(2) 성격연구" data-c="coral" data-scene="temp" data-steps="3">
-  <div class="hd"><span class="chip">기질의 순화</span><span class="sub">Dunn &amp; Kendrick, 1980 · 교재 p. 59</span></div>
+  <div class="hd"><span class="chip">기질의 순화</span><span class="sub">Dunn &amp; Kendrick(던과 켄드릭), 1980 · 교재 p. 59</span></div>
   <h2>그런데 교재는 다시 <span class="hl">뒤집습니다</span></h2>
   <div class="body">
     <div class="two">
@@ -1066,7 +1136,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
       </div>
       <div class="stack">
         <div class="card amber"><h4>왜 다른가</h4>
-          <p>Bouchard &amp; McGue(1981)의 값은 <strong>2차 인용 문헌마다 조금씩 다르게 표기</strong>됩니다. 대부분의 값은 교재와 원논문이 일치하고, 두 행에서만 차이가 납니다.</p></div>
+          <p>Bouchard &amp; McGue(부샤드와 맥규, 1981)의 값은 <strong>2차 인용 문헌마다 조금씩 다르게 표기</strong>됩니다. 대부분의 값은 교재와 원논문이 일치하고, 두 행에서만 차이가 납니다.</p></div>
       </div>
     </div>
   </div>
@@ -1276,6 +1346,27 @@ function barsIn(list){
   return null;
 }
 
+
+const RZ=[
+ {n:'뇌의 해부학적 측정치', k:'뇌 구조'},
+ {n:'뇌의 생화학적 측정치', k:'뇌 화학'},
+ {n:'미로에서의 주행속도', k:'행동'}
+];
+$('#rzRows').innerHTML=RZ.map(r=>
+ '<div class="rzrow"><span class="tx"><span class="n">'+r.n+'</span><u>'+r.k+'</u></span>'+
+ '<span class="cmp">풍요 <s>＞</s> 결핍</span></div>').join('');
+function roseStep(st){
+  $('#rzRes').classList.toggle('on',st>=1);
+  $('#rzSig').classList.toggle('on',st>=1);
+  ['#rzn1','#rzn2','#rzn3'].forEach((id,k)=>$(id).classList.toggle('on',st===k));
+}
+function roseScene(){
+  $$('#rzCages .rzitem').forEach((el,i)=>{el.classList.remove('on');
+    setTimeout(()=>el.classList.add('on'),140+i*95);});
+  roseStep(step);
+  return null;
+}
+
 const H1=[62,74,52,68,58], H2=[26,32,21,29,24];
 function seedScene(){
   [['#sd1',H1,'good'],['#sd2',H2,'bad']].forEach(([sel,hs])=>{
@@ -1316,7 +1407,7 @@ hSl.addEventListener('input',paintH); paintH();
 
 const SCENES={hw:hwScene,rr:rrScene,canal:canalScene,cyc:cycScene,corr:corrScene,
  sw:()=>barsIn([['#swA','64%',0.2],['#swB','18%',0.45]]),
- rose:()=>barsIn([['#roA','88%',0.2],['#roB','80%',0.4]]),
+ rose:roseScene,
  turk:()=>barsIn([['#tkA','4%',0.2],['#tkB','96%',0.2],['#tkC','82%',0.6],['#tkD','18%',0.6]]),
  seed:seedScene, temp:tempScene};
 
@@ -1334,6 +1425,7 @@ function paint(s){
   s.querySelectorAll('[data-from]').forEach(el=>el.classList.toggle('on',step>=+el.dataset.from));
   s.dataset.st=step;
   if(s.dataset.scene==='corr') corrStep(step);
+  if(s.dataset.scene==='rose') roseStep(step);
   const bar=s.querySelector('.steps');
   if(bar)[...bar.querySelectorAll('i')].forEach((b,i)=>b.classList.toggle('on',i<=step));
 }
