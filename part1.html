@@ -256,6 +256,73 @@ tr.mark td{background:var(--plum-l)}
 .flow .n.last{background:var(--coral-l)} .flow .n.last h4{color:var(--coral)}
 .flow .n p{font-size:14.5px;line-height:1.6}
 
+
+/* ── DNA→RNA 흐름 장면 ── */
+.flowwrap{position:relative;width:100%;height:clamp(300px,52vh,480px);
+  border-radius:18px;overflow:hidden;background:#fff}
+#flowSvg{position:absolute;inset:0;width:100%;height:calc(100% - 56px);font-family:Pretendard,sans-serif}
+#flowSvg text{font-weight:700}
+#flowSvg .zone{font-size:14px;fill:#9AA8BC;text-anchor:middle;letter-spacing:.01em}
+#flowSvg .nuc{stroke:#2C6FBF;stroke-width:2;stroke-dasharray:7 7;opacity:1}
+#flowSvg .cyto{stroke:#DFE6EF;stroke-width:2}
+#flowSvg .tag{font-size:13px;text-anchor:middle;fill:#6A7A93}
+#flowSvg .fatet{text-anchor:end;fill:#9AA8BC;font-size:13px}
+#flowSvg .poret{font-size:11.5px;fill:#9AA8BC;text-anchor:start}
+#flowScene .caption .num{background:var(--teal)}
+.flowwrap{background:transparent}
+#flowSvg .strand{fill:none;stroke-width:4;stroke-linecap:round}
+#flowSvg .rung{stroke-width:3.4;transition:opacity .45s}
+#flowSvg .pore circle{fill:#2C6FBF;opacity:.3;transition:opacity .4s,r .4s}
+
+/* RNA */
+#flowSvg .rna{opacity:0;transition:opacity .5s ease,transform 1.05s cubic-bezier(.45,.05,.2,1)}
+#flowSvg .rnaline{fill:none;stroke-width:4;stroke-linecap:round;
+  stroke-dasharray:275;stroke-dashoffset:275;transition:stroke-dashoffset 1.1s ease}
+#flowSvg .rbase{opacity:0;transition:opacity .5s ease .35s}
+#flowSvg .rflaw{fill:#0D8E9E}
+#flowSvg .rnat{opacity:0;transition:opacity .4s ease .5s}
+
+/* 부챗살 + 운명 카드 */
+#flowSvg .fan{fill:none;stroke:#B9C6D6;stroke-width:2;stroke-dasharray:4 5;
+  opacity:0;transition:opacity .5s ease var(--d)}
+#flowSvg .chip rect{fill:#F2F6FA;stroke:#F2F6FA;stroke-width:2;transition:fill .5s var(--d),stroke .5s var(--d)}
+#flowSvg .chip .ic{fill:#FFFFFF;transition:fill .5s var(--d)}
+#flowSvg .chip .gl{fill:#9AA8BC;stroke:#9AA8BC;transition:fill .5s var(--d),stroke .5s var(--d)}
+#flowSvg .chip text{font-size:19px;fill:#9AA8BC;transition:fill .5s var(--d)}
+
+/* 결함 */
+#flowSvg .flaw,#flowSvg .alert{opacity:0;transition:opacity .5s ease}
+#flowSvg .alert rect{fill:#FCEDEB;stroke:#E2503F;stroke-width:2}
+#flowSvg .alert .bang{fill:#E2503F}
+#flowSvg .alert .bangt{fill:#fff;font-size:19px;text-anchor:middle;font-weight:800}
+#flowSvg .alert .at1{font-size:14px;fill:#6A7A93}
+#flowSvg .alert .at2{font-size:17px;fill:#E2503F;font-weight:800}
+
+/* 단계 상태 */
+#flowScene[data-k="1"] .rnaline,#flowScene[data-k="2"] .rnaline,
+#flowScene[data-k="3"] .rnaline,#flowScene[data-k="4"] .rnaline{stroke-dashoffset:0}
+#flowScene[data-k="1"] .rna,#flowScene[data-k="2"] .rna,
+#flowScene[data-k="3"] .rna,#flowScene[data-k="4"] .rna{opacity:1}
+#flowScene[data-k="1"] .rbase,#flowScene[data-k="2"] .rbase,
+#flowScene[data-k="3"] .rbase,#flowScene[data-k="4"] .rbase{opacity:1}
+#flowScene[data-k="1"] .rnat,#flowScene[data-k="2"] .rnat,
+#flowScene[data-k="3"] .rnat,#flowScene[data-k="4"] .rnat{opacity:1}
+#flowScene[data-k="2"] .rna,#flowScene[data-k="3"] .rna,#flowScene[data-k="4"] .rna{transform:translate(365px,-80px)}
+#flowScene[data-k="2"] .pore circle{opacity:.85;r:6.5}
+#flowScene[data-k="3"] .fan,#flowScene[data-k="4"] .fan{opacity:1}
+#flowScene[data-k="3"] .chip rect,#flowScene[data-k="4"] .chip rect{fill:#E3F4F6;stroke:#9BD3DA}
+#flowScene[data-k="3"] .chip .gl,#flowScene[data-k="4"] .chip .gl{fill:#0D8E9E;stroke:#0D8E9E}
+#flowScene[data-k="3"] .chip text,#flowScene[data-k="4"] .chip text{fill:#12203A}
+#flowScene[data-k="4"] .flaw,#flowScene[data-k="4"] .alert{opacity:1}
+#flowScene[data-k="4"] .rung{opacity:.25}
+#flowScene[data-k="4"] .flawrung{opacity:1}
+#flowScene[data-k="4"] .rflaw{fill:#E2503F}
+#flowScene[data-k="4"] .chip rect{fill:#FCEDEB;stroke:#F0B5AC}
+#flowScene[data-k="4"] .chip .gl{fill:#E2503F;stroke:#E2503F}
+#flowScene[data-k="4"] .chip text{fill:#E2503F}
+#flowScene[data-k="4"] .fan{stroke:#E9A69B}
+@media(prefers-reduced-motion:reduce){#flowSvg *{transition-duration:.01ms !important}}
+
 .eyepick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:13px}
 .eyepick button{padding:13px 8px;font-size:17px}
 .eyepick button.rec.sel{border-color:var(--ink);background:#EAEDF2;color:var(--ink)}
@@ -678,19 +745,148 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
   </div>
 </section>
 
-<section class="slide mid" data-sec="3) 유전적 특성의 결정" data-c="teal" data-scene="flow">
+<section class="slide" data-sec="3) 유전적 특성의 결정" data-c="teal" data-scene="flow">
+  <div class="hd"><span class="chip">3) 유전적 특성의 결정</span><span class="sub">교재 p. 51 · 자동 반복 · P키로 정지</span></div>
   <h2>DNA는 <span class="hl">RNA의 주형</span>입니다</h2>
-  <div class="flow" id="flow" style="margin-top:28px">
-    <div class="n"><h4>DNA</h4><p>세포의 핵 안에서 지시를 내립니다. RNA의 <strong>주형(template)</strong>입니다.</p></div>
-    <div class="a">→</div>
-    <div class="n"><h4>RNA</h4><p>핵으로부터 DNA가 내린 지시를 <strong>세포질</strong>에 전달합니다.</p></div>
-    <div class="a">→</div>
-    <div class="n"><h4>세포의 운명</h4><p>장기·피부·뼈·신경계·근육 중 <strong>어느 부위를 형성할지</strong>가 결정됩니다.</p></div>
-    <div class="a">→</div>
-    <div class="n last"><h4>결함이 생기면</h4><p>유전인자 중 <strong>어느 하나에라도 결함이 있으면</strong> 정상아와 다른 발달장애가 나타납니다.</p></div>
+  <div class="body">
+    <div class="flowwrap" id="flowScene" data-k="0">
+    <svg id="flowSvg" viewBox="0 0 1040 430" preserveAspectRatio="xMidYMid meet" aria-label="DNA에서 RNA로, 그리고 세포의 운명까지">
+      <defs>
+        <linearGradient id="cytoG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FBFCFE"/><stop offset="1" stop-color="#EAF1F8"/>
+        </linearGradient>
+        <linearGradient id="nucG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E9F1FB"/>
+        </linearGradient>
+      </defs>
+
+      <rect class="cyto" x="14" y="14" width="1012" height="402" rx="56" fill="url(#cytoG)"/>
+      <text class="zone" x="470" y="46">세포질 cytoplasm</text>
+
+      <ellipse class="nuc" cx="210" cy="215" rx="158" ry="148" fill="url(#nucG)"/>
+      <text class="zone nucl" x="210" y="96">핵 nucleus</text>
+      <text class="tag dnat" x="210" y="139">DNA · 이중나선</text>
+
+      <path class="strand" d="M90.0 193.0 L93.0 199.6 L96.0 206.0 L99.0 211.9 L102.0 217.0 L105.0 221.3 L108.0 224.4 L111.0 226.3 L114.0 227.0 L117.0 226.3 L120.0 224.4 L123.0 221.3 L126.0 217.0 L129.0 211.9 L132.0 206.0 L135.0 199.6 L138.0 193.0 L141.0 186.4 L144.0 180.0 L147.0 174.1 L150.0 169.0 L153.0 164.7 L156.0 161.6 L159.0 159.7 L162.0 159.0 L165.0 159.7 L168.0 161.6 L171.0 164.7 L174.0 169.0 L177.0 174.1 L180.0 180.0 L183.0 186.4 L186.0 193.0 L189.0 199.6 L192.0 206.0 L195.0 211.9 L198.0 217.0 L201.0 221.3 L204.0 224.4 L207.0 226.3 L210.0 227.0 L213.0 226.3 L216.0 224.4 L219.0 221.3 L222.0 217.0 L225.0 211.9 L228.0 206.0 L231.0 199.6 L234.0 193.0 L237.0 186.4 L240.0 180.0 L243.0 174.1 L246.0 169.0 L249.0 164.7 L252.0 161.6 L255.0 159.7 L258.0 159.0 L261.0 159.7 L264.0 161.6 L267.0 164.7 L270.0 169.0 L273.0 174.1 L276.0 180.0 L279.0 186.4 L282.0 193.0 L285.0 199.6 L288.0 206.0 L291.0 211.9 L294.0 217.0 L297.0 221.3 L300.0 224.4 L303.0 226.3 L306.0 227.0 L309.0 226.3 L312.0 224.4 L315.0 221.3 L318.0 217.0 L321.0 211.9 L324.0 206.0 L327.0 199.6 L330.0 193.0" stroke="#6A7A93"/>
+      <path class="strand" d="M90.0 193.0 L93.0 186.4 L96.0 180.0 L99.0 174.1 L102.0 169.0 L105.0 164.7 L108.0 161.6 L111.0 159.7 L114.0 159.0 L117.0 159.7 L120.0 161.6 L123.0 164.7 L126.0 169.0 L129.0 174.1 L132.0 180.0 L135.0 186.4 L138.0 193.0 L141.0 199.6 L144.0 206.0 L147.0 211.9 L150.0 217.0 L153.0 221.3 L156.0 224.4 L159.0 226.3 L162.0 227.0 L165.0 226.3 L168.0 224.4 L171.0 221.3 L174.0 217.0 L177.0 211.9 L180.0 206.0 L183.0 199.6 L186.0 193.0 L189.0 186.4 L192.0 180.0 L195.0 174.1 L198.0 169.0 L201.0 164.7 L204.0 161.6 L207.0 159.7 L210.0 159.0 L213.0 159.7 L216.0 161.6 L219.0 164.7 L222.0 169.0 L225.0 174.1 L228.0 180.0 L231.0 186.4 L234.0 193.0 L237.0 199.6 L240.0 206.0 L243.0 211.9 L246.0 217.0 L249.0 221.3 L252.0 224.4 L255.0 226.3 L258.0 227.0 L261.0 226.3 L264.0 224.4 L267.0 221.3 L270.0 217.0 L273.0 211.9 L276.0 206.0 L279.0 199.6 L282.0 193.0 L285.0 186.4 L288.0 180.0 L291.0 174.1 L294.0 169.0 L297.0 164.7 L300.0 161.6 L303.0 159.7 L306.0 159.0 L309.0 159.7 L312.0 161.6 L315.0 164.7 L318.0 169.0 L321.0 174.1 L324.0 180.0 L327.0 186.4 L330.0 193.0" stroke="#9AA8BC"/>
+      <line class="rung" x1="90.0" y1="193.0" x2="90.0" y2="193.0" stroke="#E2503F"/>
+      <circle class="rung" cx="90.0" cy="193.0" r="4.2" fill="#E2503F"/>
+      <circle class="rung" cx="90.0" cy="193.0" r="4.2" fill="#E2503F"/>
+      <line class="rung" x1="108.5" y1="224.8" x2="108.5" y2="161.2" stroke="#0D8E9E"/>
+      <circle class="rung" cx="108.5" cy="224.8" r="4.2" fill="#0D8E9E"/>
+      <circle class="rung" cx="108.5" cy="161.2" r="4.2" fill="#0D8E9E"/>
+      <line class="rung" x1="126.9" y1="215.5" x2="126.9" y2="170.5" stroke="#7A2E8E"/>
+      <circle class="rung" cx="126.9" cy="215.5" r="4.2" fill="#7A2E8E"/>
+      <circle class="rung" cx="126.9" cy="170.5" r="4.2" fill="#7A2E8E"/>
+      <line class="rung" x1="145.4" y1="177.2" x2="145.4" y2="208.8" stroke="#2C6FBF"/>
+      <circle class="rung" cx="145.4" cy="177.2" r="4.2" fill="#2C6FBF"/>
+      <circle class="rung" cx="145.4" cy="208.8" r="4.2" fill="#2C6FBF"/>
+      <line class="rung" x1="163.8" y1="159.2" x2="163.8" y2="226.8" stroke="#E2503F"/>
+      <circle class="rung" cx="163.8" cy="159.2" r="4.2" fill="#E2503F"/>
+      <circle class="rung" cx="163.8" cy="226.8" r="4.2" fill="#E2503F"/>
+      <line class="rung" x1="182.3" y1="184.9" x2="182.3" y2="201.1" stroke="#0D8E9E"/>
+      <circle class="rung" cx="182.3" cy="184.9" r="4.2" fill="#0D8E9E"/>
+      <circle class="rung" cx="182.3" cy="201.1" r="4.2" fill="#0D8E9E"/>
+      <line class="rung" x1="200.8" y1="221.0" x2="200.8" y2="165.0" stroke="#7A2E8E"/>
+      <circle class="rung" cx="200.8" cy="221.0" r="4.2" fill="#7A2E8E"/>
+      <circle class="rung" cx="200.8" cy="165.0" r="4.2" fill="#7A2E8E"/>
+      <line class="rung flawrung" x1="219.2" y1="221.0" x2="219.2" y2="165.0" stroke="#2C6FBF"/>
+      <circle class="rung flawrung" cx="219.2" cy="221.0" r="4.2" fill="#2C6FBF"/>
+      <circle class="rung flawrung" cx="219.2" cy="165.0" r="4.2" fill="#2C6FBF"/>
+      <line class="rung" x1="237.7" y1="184.9" x2="237.7" y2="201.1" stroke="#E2503F"/>
+      <circle class="rung" cx="237.7" cy="184.9" r="4.2" fill="#E2503F"/>
+      <circle class="rung" cx="237.7" cy="201.1" r="4.2" fill="#E2503F"/>
+      <line class="rung" x1="256.2" y1="159.2" x2="256.2" y2="226.8" stroke="#0D8E9E"/>
+      <circle class="rung" cx="256.2" cy="159.2" r="4.2" fill="#0D8E9E"/>
+      <circle class="rung" cx="256.2" cy="226.8" r="4.2" fill="#0D8E9E"/>
+      <line class="rung" x1="274.6" y1="177.2" x2="274.6" y2="208.8" stroke="#7A2E8E"/>
+      <circle class="rung" cx="274.6" cy="177.2" r="4.2" fill="#7A2E8E"/>
+      <circle class="rung" cx="274.6" cy="208.8" r="4.2" fill="#7A2E8E"/>
+      <line class="rung" x1="293.1" y1="215.5" x2="293.1" y2="170.5" stroke="#2C6FBF"/>
+      <circle class="rung" cx="293.1" cy="215.5" r="4.2" fill="#2C6FBF"/>
+      <circle class="rung" cx="293.1" cy="170.5" r="4.2" fill="#2C6FBF"/>
+      <line class="rung" x1="311.5" y1="224.8" x2="311.5" y2="161.2" stroke="#E2503F"/>
+      <circle class="rung" cx="311.5" cy="224.8" r="4.2" fill="#E2503F"/>
+      <circle class="rung" cx="311.5" cy="161.2" r="4.2" fill="#E2503F"/>
+      <line class="rung" x1="330.0" y1="193.0" x2="330.0" y2="193.0" stroke="#0D8E9E"/>
+      <circle class="rung" cx="330.0" cy="193.0" r="4.2" fill="#0D8E9E"/>
+      <circle class="rung" cx="330.0" cy="193.0" r="4.2" fill="#0D8E9E"/>
+      <g class="flaw"><circle cx="219.2" cy="193.0" r="15" fill="none" stroke="#E2503F" stroke-width="2.6"/><path d="M213.2 187.0 l12 12 M225.2 187.0 l-12 12" stroke="#E2503F" stroke-width="2.6" stroke-linecap="round"/></g>
+
+      <g class="pore">
+        <rect x="362" y="192" width="12" height="46" rx="6" fill="#FBFCFE"/>
+        <circle cx="368" cy="192" r="5"/><circle cx="368" cy="238" r="5"/>
+        <text class="tag poret" x="388" y="270">핵막 구멍</text>
+      </g>
+
+      <g class="rna">
+        <path class="rnaline" d="M105.0 295.0 L108.0 298.7 L111.0 302.1 L114.0 305.2 L117.0 307.6 L120.0 309.2 L123.0 309.9 L126.0 309.8 L129.0 308.7 L132.0 306.8 L135.0 304.2 L138.0 301.0 L141.0 297.5 L144.0 293.8 L147.0 290.1 L150.0 286.8 L153.0 284.0 L156.0 281.8 L159.0 280.5 L162.0 280.0 L165.0 280.5 L168.0 281.8 L171.0 284.0 L174.0 286.8 L177.0 290.1 L180.0 293.8 L183.0 297.5 L186.0 301.0 L189.0 304.2 L192.0 306.8 L195.0 308.7 L198.0 309.8 L201.0 309.9 L204.0 309.2 L207.0 307.6 L210.0 305.2 L213.0 302.1 L216.0 298.7 L219.0 295.0 L222.0 291.3 L225.0 287.9 L228.0 284.8 L231.0 282.4 L234.0 280.8 L237.0 280.1 L240.0 280.2 L243.0 281.3 L246.0 283.2 L249.0 285.8 L252.0 289.0 L255.0 292.5 L258.0 296.2 L261.0 299.9 L264.0 303.2 L267.0 306.0 L270.0 308.2 L273.0 309.5 L276.0 310.0 L279.0 309.5 L282.0 308.2 L285.0 306.0 L288.0 303.2 L291.0 299.9 L294.0 296.2 L297.0 292.5 L300.0 289.0 L303.0 285.8 L306.0 283.2 L309.0 281.3 L312.0 280.2 L315.0 280.1" stroke="#0D8E9E"/>
+        <circle class="rbase" cx="105.0" cy="295.0" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="124.1" cy="310.0" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="143.2" cy="294.8" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="162.3" cy="280.0" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="181.4" cy="295.5" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="200.5" cy="310.0" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase rflaw" cx="219.5" cy="294.3" r="4.6" fill="#E2503F"/>
+        <circle class="rbase" cx="238.6" cy="280.0" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="257.7" cy="295.9" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="276.8" cy="310.0" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="295.9" cy="293.9" r="4.6" fill="#0D8E9E"/>
+        <circle class="rbase" cx="315.0" cy="280.1" r="4.6" fill="#0D8E9E"/>
+        <text class="tag rnat" x="210" y="336">RNA · 복사본</text>
+      </g>
+
+      <path class="fan" style="--d:0.0s" d="M700 225 C726 225 730 96 752 96"/>
+      <path class="fan" style="--d:0.09s" d="M700 225 C726 225 730 164 752 164"/>
+      <path class="fan" style="--d:0.18s" d="M700 225 C726 225 730 232 752 232"/>
+      <path class="fan" style="--d:0.27s" d="M700 225 C726 225 730 300 752 300"/>
+      <path class="fan" style="--d:0.36s" d="M700 225 C726 225 730 368 752 368"/>
+      <text class="tag fatet" x="1010" y="52">세포의 운명 · 어느 부위를 형성할지</text>
+      <g class="chip" style="--d:0.0s">
+        <rect x="758" y="67" width="252" height="58" rx="16"/>
+        <circle class="ic" cx="792" cy="96" r="19"/>
+        <g class="gl"><path d="M792 102 c-9-6-13-10.5-13-15 0-3.6 2.8-6 6-6 2.6 0 5 1.6 7 4.4 2-2.8 4.4-4.4 7-4.4 3.2 0 6 2.4 6 6 0 4.5-4 9-13 15z"/></g>
+        <text x="824" y="96" dominant-baseline="central">장기</text>
+      </g>
+      <g class="chip" style="--d:0.12s">
+        <rect x="758" y="135" width="252" height="58" rx="16"/>
+        <circle class="ic" cx="792" cy="164" r="19"/>
+        <g class="gl"><path d="M781 157 q5.5 -4 11 0 t11 0" fill="none" stroke-width="2.4" stroke-linecap="round"/><path d="M781 164 q5.5 -4 11 0 t11 0" fill="none" stroke-width="2.4" stroke-linecap="round"/><path d="M781 171 q5.5 -4 11 0 t11 0" fill="none" stroke-width="2.4" stroke-linecap="round"/></g>
+        <text x="824" y="164" dominant-baseline="central">피부</text>
+      </g>
+      <g class="chip" style="--d:0.24s">
+        <rect x="758" y="203" width="252" height="58" rx="16"/>
+        <circle class="ic" cx="792" cy="232" r="19"/>
+        <g class="gl"><rect x="781" y="228.6" width="22" height="6.8" rx="3.4"/><circle cx="781" cy="227.2" r="4.4"/><circle cx="781" cy="236.8" r="4.4"/><circle cx="803" cy="227.2" r="4.4"/><circle cx="803" cy="236.8" r="4.4"/></g>
+        <text x="824" y="232" dominant-baseline="central">뼈</text>
+      </g>
+      <g class="chip" style="--d:0.36s">
+        <rect x="758" y="271" width="252" height="58" rx="16"/>
+        <circle class="ic" cx="792" cy="300" r="19"/>
+        <g class="gl"><path d="M791 288 v24 M791 294 l-9 -6 M791 300 l-9 6 M791 291 l9 -4 M791 304 l9 5" fill="none" stroke-width="2.2" stroke-linecap="round"/><circle cx="781" cy="287" r="3"/><circle cx="781" cy="307" r="3"/><circle cx="801" cy="286" r="3"/><circle cx="801" cy="310" r="3"/></g>
+        <text x="824" y="300" dominant-baseline="central">신경계</text>
+      </g>
+      <g class="chip" style="--d:0.48s">
+        <rect x="758" y="339" width="252" height="58" rx="16"/>
+        <circle class="ic" cx="792" cy="368" r="19"/>
+        <g class="gl"><path d="M779 368 q6 -11 13 -11 q9 0 13 11 q-4 11 -13 11 q-7 0 -13 -11z" fill="none" stroke-width="2.4"/><path d="M788 362 q4 6 0 12 M795 361 q4 7 0 14" fill="none" stroke-width="2" stroke-linecap="round"/></g>
+        <text x="824" y="368" dominant-baseline="central">근육</text>
+      </g>
+
+      <g class="alert">
+        <rect x="424" y="300" width="300" height="60" rx="18"/>
+        <circle class="bang" cx="462" cy="330" r="15"/>
+        <text class="bangt" x="462" y="331" dominant-baseline="central">!</text>
+        <text class="at1" x="488" y="322">유전인자 하나라도 결함이 있으면</text>
+        <text class="at2" x="488" y="345">정상아와 다른 발달장애</text>
+      </g>
+    </svg>
+      <div class="caption"><span class="num" id="flowK">1</span><span id="flowCap"></span></div>
+    </div>
+    <div class="vsbar"><button class="pausebtn" type="button"><span class="ic"></span><span class="tx">일시정지</span></button></div>
+    <p style="margin-top:16px;font-size:clamp(16px,1.7vw,23px);font-weight:700;color:var(--ink);max-width:none">
+      이 마지막 문장이 <em style="color:var(--coral)">4) 염색체 결함</em>으로 넘어가는 다리입니다.</p>
   </div>
-  <p style="margin-top:24px;font-size:clamp(17px,1.8vw,24px);font-weight:700;color:var(--ink);max-width:none">
-    이 마지막 문장이 <em style="color:var(--coral)">4) 염색체 결함</em>으로 넘어가는 다리입니다.</p>
 </section>
 
 <section class="slide mid" data-sec="3) 유전적 특성의 결정" data-c="blue">
@@ -1264,6 +1460,22 @@ $$('[data-eye]').forEach(b=>b.addEventListener('click',()=>{
   $('#eyeTag').innerHTML='<span class="domtag'+(e[4]?' rec':'')+'">'+e[3]+'</span>';
 }));
 
+
+const FLOWC=[
+ '<b>DNA</b>는 세포의 <b>핵 안</b>에 있습니다. 안쪽 질산염기의 배열이 곧 지시 내용입니다.',
+ 'DNA를 <b>주형(template)</b> 삼아, 그 배열을 그대로 베낀 <b>RNA</b>가 만들어집니다.',
+ 'RNA는 핵막의 구멍을 빠져나와 <b>세포질</b>로 DNA의 지시를 전달합니다.',
+ '그 지시에 따라 이 세포가 <b>장기·피부·뼈·신경계·근육</b> 중 어느 부위를 형성할지가 결정됩니다.',
+ '유전인자 중 <b>어느 하나에라도 결함</b>이 있으면 잘못된 지시가 전달되어, <b>정상아와 다른 발달장애</b>가 나타납니다.'];
+function flowScene(){
+  const s=document.getElementById('flowScene');
+  if(!s) return null;
+  const set=i=>{s.dataset.k=i;
+    document.getElementById('flowK').textContent=i+1;
+    document.getElementById('flowCap').innerHTML=FLOWC[i];};
+  return loop(set,5,3200);
+}
+
 const SCENES={mit:mitScene,mei:meiScene,vs:vsScene,
  k1:()=>{playKaryo($('#karyo1'));return null},
  kG:()=>{playKaryo($('#karyoG'));return null},
@@ -1272,7 +1484,7 @@ const SCENES={mit:mitScene,mei:meiScene,vs:vsScene,
    $$('#agePts .pt').forEach((p,i)=>{p.classList.remove('on');p.style.animationDelay=(0.7+i*0.22)+'s';
      void p.offsetWidth;p.classList.add('on')});return null},
  dna:()=>null,
- flow:()=>{const f=$('#flow'),c=f.cloneNode(true);f.replaceWith(c);return null},
+ flow:flowScene,
  boom:()=>null};
 
 function maxStep(s){return parseInt(s.dataset.steps||'1',10)-1}
