@@ -654,7 +654,7 @@ body[data-m="supp"] .parts button.cur{background:var(--amber);border-color:var(-
 </section>
 
 <section class="slide" data-sec="(2) 수로화" data-c="teal" data-scene="canal">
-  <div class="hd"><span class="chip">그림 2-5</span><span class="sub">Fishbein(피시바인), 1976; Berk(버크), 1994 · ← → 로 단계 이동</span></div>
+  <div class="hd"><span class="chip">그림 2-5</span><span class="sub">Fishbein(피시바인), 1976; Berk(버크), 1994 · 자동 반복</span></div>
   <h2>공은 <span class="hl">발달하는 유기체</span>입니다</h2>
   <div class="body">
     <div class="two rev">
@@ -1188,6 +1188,11 @@ function seq(setFn,n){
     back(){ if(p<=0) return false; p--; setFn(p); return true }
   };
 }
+function autoseq(setFn,n,ms){
+  let p=0; setFn(0);
+  const t=setInterval(()=>{p=(p+1)%n;setFn(p)},ms);
+  return { stop(){clearInterval(t)} };
+}
 
 function hwScene(){
   const H=$('#rbH .fl'), W=$('#rbW .fl');
@@ -1235,7 +1240,7 @@ function canalScene(){
     $('#dp2').classList.toggle('on', i>=3);
     $('#cnK').textContent=CN_CAP[i][0]; $('#cnCap').innerHTML=CN_CAP[i][1];
   }
-  return seq(set,5);
+  return autoseq(set,5,1900);
 }
 
 const CYC_CAP=[
